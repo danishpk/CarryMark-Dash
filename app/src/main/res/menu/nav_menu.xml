@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+                android:id="@+id/nav_dashboard"
+                android:icon="@drawable/ic_dashboard"
+                android:title="Dashboard" />
+
+        <item
+            android:id="@+id/nav_productList"
+            android:icon="@drawable/ic_product_list"
+            android:title="Product List" />
+        <item
+                android:id="@+id/nav_orderList"
+                android:icon="@drawable/ic_order_list"
+                android:title="Order List" />
+        <item
+                android:id="@+id/nav_employeeList"
+                android:icon="@drawable/ic_employee_list"
+                android:title="Employee List" />
+        <item
+                android:id="@+id/nav_distributorList"
+                android:icon="@drawable/ic_employee_list"
+                android:title="Distributor List" />
+        <item
+            android:id="@+id/nav_retailerList"
+            android:icon="@drawable/ic_retailer"
+            android:title="View Retailers" />
+        <item
+                android:id="@+id/nav_addDistributor"
+                android:icon="@drawable/ic_retailer"
+                android:title="Add Distributor" />
+        <item
+                android:id="@+id/nav_addProduct"
+                android:icon="@drawable/ic_add_product"
+                android:title="Add Product" />
+        <item
+                android:id="@+id/nav_addEmployee"
+                android:icon="@drawable/ic_add_employee"
+                android:title="Add Employee" />
+        <item
+                android:id="@+id/nav_notific"
+                android:icon="@drawable/ic_notification"
+                android:title="Send Notification" />
+
+        <item
+            android:id="@+id/nav_master"
+            android:title="Master List" />
+
+        <item
+            android:id="@+id/nav_addMaster"
+            android:title="Add Master" />
+
+    </group>
+</menu>

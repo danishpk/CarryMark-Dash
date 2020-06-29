@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:clipToPadding="true"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Sort by"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/colorBlack" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#AEACAC" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/radios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioSortAscending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:text="Name ascending"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radioSortDescending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:text="Name descending"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+
+                android:id="@+id/radioSortDateAscending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:text="Date ascending"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radioSortDateDescending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:text="Date descenting"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

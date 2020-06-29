@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="districts">
+        <item>DISTRICT *</item>
+        <item>Thiruvananthapuram</item>
+        <item>Kollam</item>
+        <item>Alappuzha</item>
+        <item>Pathanamthitta</item>
+        <item>Kottayam</item>
+        <item>Idukki</item>
+        <item>Ernakulam</item>
+        <item>Thrissur</item>
+        <item>Palakkad</item>
+        <item>Malappuram</item>
+        <item>Kozhikode</item>
+        <item>Wayanadu</item>
+        <item>Kannur</item>
+        <item>Kasaragod</item>
+    </array>
+    <array name="filterCategory">
+        <item>Brand </item>
+        <item>Category</item>
+        <item>Material</item>
+    </array>
+
+    <array name="masterCategory">
+        <item>Select Category * </item>
+        <item>Brand </item>
+        <item>Category</item>
+        <item>Material</item>
+        <item>Size</item>
+        <item>Color</item>
+        <item>Location</item>
+    </array>
+
+    <array name="addMasterCategory">
+        <item>Select Master Category *</item>
+        <item>cln_brand </item>
+        <item>cln_category</item>
+        <item>cln_material</item>
+        <item>cln_size</item>
+        <item>cln_color</item>
+        <item>cln_location</item>
+    </array>
+    <array name="subcategory">
+        <item>SubCategory *</item>
+    </array>
+    <array name="subcategory1" />
+    <array name="targetGender">
+        <item>Target Gender *</item>
+        <item>All</item>
+        <item>Kids</item>
+        <item>Women</item>
+        <item>Men</item>
+    </array>
+    <array name="stock">
+        <item>Stock Status *</item>
+        <item>In Stock</item>
+        <item>Out Of Stock</item>
+    </array>
+    <array name="orderStatus">
+        <item>Set Status*</item>
+        <item>PENDING</item>
+        <item>CONFIRMED</item>
+        <item>REJECTED</item>
+        <item>DELIVERED</item>
+
+    </array>
+    <array name="search_suggestions" />
+    <array name="user_type">
+        <item>Select User Type*</item>
+        <item>All Users</item>
+        <item>Admin</item>
+        <item>Executive</item>
+        <item>Retailer</item>
+        <item>Distributor</item>
+    </array>
+    <array name="users_type">
+        <item>Select User Type*</item>
+        <item>Executive</item>
+        <item>Retailer</item>
+        <item>Distributor</item>
+    </array>
+    <array name="categories">
+        <item>All Products</item>
+        <item>Baby Accessories</item>
+        <item>Feeding Accessories</item>
+        <item>Baby Dress</item>
+    </array>
+    <array name="status">
+        <item>All Orders</item>
+        <item>PENDING</item>
+        <item>CONFIRMED</item>
+        <item>REJECTED</item>
+        <item>DELIVERED</item>
+        <item>GET ORDERS BY DATE</item>
+    </array>
+</resources>

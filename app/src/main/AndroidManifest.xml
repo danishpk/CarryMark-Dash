@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tech.stacka.carrymarkdashboard">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activity.master.addMaster.AddMasterActivity"></activity>
+        <activity android:name=".activity.master.masterList.MasterListActivity" />
+        <activity android:name=".activity.distributer.distributerDetail.DistributerDetailActivity" />
+        <activity android:name=".activity.employee.addEmployee.AddEmployeeActivity" />
+        <activity android:name=".activity.distributer.addDistributer.AddDistributerActivity" />
+        <activity android:name=".activity.retailer.retailerList.RetailerListActivity" />
+        <activity android:name=".activity.distributer.distributerList.DistributorListActivity" />
+        <activity android:name=".activity.employee.employeeDetail.EmployeeDetailActivity" />
+        <activity android:name=".activity.product.filterProduct.ProductFilterActivity" />
+        <activity android:name=".activity.employee.employeeList.EmployeeListActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".activity.product.addProduct.AddProductActivity" />
+        <activity android:name=".activity.product.productDetails.ProductDetailActivity" />
+        <activity android:name=".activity.product.productList.ProductListActivity" />
+        <activity android:name=".activity.home.HomeActivity" />
+        <activity android:name=".activity.login.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity" />
+    </application>
+
+</manifest>

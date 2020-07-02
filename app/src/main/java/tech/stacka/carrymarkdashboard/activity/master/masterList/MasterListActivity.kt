@@ -9,16 +9,23 @@ import android.widget.Switch
 import android.widget.Toast
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_add_master.*
 import kotlinx.android.synthetic.main.activity_master_list.*
+import kotlinx.android.synthetic.main.activity_master_list.sp_master_categorry
 import kotlinx.android.synthetic.main.activity_product_list.*
+import kotlinx.android.synthetic.main.master_list_item.*
 import okhttp3.ResponseBody
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.adapter.MasterAdapter
 import tech.stacka.carrymarkdashboard.adapter.ProductListAdapter
+import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.GetMasterResponse
 import tech.stacka.carrymarkdashboard.models.data.*
+import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
+import tech.stacka.carrymarkdashboard.utils.Utilities
 
-class MasterListActivity : AppCompatActivity(), MasterListView {
+class MasterListActivity : AppCompatActivity(), MasterListView ,MasterAdapter.DataTransferInterfaceMaster{
     var MASTER_SUCCESS:Int=0
     var arrClnBrand= ArrayList<ClnCategories>()
     var arrClnCategory= ArrayList<ClnCategories>()
@@ -26,6 +33,10 @@ class MasterListActivity : AppCompatActivity(), MasterListView {
     var arrClnSize= ArrayList<ClnCategories>()
     var arrClnColor= ArrayList<ClnCategories>()
     var arrClnLocation= ArrayList<ClnCategories>()
+    var arrClnSubCategory= ArrayList<ClnCategories>()
+    var strToken:String=""
+    var strCategoryType:String=""
+    val presenter=MasterListPresenter(this,this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master_list)
@@ -36,65 +47,83 @@ class MasterListActivity : AppCompatActivity(), MasterListView {
         categoryList.add("cln_size")
         categoryList.add("cln_color")
         categoryList.add("cln_location")
+        categoryList.add("cln_sub_category")
 
-
+        strToken= SharedPrefManager.getInstance(applicationContext).user.strToken!!
 //        val adapter= ArrayAdapter<String>(applicationContext,R.layout.support_simple_spinner_dropdown_item,categoryList)
 //        sp_master_categorry.adapter=adapter;
-        val presenter=MasterListPresenter(this,this)
+
         presenter.getMaster(categoryList,10)
 
         val mLayoutManager = LinearLayoutManager(this)
-                sp_master_categorry.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+                sp_master_categorry.onItemSelectedListener = object: AdapterView.OnItemSelectedListener,
+                    MasterAdapter.DataTransferInterfaceMaster {
             override fun onItemSelected(parent:AdapterView<*>, view: View, position: Int, id: Long){
                 // Display the selected item text on text view
                 //text_view.text = "Spinner selected : ${parent.getItemAtPosition(position).toString()}"
                 if(position==1){
                     rvMasterList.layoutManager = mLayoutManager
                     rvMasterList.setHasFixedSize(true)
-                    val mAdapter = MasterAdapter(applicationContext,arrClnBrand)
+                    val mAdapter = MasterAdapter(applicationContext,arrClnBrand,this)
                     rvMasterList.adapter = mAdapter
+                    strCategoryType=categoryList.get(position-1).toString()
                 }
                 if(position==2){
                     rvMasterList.layoutManager = mLayoutManager
                     rvMasterList.setHasFixedSize(true)
-                    val mAdapter = MasterAdapter(applicationContext,arrClnCategory)
+                    val mAdapter = MasterAdapter(applicationContext,arrClnCategory,this)
                     rvMasterList.adapter = mAdapter
+                    strCategoryType=categoryList.get(position-1).toString()
                 }
 
                 if(position==3){
                     rvMasterList.layoutManager = mLayoutManager
                     rvMasterList.setHasFixedSize(true)
-                    val mAdapter = MasterAdapter(applicationContext,arrClnMaterial)
+                    val mAdapter = MasterAdapter(applicationContext,arrClnMaterial,this)
                     rvMasterList.adapter = mAdapter
+                    strCategoryType=categoryList.get(position-1).toString()
                 }
 
                 if(position==4){
                     rvMasterList.layoutManager = mLayoutManager
                     rvMasterList.setHasFixedSize(true)
-                    val mAdapter = MasterAdapter(applicationContext,arrClnSize)
+                    val mAdapter = MasterAdapter(applicationContext,arrClnSize,this)
                     rvMasterList.adapter = mAdapter
+                    strCategoryType=categoryList.get(position-1).toString()
                 }
 
                 if(position==5){
                     rvMasterList.layoutManager = mLayoutManager
                     rvMasterList.setHasFixedSize(true)
-                    val mAdapter = MasterAdapter(applicationContext,arrClnColor)
+                    val mAdapter = MasterAdapter(applicationContext,arrClnColor,this)
                     rvMasterList.adapter = mAdapter
+                    strCategoryType=categoryList.get(position-1).toString()
                 }
 
                 if(position==6){
                     rvMasterList.layoutManager = mLayoutManager
                     rvMasterList.setHasFixedSize(true)
-                    val mAdapter = MasterAdapter(applicationContext,arrClnLocation)
+                    val mAdapter = MasterAdapter(applicationContext,arrClnLocation,this)
                     rvMasterList.adapter = mAdapter
+                    strCategoryType=categoryList.get(position-1).toString()
+                }
+                if(position==7){
+                    rvMasterList.layoutManager = mLayoutManager
+                    rvMasterList.setHasFixedSize(true)
+                    val mAdapter = MasterAdapter(applicationContext,arrClnSubCategory,this)
+                    rvMasterList.adapter = mAdapter
+                    strCategoryType=categoryList.get(position-1).toString()
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>){
                 // Another interface callback
             }
-        }
 
+                    override fun setValues(strMasterId: String) {
+                        presenter.deleteMaster(strCategoryType,strMasterId,strToken)
+                    }
+                }
 
 
 
@@ -108,7 +137,7 @@ class MasterListActivity : AppCompatActivity(), MasterListView {
     }
 
     override fun onMasterListSuccess(apiResponse: GetMasterResponse) {
-        Toast.makeText(applicationContext,"Success",Toast.LENGTH_LONG).show()
+        //Toast.makeText(applicationContext,"Success",Toast.LENGTH_LONG).show()
         val strMainCategory=sp_master_categorry.selectedItem.toString().trim()
          arrClnBrand= apiResponse.cln_brand as ArrayList<ClnCategories>
         arrClnCategory= apiResponse.cln_category as ArrayList<ClnCategories>
@@ -116,11 +145,11 @@ class MasterListActivity : AppCompatActivity(), MasterListView {
          arrClnSize= apiResponse.cln_size as ArrayList<ClnCategories>
          arrClnColor= apiResponse.cln_color as ArrayList<ClnCategories>
          arrClnLocation= apiResponse.cln_location as ArrayList<ClnCategories>
+        arrClnSubCategory= apiResponse.cln_sub_category as ArrayList<ClnCategories>
 
     }
 
     override fun onMasterListNull(apiResponse: GetMasterResponse) {
-        TODO("Not yet implemented")
     }
 
     override fun onMasterListFailed(apiResponse: ResponseBody) {
@@ -130,4 +159,29 @@ class MasterListActivity : AppCompatActivity(), MasterListView {
     override fun onMasterServerFailed(toString: String) {
         Toast.makeText(applicationContext,toString,Toast.LENGTH_LONG).show()
     }
+
+    override fun onDelMasterSuccess(apiResponse: DefaultResponse) {
+        Toast.makeText(applicationContext,apiResponse.strMessage,Toast.LENGTH_SHORT).show()
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
+    override fun onDelMasterNull(apiResponse: DefaultResponse) {
+        Toast.makeText(applicationContext,apiResponse.strMessage,Toast.LENGTH_SHORT).show()    }
+
+    override fun onDelMasterFailed(apiResponse: ResponseBody) {
+        Toast.makeText(applicationContext,apiResponse.toString(),Toast.LENGTH_SHORT).show()    }
+
+    override fun onDelMasterServerFailed(toString: String) {
+        Toast.makeText(applicationContext,toString,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun setValues(strMasterId: String) {
+
+            presenter.deleteMaster(strCategoryType,strMasterId,strToken)
+
+    }
+
 }

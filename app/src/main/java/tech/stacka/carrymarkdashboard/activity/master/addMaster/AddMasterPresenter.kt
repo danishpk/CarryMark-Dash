@@ -2,6 +2,7 @@ package tech.stacka.carrymarkdashboard.activity.master.addMaster
 
 import android.content.Context
 import android.widget.Toast
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -10,11 +11,16 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.models.AddProductCategoryResponse
 import tech.stacka.carrymarkdashboard.models.DefaultResponse
+import tech.stacka.carrymarkdashboard.models.GetMasterResponse
 import tech.stacka.carrymarkdashboard.models.UploadProductImageResponse
 import tech.stacka.carrymarkdashboard.network.EndPoint
 import tech.stacka.carrymarkdashboard.network.RetrofitClient
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AddMasterPresenter(val addMasterView: AddMasterView,val context: Context) {
 
@@ -52,12 +58,29 @@ class AddMasterPresenter(val addMasterView: AddMasterView,val context: Context) 
         })
     }
 
-    fun createMaster( strToken:String,strMainCategory:String,strMaster:String,strImageData:String) {
+    fun createMaster( strToken:String,strMainCategory:String,strMaster:String,strImageData:String,strSubCategory:String,strColorCode:String) {
         val retrofitClient= RetrofitClient(EndPoint.baseUrl2)
         val addMasterJson = JsonObject()
-        addMasterJson.addProperty("strName",strMaster)
-        addMasterJson.addProperty("strCollection",strMainCategory)
-        addMasterJson.addProperty("strImgUrl_0",strImageData)
+
+        if(strSubCategory.equals("")) {
+            val objColorCode=JsonObject()
+            addMasterJson.addProperty("strName", strMaster)
+            addMasterJson.addProperty("strCollection", strMainCategory)
+            addMasterJson.addProperty("strImgUrl_0", strImageData)
+            if(!strColorCode.equals("")){
+                objColorCode.addProperty("strColorCode", strColorCode.toUpperCase())
+                addMasterJson.add("objExtras",objColorCode)
+            }
+
+
+        }else{
+            val objSubCategoryParent=JsonObject()
+            addMasterJson.addProperty("strName", strMaster)
+            addMasterJson.addProperty("strCollection", strMainCategory)
+            addMasterJson.addProperty("strImgUrl_0", strImageData)
+            objSubCategoryParent.addProperty("strParentCategory", strSubCategory)
+            addMasterJson.add("",objSubCategoryParent)
+        }
         val apiResponseCall: Call<DefaultResponse> = retrofitClient.instance.createMaster(strToken,addMasterJson)
         apiResponseCall.enqueue(object : Callback<DefaultResponse> {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
@@ -84,6 +107,38 @@ class AddMasterPresenter(val addMasterView: AddMasterView,val context: Context) 
             }
         })
     }
+    fun categoryList(strCollection:String,strValue:String,strToken: String) {
+        val retrofitClient=RetrofitClient(EndPoint.baseUrl1)
+        val objcategory= JsonObject()
+        objcategory.addProperty("strCollection",strCollection)
+        objcategory.addProperty("strValue",strValue)
+        val apiResponseCall: Call<AddProductCategoryResponse> =
+            //  RetrofitClient.instance.productList()
+            retrofitClient.instance.addProductCategoryList(strToken,objcategory)
+        apiResponseCall.enqueue(object : Callback<AddProductCategoryResponse> {
+            override fun onResponse(call: Call<AddProductCategoryResponse>, response: Response<AddProductCategoryResponse>) {
+                if (response.isSuccessful()) {
+                    val apiResponse: AddProductCategoryResponse? = response.body()
+                    if (apiResponse != null) {
+                        addMasterView.onMasterCategoryListSuccess(apiResponse)
+                    }else{
+                        val apiResponse: AddProductCategoryResponse = response.body()!!
+                        addMasterView.onMasterCategoryListNull(apiResponse)
+                    }
+                } else {
+                    val apiResponse: ResponseBody = response.errorBody()!!
+                    if(apiResponse!=null) {
+                        addMasterView.onMasterCategoryListFailed(apiResponse)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<AddProductCategoryResponse>, t: Throwable) {
+                Toast.makeText(context,"error",Toast.LENGTH_LONG).show()
+                addMasterView.onMasterCategoryListFailedServerError(context.getString(R.string.server_error))
+            }
+        })
+    }
+
 
     private fun prepareMultipartpartBody(
         partName: String,

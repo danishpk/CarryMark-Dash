@@ -23,8 +23,9 @@ class AddDistributerPresenter(private val addDistributerView: AddDistributerView
         objAddEmployee.addProperty("strMobileNo",strMobile)
         objAddEmployee.addProperty("strEmail",strEmail)
         objAddEmployee.addProperty("strPassword",strPassword)
-        objAddEmployee.add("arrAddress",arrAddress)
         objAddEmployee.addProperty("strType","DISTRIBUTER")
+        objAddEmployee.add("arrAddress",arrAddress)
+
         objAddEmployee.add("arrExecutiveId",arrExecutive)
         val retrofitClient= RetrofitClient(EndPoint.baseUrl1)
         val apiResponseCall: Call<DefaultResponse> = retrofitClient.instance.createUser(strToken,objAddEmployee)

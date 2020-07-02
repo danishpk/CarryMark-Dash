@@ -73,6 +73,23 @@ interface ServiceInterface {
     @POST(EndPoint.createMaster)
     @Headers("Content-Type: application/json")
     fun createMaster(@Header("Authorization")strToken:String,
-                   @Body createMaster: JsonObject): Call<DefaultResponse>
+                     @Body createMaster: JsonObject): Call<DefaultResponse>
+
+
+    @HTTP(method = "DELETE", path = EndPoint.deleteMaster, hasBody = true)
+    @Headers("Content-Type: application/json")
+    fun delMaster(@Header("Authorization")strToken:String,
+                      @Body delMaster: JsonObject): Call<DefaultResponse>
+
+    @POST(EndPoint.productDetails)
+    @Headers("Content-Type: application/json")
+    fun productDetail(@Header("Authorization")strToken:String,
+                     @Body productDetails: JsonObject): Call<ProductDetailResponse>
+
+
+    @POST(EndPoint.userList)
+    @Headers("Content-Type: application/json")
+    fun employeeDetail(@Header("Authorization")strToken:String,
+                     @Body employeeDetail: JsonObject): Call<EmployeeDetailResponse>
 }
 

@@ -50,7 +50,7 @@ class EmployeeListAdapter(
         holder.itemView.setOnClickListener {
             if (!selectUser) {
                 val i = Intent(ctx, EmployeeDetailActivity::class.java)
-                i.putExtra("employee", employeeList.get(position)._id)
+                i.putExtra("employeeId", employeeList.get(position)._id)
                 ctx.startActivity(i)
             } else {
                 val intent = Intent()

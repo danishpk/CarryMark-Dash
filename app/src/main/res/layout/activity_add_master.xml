@@ -1,135 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.master.addMaster.AddMasterActivity">
 
-    <LinearLayout
-        android:id="@+id/lv_toolbar"
+    <include
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/include"
+        layout="@layout/toolbar_child" />
+
+    <androidx.core.widget.NestedScrollView
+        app:layout_constraintTop_toBottomOf="@id/include"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        app:layout_constraintBottom_toTopOf="@id/btAddCategory"
+        android:layout_height="0dp">
 
-        <include
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/include"
-            layout="@layout/toolbar_child" />
-    </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/sp_master_categorry"
+                style="@style/SpinnerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:entries="@array/addMasterCategory"
+                android:spinnerMode="dialog"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-    <Spinner
-        android:id="@+id/sp_master_categorry"
-        style="@style/SpinnerStyle"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:entries="@array/addMasterCategory"
-        android:spinnerMode="dialog"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lv_toolbar" />
+            <ImageView
+                android:id="@+id/ivAddMaster"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/ic_gal"
+                android:onClick="setCategoryImage"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sp_master_categorry"
+                android:visibility="visible" />
 
-    <Spinner
-        android:id="@+id/sp_master_sub_categorry"
-        style="@style/SpinnerStyle"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:spinnerMode="dialog"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sp_master_categorry" />
+            <ProgressBar
+                android:id="@+id/pbUploadImageCategory"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/ivAddMaster"
+                app:layout_constraintStart_toStartOf="@id/ivAddMaster"
+                app:layout_constraintTop_toTopOf="@id/ivAddMaster"
+                app:layout_constraintBottom_toBottomOf="@id/ivAddMaster"
+                android:visibility="gone" />
 
-    <TextView
-        android:layout_marginTop="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Category Image"
-        android:textSize="16sp"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/colorLightBlack"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sp_master_categorry"/>
+            <ImageView
+                android:id="@+id/ivSuccess"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:onClick="setCategoryImage"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_baseline_add_to_photos_24"
+                app:layout_constraintEnd_toEndOf="@id/ivAddMaster"
+                app:layout_constraintTop_toTopOf="@id/ivAddMaster"
+                android:visibility="visible" />
 
-    <ImageView
-        android:id="@+id/ivAddMaster"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/ic_gal"
-        android:onClick="setCategoryImage"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sp_master_sub_categorry"
-        android:visibility="visible" />
+            <Button
+                android:id="@+id/btUploadImageCategory"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="24dp"
+                android:visibility="visible"
+                android:text="Upload  Image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivAddMaster"/>
 
-    <ProgressBar
-        android:id="@+id/pbUploadImageCategory"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/ivAddMaster"
-        app:layout_constraintStart_toStartOf="@id/ivAddMaster"
-        app:layout_constraintTop_toTopOf="@id/ivAddMaster"
-        app:layout_constraintBottom_toBottomOf="@id/ivAddMaster"
-        android:visibility="gone" />
+            <AutoCompleteTextView
+                android:id="@+id/autotvListMainCategory"
+                style="@style/InputStyle"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="24dp"
+                android:ems="10"
+                android:hint="Main category"
+                android:inputType="text"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btUploadImageCategory"/>
+            <EditText
+                android:id="@+id/etAddMaster"
+                style="@style/InputStyle"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:ems="10"
+                android:hint="Add here"
+                android:inputType="text"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/autotvListMainCategory"/>
 
-    <ImageView
-        android:id="@+id/ivSuccess"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:onClick="setCategoryImage"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_baseline_add_to_photos_24"
-        app:layout_constraintEnd_toEndOf="@id/ivAddMaster"
-        app:layout_constraintTop_toTopOf="@id/ivAddMaster"
-        android:visibility="visible" />
+            <TextView
+                style="@style/InputStyle"
+                android:id="@+id/btColorPick"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:visibility="gone"
+                android:text="Select Color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAddMaster"/>
 
-    <Button
-        android:id="@+id/btUploadImageCategory"
-        style="@style/ButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:visibility="visible"
-        android:text="Upload  Image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivAddMaster"/>
-    <EditText
-        android:id="@+id/etAddMaster"
-        style="@style/InputStyle"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:ems="10"
-        android:hint="Add here"
-        android:inputType="text"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btUploadImageCategory"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
 
     <Button
         style="@style/ButtonStyle"
@@ -159,5 +174,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btCancelCategory" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

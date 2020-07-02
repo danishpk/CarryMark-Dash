@@ -51,6 +51,7 @@ class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProduct
         holder.itemView.setOnClickListener {
             val intent = Intent(ctx, ProductDetailActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("productId",product._id)
             ctx.startActivity(intent)
         }
     }

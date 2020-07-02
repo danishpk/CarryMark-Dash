@@ -259,9 +259,11 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
             btAddProduct.visibility = View.VISIBLE
         }
 
+
+
         presenter.addProduct(productTitle,productId,productDescription,category,productBrand,
             targetedGender,mrp,sellingPrice,retailerPrice,targetApp,stock,"","",itemUnit,
-            arrImageData,strToken,productMaterial,arrSelectedSize,arrSelectedColor,subCategory,arrSelectedColorCode)
+            arrImageData,strToken,productMaterial,arrSelectedSize,arrPassingColor,subCategory,arrSelectedColorCode)
     }
 
     fun setMainImage(view: View) {
@@ -527,6 +529,10 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                 DialogInterface.OnClickListener { dialogInterface, which ->
                     var item = ""
                     for (i in mUserItems2.indices) {
+                        val objColorData=JsonObject()
+                        objColorData.addProperty("strName",arrColorList.get(mUserItems2.get(i)))
+                        objColorData.addProperty("strColorCode",arrColorCodeList.get(mUserItems2.get(i)))
+                        arrPassingColor.add(objColorData)
                         arrSelectedColor.add(arrColorList.get(mUserItems2.get(i)))
                         arrSelectedColorCode.add(arrColorCodeList.get(mUserItems2.get(i)))
                         item = item + arrColorList.get(mUserItems2.get(i))
@@ -576,15 +582,15 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
 
     override fun onAddSizeColorNull(apiResponse: AddSizeColorResponse) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onAddSizeColorFailed(apiResponse: ResponseBody) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onAddSizeColorFailedServerError(string: String) {
-        TODO("Not yet implemented")
+
     }
 
 

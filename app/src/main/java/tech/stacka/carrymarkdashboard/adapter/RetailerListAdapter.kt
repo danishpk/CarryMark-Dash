@@ -21,10 +21,11 @@ class RetailerListAdapter(
     val retailerList: ArrayList<ArrRetailerList>,
     val selectUser: Boolean,
     val activity: Activity,
-    val executiveList: ArrayList<String>,
-    val executiveIdList: ArrayList<String>
-) :
-    RecyclerView.Adapter<RetailerListAdapter.RetailersViewHolder>() {
+    val employeeList: ArrayList<String>,
+    val employeeIdList: ArrayList<String>,
+    val distributerList: ArrayList<String>,
+    val distributerIdList: ArrayList<String>
+) : RecyclerView.Adapter<RetailerListAdapter.RetailersViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RetailersViewHolder {
         return RetailersViewHolder(
@@ -41,30 +42,27 @@ class RetailerListAdapter(
     }
 
     override fun onBindViewHolder(holder: RetailersViewHolder, position: Int) {
-        val adapter = ArrayAdapter(
-            ctx,
-            android.R.layout.simple_spinner_dropdown_item, executiveList
-        )
+        val adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, employeeList)
         val retailer = retailerList[position]
         holder.displayName.text = retailer.strName
         holder.retId.text = retailer._id
         holder.mobile.text = retailer.strMobileNo
-      //  holder.district.text = "District : " + retailer.arrAddress
+        //  holder.district.text = "District : " + retailer.arrAddress
         holder.whatsapp.text = retailer.strWhatsAppNumber
         holder.officeNo.text = retailer.strOfficeNumber
         //holder.address1.text = retailer.arrAddress
         //holder.address2.text = retailer.address2
-       // holder.state.text = "State     : " + retailer.state
-     //   holder.post.text = "PIN Code  : " + retailer.post
+        // holder.state.text = "State     : " + retailer.state
+        //   holder.post.text = "PIN Code  : " + retailer.post
         holder.checkBox.isChecked = retailer.strActiveStatus == "A"
         holder.sp_executive.adapter = adapter
-//        if (retailer.executiveId != "") {
-//            holder.sp_executive.setSelection(executiveIdList.indexOf(retailer.executiveId))
-//            val exeIndex = executiveIdList.indexOf(retailer.executiveId)
-//            if (exeIndex >= 0)
-//                holder.executiveName.text =
-//                    "Executive : " + executiveList[exeIndex]
-//        }
+        if (retailerList.get(position).arrExecutiveId[0] != null) {
+            holder.sp_executive.setSelection(employeeIdList.indexOf(retailer.arrExecutiveId[0]))
+            val exeIndex = employeeIdList.indexOf(retailer.arrExecutiveId[0])
+            if (exeIndex >= 0)
+                holder.executiveName.text =
+                    "Executive : " + employeeList[exeIndex]
+        }
         holder.sp_executive.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -77,8 +75,8 @@ class RetailerListAdapter(
                     pos: Int,
                     id: Long
                 ) {
-                    if (executiveIdList[pos] != "Executives *")
-                        holder.executiveName.text = "Executive : " + executiveList[pos]
+                    if (employeeIdList[pos] != "Executives *")
+                        holder.executiveName.text = "Executive : " + employeeList[pos]
                 }
 
             }

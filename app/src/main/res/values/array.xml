@@ -31,16 +31,18 @@
         <item>Size</item>
         <item>Color</item>
         <item>Location</item>
+        <item>Sub Category</item>
     </array>
 
     <array name="addMasterCategory">
         <item>Select Master Category *</item>
-        <item>cln_brand </item>
-        <item>cln_category</item>
-        <item>cln_material</item>
-        <item>cln_size</item>
-        <item>cln_color</item>
-        <item>cln_location</item>
+        <item>Brand </item>
+        <item>Category</item>
+        <item>Material</item>
+        <item>Size</item>
+        <item>Color</item>
+        <item>Location</item>
+        <item>Sub Category</item>
     </array>
     <array name="subcategory">
         <item>SubCategory *</item>

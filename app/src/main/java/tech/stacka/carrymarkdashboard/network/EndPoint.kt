@@ -14,5 +14,7 @@ object EndPoint {
     const val createUser = "user/register_user"
     const val deleteProduct = "product/delete_product"
     const val createMaster = "master/create_master"
+    const val deleteMaster = "master/delete_master"
+    const val productDetails = "product/get_product_details"
 
 }

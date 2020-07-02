@@ -24,8 +24,6 @@ import java.io.File
 class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
     private val addProductView: AddProductView = addProductView
     private val mContext: Context = mContext
-    private var j:Int=0
-    private var k:Int=0
     fun addProduct(
         strName: String,
         strProductId: String,
@@ -45,40 +43,18 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
         strToken: String,
         strMaterial:String,
         arrSelectedSize: MutableList<String>,
-        arrSelectedColor: MutableList<String>,
+        arrColorSelected: JsonArray,
         strSubCategory:String,
         arrSelectedColorCode: MutableList<String>
     ) {
         val arrSchemeJson = JsonArray()
         val arrSizeStockJson=JsonArray()
-//        for(i in arrSelectedSize){
-//            val objsize=JsonObject()
-//            objsize.addProperty("strName",i)
-//            arrSizeStockJson.add(objsize)
-//        }
-//        val arrColorStockJson=JsonArray()
-//
-//        for(k in arrSelectedColor){
-//            var objcolor=JsonObject()
-//            objcolor.addProperty("strName",k)
-//            arrColorStockJson.add(objcolor)
-//        }
-        val arrColorStockJson=JsonArray()
-//        while ( j<arrSelectedColorCode.size){
-//            var objcolor=JsonObject()
-//            objcolor.addProperty("strName",arrSelectedColor.get(j).toString())
-//            objcolor.addProperty("strColorCode",arrSelectedColorCode.get(j))
-//            arrColorStockJson.add(objcolor)
-//        }
-//
-//        while ( k<arrSelectedSize.size){
-//            var objSize=JsonObject()
-//            objSize.addProperty("strName",arrSelectedColor.get(k).toString())
-//            arrSizeStockJson.add(objSize)
-//        }
+        for(i in arrSelectedSize){
+            val objsize=JsonObject()
+            objsize.addProperty("strName",i)
+            arrSizeStockJson.add(objsize)
+        }
         val schemeDataJson=JsonObject()
-       // for(ob in objImageUrls){objImageUrlsJson.addProperty("img",ob)}
-        //for(string in arrScheme) { arrSchemeJson.add(schemeDataJson) }
         val addProductJson = JsonObject()
         addProductJson.addProperty("strName",strName)
         addProductJson.addProperty("strProductId",strProductId)
@@ -98,7 +74,7 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
         addProductJson.addProperty("strMaterial",strMaterial)
         addProductJson.add("arrImageUrl",arrImageUrl)
         addProductJson.add("arrSizeStock",arrSizeStockJson)
-        addProductJson.add("arrColorStock",arrColorStockJson)
+        addProductJson.add("arrColorStock",arrColorSelected)
         addProductJson.addProperty("strSubCategory",strSubCategory)
         val retrofitClient=RetrofitClient(EndPoint.baseUrl2)
         val apiResponseCall: Call<AddProductResponse> = retrofitClient.instance.addProduct(strToken,addProductJson)

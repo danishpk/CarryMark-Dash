@@ -2,6 +2,7 @@ package tech.stacka.carrymarkdashboard.activity.distributer.addDistributer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_employee.*
 import kotlinx.android.synthetic.main.toolbar_child.*
@@ -24,8 +25,23 @@ class AddDistributerActivity : AppCompatActivity(), AddDistributerView {
         }
     }
 
-    fun btAddDistbtrClick() {
+    override fun onaddDistributerSuccess(apiResponse: DefaultResponse) {
+        Toast.makeText(applicationContext,apiResponse.strMessage, Toast.LENGTH_SHORT).show()
+        finish()
+    }
 
+    override fun onaddDistributerNull(apiResponse: DefaultResponse) {
+    }
+
+    override fun onaddDistributerFailed(apiResponse: ResponseBody) {
+        Toast.makeText(applicationContext,apiResponse.toString(),Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onaddDistributerFailedServerError(string: String) {
+        Toast.makeText(applicationContext,"Please enter valid data",Toast.LENGTH_SHORT).show()
+    }
+
+    fun btAddDistbtrClick(view: View) {
         val strName = etName.text.toString().trim()
         val strEmail = etEmail.text.toString().trim()
         val strPassword = etPassword.text.toString().trim()
@@ -52,22 +68,6 @@ class AddDistributerActivity : AppCompatActivity(), AddDistributerView {
             return
         }
         presenter.addDistributer(strToken,strName,strMobile,strEmail,strPassword)
-    }
-    override fun onaddDistributerSuccess(apiResponse: DefaultResponse) {
-        Toast.makeText(applicationContext,apiResponse.strMessage, Toast.LENGTH_SHORT).show()
-        finish()
-    }
-
-    override fun onaddDistributerNull(apiResponse: DefaultResponse) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onaddDistributerFailed(apiResponse: ResponseBody) {
-        Toast.makeText(applicationContext,apiResponse.toString(),Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onaddDistributerFailedServerError(string: String) {
-        Toast.makeText(applicationContext,string,Toast.LENGTH_SHORT).show()
     }
 
 

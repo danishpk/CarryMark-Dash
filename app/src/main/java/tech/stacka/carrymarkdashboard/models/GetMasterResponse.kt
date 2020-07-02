@@ -9,5 +9,6 @@ data class GetMasterResponse(
     val cln_color: List<ClnCategories>,
     val cln_location: List<ClnCategories>,
     val cln_material: List<ClnCategories>,
-    val cln_size: List<ClnCategories>
+    val cln_size: List<ClnCategories>,
+    val cln_sub_category: List<ClnCategories>
 )

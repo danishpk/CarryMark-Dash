@@ -8,3 +8,4 @@ data class ClnCategory(
     val strImgUrl_0: String,
     val strName: String
 )
+

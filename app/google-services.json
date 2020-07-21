@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "355975823693",
+    "firebase_url": "https://carry-mark-f6738.firebaseio.com",
+    "project_id": "carry-mark-f6738",
+    "storage_bucket": "carry-mark-f6738.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355975823693:android:66f345cf07d0671c98b704",
+        "android_client_info": {
+          "package_name": "tech.stacka.carrymarkdashboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355975823693-2v6e6l14f2j0o49k35hqetse2ihodnts.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcOmpUxTQ5X2ptIJiQJ-LQOO3dBSIb1bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355975823693-2v6e6l14f2j0o49k35hqetse2ihodnts.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,25 +1,24 @@
 package tech.stacka.carrymarkdashboard.activity.master.addMaster
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.models.AddProductCategoryResponse
 import tech.stacka.carrymarkdashboard.models.DefaultResponse
-import tech.stacka.carrymarkdashboard.models.GetMasterResponse
 import tech.stacka.carrymarkdashboard.models.UploadProductImageResponse
 import tech.stacka.carrymarkdashboard.network.EndPoint
 import tech.stacka.carrymarkdashboard.network.RetrofitClient
 import java.io.File
-import java.util.*
 import kotlin.collections.ArrayList
 
 class AddMasterPresenter(val addMasterView: AddMasterView,val context: Context) {
@@ -93,10 +92,15 @@ class AddMasterPresenter(val addMasterView: AddMasterView,val context: Context) 
                         addMasterView.addMasterNull(apiResponse)
                     }
                 } else {
-                    val apiResponse: ResponseBody = response.errorBody()!!
-                    if(apiResponse!=null) {
-                        addMasterView.addMasterFailed(apiResponse)
-                    }
+//                    val apiResponse: ResponseBody = response.errorBody()!!
+//                    if(apiResponse!=null) {
+//                        addMasterView.addMasterFailed(apiResponse)
+//                    }
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+                    addMasterView.addMasterFailed(arrErrorCommon)
                 }
             }
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {

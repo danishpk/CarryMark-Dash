@@ -121,7 +121,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 style="@style/ButtonStyle"
                 android:textAllCaps="false"
                 android:text="Upload Image"
@@ -215,7 +215,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
                 android:hint="Stock *"
                 android:inputType="number"
@@ -228,9 +228,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
-                android:background="@drawable/bg_image_selector"
+                android:background="@drawable/bg_input"
                 android:button="@android:color/transparent"
                 android:gravity="center|center_horizontal"
                 android:orientation="vertical"
@@ -239,6 +239,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
@@ -255,6 +256,7 @@
                         android:text="PRODUCT TO" />
 
                     <CheckBox
+                        android:buttonTint="@color/colorLightBlue"
                         android:id="@+id/chBtoB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -266,6 +268,7 @@
                         android:textColorHint="@color/colorBlack" />
 
                     <CheckBox
+                        android:buttonTint="@color/colorLightBlue"
                         android:id="@+id/chBtoC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -298,11 +301,11 @@
 
             <AutoCompleteTextView
                 style="@style/InputStyle"
-                android:id="@+id/et_brand"
+                android:id="@+id/et_brandAddProduct"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
                 android:hint="Brand *"
                 android:inputType="text"
@@ -316,7 +319,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
                 android:hint="Category *"
                 android:inputType="text"
@@ -331,7 +334,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
                 android:hint="Sub Category *"
                 android:inputType="text"
@@ -346,9 +349,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
-                android:background="@drawable/bg_image_selector"
+                android:background="@drawable/bg_input"
                 android:button="@android:color/transparent"
                 android:gravity="center|center_horizontal"
                 android:orientation="vertical"
@@ -374,6 +377,7 @@
                     tools:layout_editor_absoluteX="0dp">
 
                     <RadioButton
+                        android:buttonTint="@color/colorLightBlue"
                         android:id="@+id/rbLiter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -384,6 +388,7 @@
                         android:textColorHint="@color/colorBlack" />
 
                     <RadioButton
+                        android:buttonTint="@color/colorLightBlue"
                         android:id="@+id/rbKg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -394,6 +399,7 @@
                         android:textColorHint="@color/colorBlack" />
 
                     <RadioButton
+                        android:buttonTint="@color/colorLightBlue"
                         android:id="@+id/rbItem"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -409,7 +415,7 @@
                 android:id="@+id/etProductMaterial"
                 style="@style/InputStyle"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="55dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
@@ -454,8 +460,7 @@
 <!--                app:layout_constraintTop_toBottomOf="@+id/etProductDescription" />-->
 
 
-            <Button
-                android:backgroundTint="@android:color/transparent"
+            <androidx.appcompat.widget.AppCompatButton
                 android:background="@drawable/bg_spinner"
                 android:textColor="@color/colorBlack"
                 android:text="Select Sizes"
@@ -464,7 +469,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -488,17 +493,17 @@
 <!--                app:layout_constraintTop_toBottomOf="@+id/sp_size" />-->
 
 
-            <Button
-                android:backgroundTint="@android:color/transparent"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
-                android:text="Select Colors"
+            <androidx.appcompat.widget.AppCompatButton
+                android:background="@drawable/bg_spinner"
                 android:textColor="@color/colorBlack"
+                android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+                android:text="Select Colors"
                 android:id="@+id/bt_color"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:textAllCaps="false"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -528,14 +533,17 @@
                 android:visibility="visible">
 
                 <TableRow
+                    android:id="@+id/trSchemeRow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:layout_marginLeft="32dp"
+                        android:gravity="center_vertical"
+                        android:id="@+id/schemeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <EditText
@@ -556,19 +564,31 @@
                             android:hint="Get Qty"
                             android:layout_marginLeft="5dp" />
 
+                        <ImageButton
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="16dp"
+                            android:id="@+id/ibAddNewScheme1"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_outline_add_circle_outline_24"
+                            />
+
                     </LinearLayout>
                 </TableRow>
 
                 <TableRow
+                    android:id="@+id/trSchemeTwo"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     >
 
                     <LinearLayout
+                        android:layout_margin="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <EditText
@@ -589,12 +609,23 @@
                             android:layout_height="55dp"
                             android:layout_marginLeft="5dp" />
 
+                        <ImageButton
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="16dp"
+                            android:id="@+id/ibAddNewScheme2"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_outline_add_circle_outline_24"
+                            />
+
                     </LinearLayout>
 
                 </TableRow>
 
 
                 <TableRow
+                    android:visibility="gone"
+                    android:id="@+id/trSchemeThree"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -603,7 +634,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
                         android:inputType="number"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <EditText
@@ -623,11 +654,22 @@
                             android:inputType="number"
                             android:hint="Get Qty"
                             android:layout_marginLeft="5dp" />
+                        <ImageButton
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="16dp"
+                            android:id="@+id/ibAddNewScheme3"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_outline_add_circle_outline_24"
+                            />
+
 
                     </LinearLayout>
                 </TableRow>
 
                 <TableRow
+                    android:visibility="gone"
+                    android:id="@+id/trScheme4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -635,7 +677,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <EditText
@@ -655,11 +697,21 @@
                             android:inputType="number"
                             android:hint="Get Qty"
                             android:layout_marginLeft="5dp" />
+                        <ImageButton
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="16dp"
+                            android:id="@+id/ibAddNewScheme4"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_outline_add_circle_outline_24"
+                            />
 
                     </LinearLayout>
                 </TableRow>
 
                 <TableRow
+                    android:visibility="gone"
+                    android:id="@+id/trScheme5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -667,7 +719,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <EditText
@@ -706,7 +758,7 @@
                 android:layout_marginBottom="40dp"
                 android:visibility="gone" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btAddProduct"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"

@@ -11,6 +11,7 @@
         android:background="@drawable/bg_button_outline">
 
         <TextView
+            android:textColor="@color/colorBlack"
             android:id="@+id/tvDisplayName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tvRetId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -199,7 +201,7 @@
 
         <Spinner
             android:id="@+id/sp_executives"
-            android:layout_width="20dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
@@ -210,7 +212,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvExecutive" />
 
+        <TextView
+            android:id="@+id/tv_distributer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Distributer"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sp_executives" />
+
+        <Spinner
+            android:id="@+id/sp_distributers"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/ic_edit"
+            android:spinnerMode="dialog"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_distributer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_distributer" />
+
+
         <CheckBox
+            android:buttonTint="@color/colorLightBlue"
             android:id="@+id/chStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -219,9 +248,9 @@
             android:textOff="Off"
             android:textOn="On"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sp_executives" />
+            app:layout_constraintTop_toBottomOf="@+id/sp_distributers" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btUpdate"
             style="@style/ButtonStyle"
             android:layout_width="0dp"

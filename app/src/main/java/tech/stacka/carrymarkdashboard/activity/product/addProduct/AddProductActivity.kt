@@ -1,5 +1,6 @@
 package tech.stacka.carrymarkdashboard.activity.product.addProduct
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -11,9 +12,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
-
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
@@ -24,7 +25,9 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_product.*
 import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.activity.product.productList.ProductListActivity
 import tech.stacka.carrymarkdashboard.models.AddProductCategoryResponse
 import tech.stacka.carrymarkdashboard.models.AddProductResponse
 import tech.stacka.carrymarkdashboard.models.AddSizeColorResponse
@@ -47,12 +50,12 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
     private var imgUrisThree: Uri? = null
     var UPLOAD_IMAGE_VALUE:Int =0
     var CATEGORY_TYPE:Int=0
-    var objImageData=JsonObject()
     var arrImageData=JsonArray()
     val presenter = AddProductPresenter(this,this)
     val path: ArrayList<File> = ArrayList()
     val list: MutableList<String> = ArrayList()
-
+    var arrScheme=JsonArray()
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_product)
@@ -64,6 +67,28 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         nav_back.setOnClickListener {
             finish()
         }
+
+        ibAddNewScheme1.setOnClickListener {
+            trSchemeTwo.visibility=View.VISIBLE
+            ibAddNewScheme1.visibility=View.GONE
+        }
+
+        ibAddNewScheme2.setOnClickListener {
+            trSchemeThree.visibility=View.VISIBLE
+            ibAddNewScheme2.visibility=View.GONE
+        }
+        ibAddNewScheme3.setOnClickListener {
+            trScheme4.visibility=View.VISIBLE
+            ibAddNewScheme3.visibility=View.GONE
+        }
+        ibAddNewScheme4.setOnClickListener {
+            trScheme5.visibility=View.VISIBLE
+            ibAddNewScheme4.visibility=View.GONE
+        }
+
+
+
+
         Log.e("strTokenOnAddProduct",strToken)
         bt_upload_image.setOnClickListener {
                 pbUploadImage.visibility=View.VISIBLE
@@ -77,32 +102,69 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         }
         btAddProduct.setOnClickListener {
             if(UPLOAD_IMAGE_VALUE==1) {
+                btAddProduct.visibility=View.GONE
+                pbAddProduct.visibility=View.VISIBLE
                 addProductClick(it)
             }else{
                 Snackbar.make(it!!,"Upload one image",Snackbar.LENGTH_LONG).show()
             }
 
         }
-        et_brand.addTextChangedListener(object:TextWatcher {
+        et_brandAddProduct.addTextChangedListener(object:TextWatcher {
 
             override fun afterTextChanged(s: Editable) {}
 
             override fun beforeTextChanged(s: CharSequence, start: Int,
                                            count: Int, after: Int) {
+
             }
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
 
-                if(et_brand!=null){
-                    val strValueBrand:String=et_brand.text.toString()
+                    val strValueBrand:String=et_brandAddProduct.text.toString()
                     val strCollectionBrand:String="cln_brand"
                     presenter.categoryList(strCollectionBrand,strValueBrand,strToken)
-                    CATEGORY_TYPE=1;
+                    CATEGORY_TYPE=1
 
-                }
+
             }
         })
+
+//        et_brandAddProduct.setOnTouchListener { v, event ->
+//            val strValueBrand:String=et_brandAddProduct.text.toString()
+//            val strCollectionBrand:String="cln_brand"
+//            presenter.categoryList(strCollectionBrand,strValueBrand,strToken)
+//            false
+//        }
+
+        et_brandAddProduct.setOnTouchListener { v, motionEvent ->
+            val strCollectionBrand:String="cln_brand"
+            presenter.categoryList(strCollectionBrand,"",strToken)
+            CATEGORY_TYPE=1
+            false
+        }
+
+        et_category.setOnTouchListener { v, motionEvent ->
+            val strCollectionCategory:String="cln_category"
+            presenter.categoryList(strCollectionCategory,"",strToken)
+            CATEGORY_TYPE=2
+            false
+        }
+
+        et_subcategory.setOnTouchListener { v, motionEvent ->
+            val strCollectionSubCategory:String="cln_sub_category"
+            presenter.subCategoryList(strCollectionSubCategory,"",strToken,strMaincategory)
+            CATEGORY_TYPE=4
+            false
+        }
+
+        etProductMaterial.setOnTouchListener { v, motionEvent ->
+            val strCollectionMaterial:String="cln_material"
+            presenter.categoryList(strCollectionMaterial,"",strToken)
+            CATEGORY_TYPE=3
+            false
+        }
 
         et_category.addTextChangedListener(object:TextWatcher {
 
@@ -116,13 +178,12 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                if(et_category!=null){
                     val strValueCategory:String=et_category.text.toString()
                     val strCollectionCategory:String="cln_category"
                     presenter.categoryList(strCollectionCategory,strValueCategory,strToken)
-                    CATEGORY_TYPE=2;
+                    CATEGORY_TYPE=2
 
-                }
+
             }
         })
 
@@ -130,7 +191,6 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                 parent,view,position,id->
             strMaincategory = parent.getItemAtPosition(position).toString()
             et_subcategory.visibility=View.VISIBLE
-           // Toast.makeText(applicationContext,"Selected : $selectedItem",Toast.LENGTH_SHORT).show()
         }
 
 
@@ -144,13 +204,11 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                if(et_category!=null){
                     val strValueSubCategory:String=et_subcategory.text.toString()
                     val strCollectionSubCategory:String="cln_sub_category"
                     presenter.subCategoryList(strCollectionSubCategory,strValueSubCategory,strToken,strMaincategory)
-                    CATEGORY_TYPE=4;
+                    CATEGORY_TYPE=4
 
-                }
             }
         })
 
@@ -165,17 +223,13 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                if(etProductMaterial!=null){
                     val strValueMaterial:String=etProductMaterial.text.toString()
                     val strCollectionMaterial:String="cln_material"
                     presenter.categoryList(strCollectionMaterial,strValueMaterial,strToken)
                     CATEGORY_TYPE=3
 
-                }
             }
         })
-
-
 
 
     }
@@ -183,7 +237,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
     private fun addProductClick(it: View?) {
         val productId = etProductId.text.toString().trim()
         val productTitle = etProductTitle.text.toString().trim()
-        val productBrand = et_brand.text.toString().trim()
+        val productBrand = et_brandAddProduct.text.toString().trim()
         val subCategory=et_subcategory.text.toString().trim()
         val category = et_category.text.toString().trim()
         val productMaterial = etProductMaterial.text.toString().trim()
@@ -193,45 +247,91 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         val mrp = etMrp.text.toString().trim()
         val retailerPrice=etRetailerPrice.text.toString().trim()
         val stock = sp_stock.text.toString().trim()
+        val strSchemeOne=etSchemeOne.text.toString().trim()
+        val strScheme1Offer=etOfferOne.text.toString().trim()
+        val strSchemeTwo=etSchemeTw.text.toString().trim()
+        val strScheme2Offer=etOfferTw.text.toString().trim()
+        val strSchemeThree=etSchemeTr.text.toString().trim()
+        val strScheme3Offer=etOfferTr.text.toString().trim()
+//        val strSchemeFour=etSchemeOne.text.toString().trim()
+//        val strScheme4Offer=etOfferOne.text.toString().trim()
+
+        if(strSchemeOne!=null&&!strSchemeOne.equals("")){
+            val objScheme1=JsonObject()
+            objScheme1.addProperty("intBuyNo",strSchemeOne)
+            objScheme1.addProperty("intGetNo",strScheme1Offer)
+            arrScheme.add(objScheme1)
+        }
+        if(strSchemeTwo!=null&&!strSchemeTwo.equals("")){
+            val objScheme2=JsonObject()
+            objScheme2.addProperty("intBuyNo",strSchemeTwo)
+            objScheme2.addProperty("intGetNo",strScheme2Offer)
+            arrScheme.add(objScheme2)
+        }
+        if(strSchemeThree!=null&&!strSchemeThree.equals("")){
+            val objScheme3=JsonObject()
+            objScheme3.addProperty("intBuyNo",strSchemeThree)
+            objScheme3.addProperty("intGetNo",strScheme3Offer)
+            arrScheme.add(objScheme3)
+        }
+
+
+
         if (productId.isEmpty()) {
             etProductId.error = "Product id required*"
             etProductId.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
         if (productTitle.isEmpty()) {
             etProductTitle.error = "Product title required*"
             etProductTitle.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
         if (mrp.isEmpty()) {
             etMrp.error = "Mrp required*"
             etMrp.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
         if (sellingPrice.isEmpty()) {
             etSellingPrice.error = "Selling price required*"
             etSellingPrice.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
         if (retailerPrice.isEmpty()) {
             etRetailerPrice.error = "Retail price required*"
             etRetailerPrice.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
 
         if (stock.isEmpty()) {
             sp_stock.error = "Retail price required*"
             sp_stock.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
         if (productDescription.isEmpty()) {
             etProductDescription.error = "Product discription required*"
             etProductDescription.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
         if (productBrand.isEmpty()) {
-            et_brand.error = "Product brand required*"
-            et_brand.requestFocus()
+            et_brandAddProduct.error = "Product brand required*"
+            et_brandAddProduct.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
             return
         }
 //        if (productMaterial.isEmpty()) {
@@ -258,12 +358,17 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
             pbAddProduct.visibility = View.GONE
             btAddProduct.visibility = View.VISIBLE
         }
+        if(Utilities.checkInternetConnection(this)) {
+            presenter.addProduct(productTitle,productId,productDescription,category,productBrand,
+                targetedGender,mrp,sellingPrice,retailerPrice,targetApp,stock,"","",itemUnit,
+                arrImageData,strToken,productMaterial,arrSelectedSize,arrPassingColor,subCategory,arrSelectedColorCode,arrScheme)
 
+        }else{
+            pbAddProduct.visibility = View.GONE
+            btAddProduct.visibility = View.VISIBLE
+            Snackbar.make(it!!,"check your internet connection",Snackbar.LENGTH_LONG).show()
+        }
 
-
-        presenter.addProduct(productTitle,productId,productDescription,category,productBrand,
-            targetedGender,mrp,sellingPrice,retailerPrice,targetApp,stock,"","",itemUnit,
-            arrImageData,strToken,productMaterial,arrSelectedSize,arrPassingColor,subCategory,arrSelectedColorCode)
     }
 
     fun setMainImage(view: View) {
@@ -325,18 +430,42 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
     }
 
     override fun addProductSuccess(apiResponse: AddProductResponse) {
+        pbAddProduct.visibility=View.GONE
         Toast.makeText(applicationContext,"Product Added",Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this@AddProductActivity,ProductListActivity::class.java))
         finish()
 
 
     }
 
-    override fun addProductFailed(apiResponse: ResponseBody) {
-        Toast.makeText(applicationContext,apiResponse.toString(),Toast.LENGTH_LONG).show()
+    override fun addProductFailed(apiResponse: JSONArray) {
+        val listData = ArrayList<String>()
+        for (i in 0 until apiResponse.length()) {
+            listData += apiResponse.getString(i)
+            Log.e("ListData",listData.toString())
+            for(i in listData){
+                if(i=="PRODUCT NAME ALREADY EXIST"){
+                    etProductTitle.error = "PRODUCT ALREADY EXIST *"
+                    etProductTitle.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                }else if(i=="PRODUCT ID ALREADY EXIST"){
+                    etProductId.error = "PRODUCT ID ALREADY EXIST *"
+                    etProductId.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                }
+            }
+        }
+
+
+        //Toast.makeText(applicationContext,apiResponse.toString(),Toast.LENGTH_LONG).show()
 
     }
 
     override fun addProductFailedServerError(string: String) {
+        pbAddProduct.visibility=View.GONE
+        btAddProduct.visibility=View.VISIBLE
         Toast.makeText(applicationContext,string,Toast.LENGTH_LONG).show()
     }
 
@@ -369,23 +498,23 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         val list: MutableList<String> = ArrayList()
         for(i in categoryData){ list.add(i.strName) }
         if(CATEGORY_TYPE==1) {
-            val acTextView = findViewById(R.id.et_brand) as AutoCompleteTextView
-            acTextView.threshold = 1
-            val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
-            acTextView.setAdapter(arrayAdapter)
+            var acTextView1 = findViewById<AutoCompleteTextView>(R.id.et_brandAddProduct)
+            var arrayAdapter1 = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+            et_brandAddProduct.setAdapter(arrayAdapter1)
+            acTextView1.showDropDown()
         }
         if(CATEGORY_TYPE==2){
-            val acTextView = findViewById(R.id.et_category) as AutoCompleteTextView
-            acTextView.threshold = 1
-            val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
-            acTextView.setAdapter(arrayAdapter)
+            val acTextView2 = findViewById<AutoCompleteTextView>(R.id.et_category)
+            val arrayAdapter2 = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+            acTextView2.setAdapter(arrayAdapter2)
+            acTextView2.showDropDown()
         }
 
         if(CATEGORY_TYPE==3){
-            val acTextView = findViewById(R.id.etProductMaterial) as AutoCompleteTextView
-            acTextView.threshold = 1
-            val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
-            acTextView.setAdapter(arrayAdapter)
+            val acTextView3 = findViewById<AutoCompleteTextView>(R.id.etProductMaterial)
+            val arrayAdapter3 = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+            acTextView3.setAdapter(arrayAdapter3)
+            acTextView3.showDropDown()
 //            acTextView.onItemSelectedListener = object : OnItemSelectedListener {
 //                override fun onItemSelected(arg0: AdapterView<*>?, arg1: View, arg2: Int, arg3: Long
 //                ) {
@@ -401,8 +530,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         }
 
         if(CATEGORY_TYPE==4){
-            val acTextView = findViewById(R.id.et_subcategory) as AutoCompleteTextView
-            acTextView.threshold = 1
+            val acTextView = findViewById<AutoCompleteTextView>(R.id.et_subcategory)
             val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
             acTextView.setAdapter(arrayAdapter)
         }
@@ -446,8 +574,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
 
         bt_size.setOnClickListener {
-            lateinit var checkedItems1: BooleanArray
-            checkedItems1 = BooleanArray(arrSizeList.size)
+            var checkedItems1: BooleanArray = BooleanArray(arrSizeList.size)
             var mUserItems1 = java.util.ArrayList<Int>()
             val list = arrSizeList.toTypedArray<CharSequence>()
             val selectedList=ArrayList<String>()
@@ -476,7 +603,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                             item = "$item, "
                         }
                     }
-                    bt_size.setText("Sizes : $item")
+                    bt_size.text = "Sizes : $item"
                 })
 
             mBuilder.setNegativeButton(
@@ -490,7 +617,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                         checkedItems1[i] = false
                         mUserItems1.clear()
                     }
-                    bt_size.setText("Select Sizes")
+                    bt_size.text = "Select Sizes"
                 })
 
             val mDialog: AlertDialog = mBuilder.create()
@@ -540,7 +667,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                             item = "$item, "
                         }
                     }
-                    bt_color.setText("Colors : $item")
+                    bt_color.text = "Colors : $item"
                 })
 
             mBuilder.setNegativeButton(
@@ -554,7 +681,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                         checkedItems2[i] = false
                         mUserItems2.clear()
                     }
-                    bt_color.setText("Select Colors")
+                    bt_color.text = "Select Colors"
                 })
 
             val mDialog: AlertDialog = mBuilder.create()
@@ -592,6 +719,9 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
     override fun onAddSizeColorFailedServerError(string: String) {
 
     }
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 
 }

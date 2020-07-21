@@ -10,11 +10,11 @@ import tech.stacka.carrymarkdashboard.models.*
 interface ServiceInterface {
 
     @POST(EndPoint.userLogin)
-    @Headers("Content-Type: application/json","strAppInfo: TNT1")
+    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
     fun authUserLogin(@Body userlogin: JsonObject): Call<LoginResponse>
 
     @POST(EndPoint.productList)
-    @Headers("Content-Type: application/json","strAppInfo: TNT1")
+    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
     fun productList(@Body productList: JsonObject): Call<ProductListResponse>
 
     @POST(EndPoint.addProduct)
@@ -32,7 +32,7 @@ interface ServiceInterface {
                            @Part images:List<MultipartBody.Part>):Call<UploadProductImageResponse>
 
     @POST(EndPoint.getMaster)
-    @Headers("Content-Type: application/json","strAppInfo: TNT1")
+    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
     fun filterCategoryList(@Body filterCategoryList: JsonObject): Call<FilterCategoryResponse>
 
     @POST(EndPoint.userList)
@@ -63,11 +63,11 @@ interface ServiceInterface {
                    @Body createUser: JsonObject): Call<DefaultResponse>
 
     @POST(EndPoint.getMaster)
-    @Headers("Content-Type: application/json","strAppInfo: TNT1")
+    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
     fun addSizeColor(@Body addSizeColor: JsonObject): Call<AddSizeColorResponse>
 
     @POST(EndPoint.getMaster)
-    @Headers("Content-Type: application/json","strAppInfo: TNT1")
+    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
     fun getMaster(@Body getMaster: JsonObject): Call<GetMasterResponse>
 
     @POST(EndPoint.createMaster)
@@ -91,5 +91,42 @@ interface ServiceInterface {
     @Headers("Content-Type: application/json")
     fun employeeDetail(@Header("Authorization")strToken:String,
                      @Body employeeDetail: JsonObject): Call<EmployeeDetailResponse>
+
+    @POST(EndPoint.orderList)
+    @Headers("Content-Type: application/json")
+    fun orderList(@Header("Authorization")strToken:String,
+                  @Body orderList: JsonObject): Call<OrderListResponse>
+
+    @POST(EndPoint.orderDetail)
+    @Headers("Content-Type: application/json")
+    fun orderDetail(@Header("Authorization")strToken:String,
+                    @Body orderDetail: JsonObject): Call<OrderDetailResponse>
+
+    @POST(EndPoint.orderUpdate)
+    @Headers("Content-Type: application/json")
+    fun orderUpdate(@Header("Authorization")strToken:String,
+                    @Body orderDetail: JsonObject): Call<DefaultResponse>
+
+    @POST(EndPoint.updateRetailer)
+    @Headers("Content-Type: application/json")
+    fun updateRetailer(@Header("Authorization")strToken:String,
+                    @Body updateRetailer: JsonObject): Call<DefaultResponse>
+
+    @POST(EndPoint.getReports)
+    @Headers("Content-Type: application/json")
+    fun getReport(@Header("Authorization")strToken:String,
+                       @Body getReport: JsonObject): Call<ReportResponse>
+
+    @POST(EndPoint.getEmpLocations)
+    @Headers("Content-Type: application/json")
+    fun getLocation(@Header("Authorization")strToken:String,
+                  @Body getLocation: JsonObject): Call<EmployeeLocationResponse>
+
+    @POST(EndPoint.createTarget)
+    @Headers("Content-Type: application/json")
+    fun createTarget(@Header("Authorization")strToken:String,
+                    @Body createTarget: JsonObject): Call<DefaultResponse>
+
+
 }
 

@@ -1,6 +1,7 @@
 package tech.stacka.carrymarkdashboard.activity.product.addProduct
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -8,6 +9,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,9 +47,10 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
         arrSelectedSize: MutableList<String>,
         arrColorSelected: JsonArray,
         strSubCategory:String,
-        arrSelectedColorCode: MutableList<String>
+        arrSelectedColorCode: MutableList<String>,
+        arrScheme:JsonArray
     ) {
-        val arrSchemeJson = JsonArray()
+        //val arrSchemeJson = JsonArray()
         val arrSizeStockJson=JsonArray()
         for(i in arrSelectedSize){
             val objsize=JsonObject()
@@ -65,7 +68,7 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
         addProductJson.addProperty("dblMRP",dblMRP)
         addProductJson.addProperty("dblSellingPrice",dblSellingPrice)
         addProductJson.addProperty("dblRetailerPrice",dblRetailerPrice)
-        addProductJson.add("arrScheme",arrSchemeJson)
+        addProductJson.add("arrScheme",arrScheme)
         addProductJson.addProperty("strTargetType",strTargetType)
         addProductJson.addProperty("dblTotalStock",dblTotalStock)
         addProductJson.addProperty("intTotalSales",intTotalSales)
@@ -90,10 +93,15 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
                         addProductView.addProductNull(apiResponse)
                     }
                 } else {
-                    val apiResponse: ResponseBody = response.errorBody()!!
-                    if(apiResponse!=null) {
-                        addProductView.addProductFailed(apiResponse)
-                    }
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+
+                    //val apiResponse: ResponseBody = response.errorBody()!!
+                   // if(apiResponse!=null) {
+                       addProductView.addProductFailed(arrErrorCommon)
+                   // }
                 }
             }
             override fun onFailure(call: Call<AddProductResponse>, t: Throwable) {

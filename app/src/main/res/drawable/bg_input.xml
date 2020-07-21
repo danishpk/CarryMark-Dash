@@ -3,5 +3,5 @@
     <path android:fillColor="#00000000"
         android:pathData="m305.33,65.19h-304.8v-64.661h304.8z"
             android:strokeWidth="3"
-            android:strokeColor="#9E9D9C" />
+            android:strokeColor="@color/colorBlue" />
 </vector>

@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_master_list.*
 import kotlinx.android.synthetic.main.activity_master_list.sp_master_categorry
 import kotlinx.android.synthetic.main.activity_product_list.*
 import kotlinx.android.synthetic.main.master_list_item.*
+import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.adapter.MasterAdapter
@@ -40,6 +41,10 @@ class MasterListActivity : AppCompatActivity(), MasterListView ,MasterAdapter.Da
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master_list)
+
+        nav_back.setOnClickListener {
+            finish()
+        }
         val categoryList= ArrayList<String>()
         categoryList.add("cln_brand")
         categoryList.add("cln_category")
@@ -182,6 +187,10 @@ class MasterListActivity : AppCompatActivity(), MasterListView ,MasterAdapter.Da
 
             presenter.deleteMaster(strCategoryType,strMasterId,strToken)
 
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
 }

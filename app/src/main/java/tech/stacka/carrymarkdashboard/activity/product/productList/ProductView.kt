@@ -13,4 +13,8 @@ interface ProductView {
     abstract fun onDeleteProductNull(apiResponse: DefaultResponse)
     abstract fun onDeleteProductFailed(apiResponse: ResponseBody)
     abstract fun onDeleteProductFailedServerError(toString: String)
+    abstract fun onProductListMoreSuccess(apiResponse: ProductListResponse)
+    abstract fun onProductListMoreNull(apiResponse: ProductListResponse)
+    abstract fun onProductListMoreFailed(apiResponse: ResponseBody)
+    abstract fun onProductListFailedMoreServerError(string: String)
 }

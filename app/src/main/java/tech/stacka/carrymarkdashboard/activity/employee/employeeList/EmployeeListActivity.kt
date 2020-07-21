@@ -14,6 +14,8 @@ import tech.stacka.carrymarkdashboard.adapter.EmployeeListAdapter
 import tech.stacka.carrymarkdashboard.models.EmployeeListResponse
 import tech.stacka.carrymarkdashboard.models.data.ArrEmployeeList
 import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
+import tech.stacka.carrymarkdashboard.utils.AlertHelper
+import tech.stacka.carrymarkdashboard.utils.Utilities
 
 class EmployeeListActivity : AppCompatActivity(), EmployeeListView {
     private var mTotalItemCount = 0
@@ -33,9 +35,19 @@ class EmployeeListActivity : AppCompatActivity(), EmployeeListView {
         }
         val strToken:String= SharedPrefManager.getInstance(applicationContext).user.strToken!!
         val presenter = EmployeeListPresenter(this, this)
-        presenter.employeeList(strToken)
 
 
+        if(Utilities.checkInternetConnection(this)) {
+            presenter.employeeList(strToken)
+
+        }else{
+            AlertHelper.showNoInternetSnackBar(this@EmployeeListActivity, object :
+                AlertHelper.SnackBarListener {
+                override fun onOkClick() {
+                    presenter.employeeList(strToken)
+                }
+            })
+        }
 
 
 
@@ -58,14 +70,28 @@ class EmployeeListActivity : AppCompatActivity(), EmployeeListView {
     }
 
     override fun onEmployeeListFailed(apiResponse: ResponseBody) {
-
+        AlertHelper.showOKSnackBarAlert(this@EmployeeListActivity,"Employee List Failed")
+        pbLoadMore.visibility = View.GONE
+        pbLoading.visibility = View.GONE
     }
 
     override fun onEmployeeListFailedServerError(string: String) {
-
+        AlertHelper.showNoInternetSnackBar(this@EmployeeListActivity, object :
+            AlertHelper.SnackBarListener {
+            override fun onOkClick() {
+            }
+        })
+        pbLoadMore.visibility = View.GONE
+        pbLoading.visibility = View.GONE
     }
 
     override fun onEmployeeListNull(apiResponse: EmployeeListResponse) {
-        TODO("Not yet implemented")
+        pbLoadMore.visibility = View.GONE
+        pbLoading.visibility = View.GONE
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

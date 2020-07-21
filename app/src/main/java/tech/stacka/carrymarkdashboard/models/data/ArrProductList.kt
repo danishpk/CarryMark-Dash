@@ -12,5 +12,6 @@ data class ArrProductList(
     val strGenderCategory: String,
     val strImageUrl: String,
     val strName: String,
-    val strProductId: String
+    val strProductId: String,
+    val dblTotalSales: Int=0
 )

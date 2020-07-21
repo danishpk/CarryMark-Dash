@@ -1,6 +1,7 @@
 package tech.stacka.carrymarkdashboard.activity.retailer.retailerList
 
 import okhttp3.ResponseBody
+import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.DistributerListResponse
 import tech.stacka.carrymarkdashboard.models.EmployeeListResponse
 import tech.stacka.carrymarkdashboard.models.RetailerListResponse
@@ -18,4 +19,8 @@ interface RetailerListView {
     abstract fun onDistributerListSuccess(apiResponse: DistributerListResponse)
     abstract fun onDistributerListFailed(apiResponse: ResponseBody)
     abstract fun onDistributerListFailedServerError(string: String)
+    abstract fun onRetailerUpdateSuccess(apiResponse: DefaultResponse)
+    abstract fun onRetailerUpdateNull(apiResponse: DefaultResponse)
+    abstract fun onRetailerUpdateFailed(apiResponse: ResponseBody)
+    abstract fun onRetailerUpdateFailedServerError(string: String)
 }

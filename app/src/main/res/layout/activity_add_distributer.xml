@@ -10,7 +10,7 @@
         android:id="@+id/include"
         layout="@layout/toolbar_child" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -105,54 +105,87 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+            
 
-            <Spinner
-                android:id="@+id/sp_district"
-                style="@style/SpinnerStyle"
+<!--            <Spinner-->
+<!--                android:id="@+id/sp_district"-->
+<!--                style="@style/SpinnerStyle"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="55dp"-->
+<!--                android:layout_marginStart="24dp"-->
+<!--                android:layout_marginTop="32dp"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                android:entries="@array/districts"-->
+<!--                android:spinnerMode="dialog"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/etPassword" />-->
+
+            <EditText
+                android:id="@+id/etAddressDistr"
+                style="@style/InputStyle"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
-                android:entries="@array/districts"
-                android:spinnerMode="dialog"
+                android:hint="ADDRESS *"
+                android:inputType="text"
+                android:textColor="@color/colorGrey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
-            <Spinner
-                android:id="@+id/sp_executive"
-                style="@style/SpinnerStyle"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
+            <TextView
+                android:id="@+id/tvExecutive"
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
-                android:spinnerMode="dialog"
+                android:fontFamily="@font/montserrat"
+                android:text="Select Executive"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sp_district" />
+                app:layout_constraintTop_toBottomOf="@+id/etAddressDistr" />
 
-            <Button
-                android:id="@+id/btAddEmpl"
+
+
+
+            <Spinner
+                style="@style/SpinnerStyle"
+                android:id="@+id/spExecutive"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvExecutive" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                style="@style/ButtonStyle"
+                android:id="@+id/btAddDist"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="32dp"
-                android:background="@drawable/bg_button"
                 android:onClick="btAddDistbtrClick"
                 android:text="ADD DISTRIBUTOR"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sp_executive" />
+                app:layout_constraintTop_toBottomOf="@+id/spExecutive" />
 
             <ProgressBar
-                android:id="@+id/pbAddEmpl"
+                android:id="@+id/pbAddDist"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -166,5 +199,5 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sp_district" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

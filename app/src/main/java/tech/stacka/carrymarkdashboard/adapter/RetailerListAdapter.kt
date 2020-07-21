@@ -24,9 +24,14 @@ class RetailerListAdapter(
     val employeeList: ArrayList<String>,
     val employeeIdList: ArrayList<String>,
     val distributerList: ArrayList<String>,
-    val distributerIdList: ArrayList<String>
+    val distributerIdList: ArrayList<String>,
+    var dtInterface: DataTransferInterfaceRetailer
 ) : RecyclerView.Adapter<RetailerListAdapter.RetailersViewHolder>() {
-
+    var strActive="";
+    var strDistributorName:String=""
+    var strExecutiveName:String=""
+    var strDistributorId:String=""
+    var strExecutiveId:String=""
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RetailersViewHolder {
         return RetailersViewHolder(
             LayoutInflater.from(ctx).inflate(
@@ -43,43 +48,86 @@ class RetailerListAdapter(
 
     override fun onBindViewHolder(holder: RetailersViewHolder, position: Int) {
         val adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, employeeList)
+        val adapter2 = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, distributerList)
         val retailer = retailerList[position]
         holder.displayName.text = retailer.strName
         holder.retId.text = retailer._id
         holder.mobile.text = retailer.strMobileNo
-        //  holder.district.text = "District : " + retailer.arrAddress
         holder.whatsapp.text = retailer.strWhatsAppNumber
         holder.officeNo.text = retailer.strOfficeNumber
-        //holder.address1.text = retailer.arrAddress
-        //holder.address2.text = retailer.address2
-        // holder.state.text = "State     : " + retailer.state
-        //   holder.post.text = "PIN Code  : " + retailer.post
         holder.checkBox.isChecked = retailer.strActiveStatus == "A"
         holder.sp_executive.adapter = adapter
-        if (retailerList.get(position).arrExecutiveId[0] != null) {
-            holder.sp_executive.setSelection(employeeIdList.indexOf(retailer.arrExecutiveId[0]))
-            val exeIndex = employeeIdList.indexOf(retailer.arrExecutiveId[0])
-            if (exeIndex >= 0)
-                holder.executiveName.text =
-                    "Executive : " + employeeList[exeIndex]
-        }
-        holder.sp_executive.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
+        holder.sp_distributer.adapter=adapter2
 
+        if (retailerList.get(position).strExecutiveId!= null) {
+            if(holder.checkBox.isChecked){
+                strActive="A"
+
+            }else{
+                strActive="I"
+            }
+
+            holder.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    strActive="A"
+                }else{
+                    strActive="I"
+                }
+            }
+            holder.sp_executive.setSelection(employeeIdList.indexOf(retailer.strExecutiveId))
+            val exeIndex = employeeIdList.indexOf(retailer.strExecutiveId)
+
+            if (exeIndex >= 0) {
+                holder.executiveName.text = "Executive : " + employeeList[exeIndex]
+                strExecutiveName = employeeList[exeIndex]
+                strExecutiveId = employeeIdList[exeIndex]
+            }
+        }
+
+        holder.sp_executive.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
 
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    pos: Int,
-                    id: Long
-                ) {
-                    if (employeeIdList[pos] != "Executives *")
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+
+                    if (employeeIdList[pos] != "Executives *") {
                         holder.executiveName.text = "Executive : " + employeeList[pos]
+                        strExecutiveId = employeeIdList[pos]
+                        strExecutiveName = employeeList[pos]
+                    }
                 }
 
             }
+
+
+
+        if (retailerList.get(position).strDistributerId != null) {
+            holder.sp_distributer.setSelection(distributerIdList.indexOf(retailer.strDistributerId))
+            val exeIndex = distributerIdList.indexOf(retailer.strDistributerId)
+            if (exeIndex >= 0) {
+                holder.distributerName.text = "Distributer : " + distributerList[exeIndex]
+                strDistributorId = distributerIdList[exeIndex]
+                strDistributorName = distributerList[exeIndex]
+            }
+        }
+        holder.sp_distributer.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+
+                    if (distributerIdList[pos] != "Distributers * *") {
+                        holder.distributerName.text = "Distributer : " + distributerList[pos]
+                        strDistributorName = distributerList[pos]
+                        strDistributorId = distributerIdList[pos]
+                    }
+                }
+
+            }
+
+
+
         if (selectUser) {
             holder.itemView.setOnClickListener {
                 val intent = Intent()
@@ -89,45 +137,12 @@ class RetailerListAdapter(
                 activity.finish()
             }
         }
-//        var mFunctions: FirebaseFunctions = FirebaseFunctions.getInstance()
-//        holder.btUpdate.setOnClickListener { v ->
-//            holder.btUpdate.isEnabled = false
-//            val data = HashMap<String, Any>()
-//            data["uid"] = retailer.uid
-//            if (holder.checkBox.isChecked) {
-//                data["status"] = "A"
-//            } else {
-//                data["status"] = "I"
-//            }
-//            data["executiveId"] = executiveIdList[holder.sp_executive.selectedItemPosition]
-//            mFunctions.getHttpsCallable("verifyRetailer")
-//                .call(data).addOnSuccessListener { httpsCallableResult ->
-//                    val result = httpsCallableResult.data.toString()
-//                    try {
-//                        val g = Gson()
-//                        val json =
-//                            g.fromJson(result, Response::class.java)
-//                        if (json.success) {
-//                            Snackbar.make(
-//                                v,
-//                                "Updated Retailer",
-//                                Snackbar.LENGTH_LONG
-//                            ).show()
-//                        } else {
-//                            Snackbar.make(
-//                                v,
-//                                "Updation failed",
-//                                Snackbar.LENGTH_LONG
-//                            ).show()
-//                        }
-//                    } catch (e: Exception) {
-//                        Snackbar.make(v, "Something went wrong", Snackbar.LENGTH_LONG)
-//                            .show()
-//                    }
-//                    holder.btUpdate.isEnabled = true
-//                }
-//
-//        }
+
+        holder.btUpdate.setOnClickListener {
+            dtInterface.setRetailerValues(strExecutiveId,strExecutiveName,strDistributorId,
+                strDistributorName,strActive,retailerList.get(position)._id)
+        }
+
         holder.btmMore.setOnClickListener {
             if (holder.district.getVisibility() == View.VISIBLE) {
                 holder.btmMore.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp)
@@ -138,10 +153,6 @@ class RetailerListAdapter(
                 holder.address2.visibility = View.GONE
                 holder.state.visibility = View.GONE
                 holder.post.visibility = View.GONE
-//                        holder.exeId.visibility = View.GONE
-//                        holder.distId.visibility = View.GONE
-//                        holder.text3.visibility = View.GONE
-//                        holder.text4.visibility = View.GONE
                 holder.text6.visibility = View.GONE
                 holder.text7.visibility = View.GONE
                 holder.text8.visibility = View.GONE
@@ -155,10 +166,6 @@ class RetailerListAdapter(
                 holder.address2.visibility = View.VISIBLE
                 holder.state.visibility = View.VISIBLE
                 holder.post.visibility = View.VISIBLE
-//                        holder.exeId.visibility = View.VISIBLE
-//                        holder.distId.visibility = View.VISIBLE
-//                        holder.text3.visibility = View.VISIBLE
-//                        holder.text4.visibility = View.VISIBLE
                 holder.text6.visibility = View.VISIBLE
                 holder.text7.visibility = View.VISIBLE
                 holder.text8.visibility = View.VISIBLE
@@ -168,9 +175,6 @@ class RetailerListAdapter(
 
     }
 
-//    fun getLastItemId(): String {
-//        return retailerList[retailerList.lastIndex].uid
-//    }
 
     fun addAll(newOrders: ArrayList<ArrRetailerList>) {
         val initialSize = retailerList.size
@@ -191,10 +195,7 @@ class RetailerListAdapter(
         val officeNo = view.tvOfficeNo
         val state = view.tvState
         val post = view.tvPost
-
-        //        val exeId = view.tvExecutive
-//        val distId = view.tvDistributor
-//        val text3 = view.textView3
+        val distributerName=view.tv_distributer
         val executiveName = view.tvExecutive
         val text5 = view.textView5
         val text6 = view.textView6
@@ -203,7 +204,12 @@ class RetailerListAdapter(
         val text9 = view.textView9
         val checkBox = view.chStatus
         val sp_executive = view.sp_executives
+        val sp_distributer = view.sp_distributers
 
+    }
+    interface DataTransferInterfaceRetailer {
+        fun setRetailerValues(strExecutiveId:String,strExecutiveName:String,strDistributorId:String,
+                              strDistributorName:String,strActive:String,strRetailerId:String)
     }
 
 }

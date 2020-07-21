@@ -33,7 +33,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btUpdateTarget" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btLocationHistory"
                 style="@style/ButtonStyle"
                 android:layout_width="0dp"
@@ -49,6 +49,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/chartOrders" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btTargetHistory"
                 style="@style/ButtonStyle"
                 android:layout_width="0dp"
@@ -62,6 +63,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btLocationHistory" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btDeleteUser"
                 style="@style/ButtonStyle"
                 android:layout_width="0dp"
@@ -148,6 +150,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvMobile" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tvDistrict"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,8 +182,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDistrict" />
 
-            <TextView
-                android:id="@+id/tvTarget"
+            <androidx.appcompat.widget.AppCompatButton
+                android:background="@drawable/bg_button_outline"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:id="@+id/btTarget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -202,7 +208,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTarget"
+                app:layout_constraintTop_toBottomOf="@+id/btTarget"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -214,7 +220,7 @@
                     tools:visibility="visible" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btUpdateTarget"
                 style="@style/ButtonStyle"
                 android:layout_width="wrap_content"

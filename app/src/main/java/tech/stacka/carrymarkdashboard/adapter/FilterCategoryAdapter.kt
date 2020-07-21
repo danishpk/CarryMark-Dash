@@ -1,6 +1,7 @@
 package tech.stacka.carrymarkdashboard.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,14 @@ import android.widget.CheckBox
 import android.widget.TextView
 import tech.stacka.carrymarkdashboard.R
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-class FilterCategoryAdapter(var mContext: Context, data: ArrayList<String>, dtInterface:DataTransferInterface) : ArrayAdapter<String>(mContext, R.layout.filter_category_list) {
+class FilterCategoryAdapter(var mContext: Context, data: ArrayList<String>,
+                            var dtInterface: DataTransferInterface,
+                            var filteredCategory: ArrayList<String>
+) : ArrayAdapter<String>(mContext, R.layout.filter_category_list) {
     private val data: ArrayList<String>
-    var dtInterface: DataTransferInterface
-    var filterCategory: MutableList<String> = ArrayList()
     private val mItemChecked: BooleanArray
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
@@ -25,24 +28,32 @@ class FilterCategoryAdapter(var mContext: Context, data: ArrayList<String>, dtIn
             holder = ViewHolder()
             holder.mName = convertView!!.findViewById<View>(R.id.subjectName_textView) as TextView?
             holder.checkBox = convertView.findViewById<View>(R.id.subjectCheckbox) as CheckBox?
-            dtInterface.setValues(filterCategory)
-            convertView.setTag(holder)
+            //dtInterface.setValues(filteredCategory)
+            convertView.tag = holder
         } else {
-            holder =
-                convertView.tag as ViewHolder
+            holder = convertView.tag as ViewHolder
         }
-    holder.mName!!.setText(this.data[position].toString())
+
+        for(i in filteredCategory.indices){
+            if(data[position]==filteredCategory[i])
+                mItemChecked[position] = true
+            Log.e("dataPosition",data[position])
+            Log.e("filteredPosition",filteredCategory[i])
+        }
+
+
+        holder.mName!!.text = this.data[position].toString()
         holder.checkBox!!.setOnCheckedChangeListener(null)
         holder.checkBox!!.isChecked = mItemChecked[position]
         holder.checkBox!!.tag = position
         holder.checkBox!!.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked.also { mItemChecked[position] = it }) {
-                filterCategory.add(data[position].toString())
-                dtInterface.setValues(filterCategory)
+                filteredCategory.add(data[position].toString())
+                dtInterface.setValues(filteredCategory)
 
             } else {
-                filterCategory.remove(data[position].toString())
-                dtInterface.setValues(filterCategory)
+                filteredCategory.remove(data[position].toString())
+                dtInterface.setValues(filteredCategory)
             }
         }
         return convertView
@@ -56,10 +67,6 @@ class FilterCategoryAdapter(var mContext: Context, data: ArrayList<String>, dtIn
         return position
     }
 
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
-    }
-
     fun itemIsChecked(position: Int): Boolean {
         return mItemChecked[position]
     }
@@ -70,16 +77,17 @@ class FilterCategoryAdapter(var mContext: Context, data: ArrayList<String>, dtIn
     }
 
     init {
-        this.dtInterface=dtInterface
         this.data = data
+        this.filteredCategory=filteredCategory
         mItemChecked = BooleanArray(data.size)
-        for (i in data.indices) {
-            mItemChecked[i] = true
-            filterCategory.add(data[i].toString())
-        }
+//        for (i in filteredCategory.indices) {
+//         //   if(filteredCategory[i]==data[i])
+//            mItemChecked[i] = true
+//          filteredCategory.add(data[i].toString())
+//        }
     }
 
     interface DataTransferInterface {
-        fun setValues(al: MutableList<String>)
+        fun setValues(al: ArrayList<String>)
     }
 }

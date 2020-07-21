@@ -38,6 +38,7 @@ class DistributorListAdapter(
         val distributor = distributorList[position]
         holder.displayName.text = distributor.strName
         holder.distId.text = distributor._id
+        holder.district.text=distributor.strEmail
        // holder.district.text = distributor.district
         holder.mobile.text = distributor.strMobileNo
         if (selectUser) {

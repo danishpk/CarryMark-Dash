@@ -42,7 +42,7 @@
                 android:layout_gravity="start"
                 android:layout_margin="4dp"
                 android:padding="12dp"
-                android:text="Name ascending"
+                android:text="Name Ascending"
                 android:textAlignment="textStart"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -54,32 +54,32 @@
                 android:layout_gravity="start"
                 android:layout_margin="4dp"
                 android:padding="12dp"
-                android:text="Name descending"
+                android:text="Name Descending"
                 android:textAlignment="textStart"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
             <RadioButton
 
-                android:id="@+id/radioSortDateAscending"
+                android:id="@+id/radioSortPriceAscending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_margin="4dp"
                 android:padding="12dp"
-                android:text="Date ascending"
+                android:text="Price Ascending"
                 android:textAlignment="textStart"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
             <RadioButton
-                android:id="@+id/radioSortDateDescending"
+                android:id="@+id/radioSortPriceDescending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_margin="4dp"
                 android:padding="12dp"
-                android:text="Date descenting"
+                android:text="Price Descending"
                 android:textAlignment="textStart"
                 android:textSize="14sp"
                 android:textStyle="bold" />

@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.adapter.RetailerListAdapter
+import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.DistributerListResponse
 import tech.stacka.carrymarkdashboard.models.EmployeeListResponse
 import tech.stacka.carrymarkdashboard.models.RetailerListResponse
@@ -19,8 +20,10 @@ import tech.stacka.carrymarkdashboard.models.data.ArrDistributerList
 import tech.stacka.carrymarkdashboard.models.data.ArrEmployeeList
 import tech.stacka.carrymarkdashboard.models.data.ArrRetailerList
 import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
+import tech.stacka.carrymarkdashboard.utils.AlertHelper
 
-class RetailerListActivity : AppCompatActivity(), RetailerListView {
+class RetailerListActivity : AppCompatActivity(), RetailerListView,
+    RetailerListAdapter.DataTransferInterfaceRetailer {
     private lateinit var mAdapter: RetailerListAdapter
     //private lateinit var lastSnap: QueryDocumentSnapshot
     private var retailersList = ArrayList<ArrRetailerList>()
@@ -123,7 +126,7 @@ class RetailerListActivity : AppCompatActivity(), RetailerListView {
         rvRetailers.layoutManager = mLayoutManager
         rvRetailers.setHasFixedSize(true)
         mAdapter = RetailerListAdapter(this,retailersList,selectUser,this,arrEmployeeNameList,arrEmployeeIdList,
-            arrDistributerNameList,arrDistributerIdList)
+            arrDistributerNameList,arrDistributerIdList,this)
         //   mAdapter.addAll(employeeList)
         rvRetailers.adapter = mAdapter
         pbLoadMore.visibility = View.GONE
@@ -137,5 +140,41 @@ class RetailerListActivity : AppCompatActivity(), RetailerListView {
 
     override fun onDistributerListFailedServerError(string: String) {
         Toast.makeText(applicationContext,string,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRetailerUpdateSuccess(apiResponse: DefaultResponse) {
+        AlertHelper.showOKSnackBarAlert(this@RetailerListActivity,"Retailer successfully updated")
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
+    override fun onRetailerUpdateNull(apiResponse: DefaultResponse) {
+     //   AlertHelper.showOKSnackBarAlert(this@RetailerListActivity,"Retailer successfully updated")
+    }
+
+    override fun onRetailerUpdateFailed(apiResponse: ResponseBody) {
+        AlertHelper.showOKSnackBarAlert(this@RetailerListActivity,"Retailer update failed")
+    }
+
+    override fun onRetailerUpdateFailedServerError(string: String) {
+        AlertHelper.showOKSnackBarAlert(this@RetailerListActivity,"Network Problem")
+    }
+
+    override fun setRetailerValues(
+        strExecutiveId: String,
+        strExecutiveName: String,
+        strDistributorId: String,
+        strDistributorName: String,
+        strActive: String,
+        strRetailerId:String
+    ) {
+        presenter.updateRetailer(strToken,strExecutiveId,strExecutiveName,strDistributorId,strDistributorName,strActive,strRetailerId)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

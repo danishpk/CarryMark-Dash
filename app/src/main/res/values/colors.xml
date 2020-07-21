@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">#0384DA</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGrey">#999999</color>
@@ -11,4 +11,6 @@
     <color name="colorLightBlack">#3C3C3C</color>
     <color name="colorCardText">#4D4D4D</color>
     <color name="colorLightOrange">#E05517</color>
+    <color name="colorBlue">#00134A</color>
+    <color name="colorLightBlue">#0537C8</color>
 </resources>

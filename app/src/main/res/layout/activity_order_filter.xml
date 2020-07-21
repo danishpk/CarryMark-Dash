@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.order.orderFilter.OrderFilterActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_child" />
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        app:layout_constraintBottom_toTopOf="@+id/btApply"
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+        <ListView
+            android:id="@+id/lvFilterOrderMainCategory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:entries="@array/filterOrderCategory"
+            android:orientation="vertical" />
+
+        <ListView
+            android:visibility="gone"
+            android:id="@+id/lvFilterOrderDetailCategory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="3"
+            android:id="@+id/datePickerLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sp_status">
+
+            <LinearLayout
+                android:id="@+id/LFrmDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_input"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvOrdFromDate"
+                    android:layout_width="171dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+
+                    android:gravity="center|start"
+                    android:hint="From Date"
+                    android:inputType="numberSigned|number"
+                    android:paddingLeft="10dp"
+                    android:textColor="#000000" />
+
+                <ImageView
+                    android:id="@+id/btOrdFrmDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_dateblue" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:id="@+id/LToDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_input"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvOrdToDate"
+                    android:layout_width="171dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:gravity="center|start"
+                    android:hint="To Date"
+                    android:inputType="numberSigned|number"
+                    android:paddingLeft="10dp"
+                    android:textColor="#000000" />
+
+                <ImageView
+                    android:id="@+id/btOrdToDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_dateblue" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_margin="8dp"
+        android:id="@+id/btCancel"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:background="#fff"
+        android:backgroundTint="#CCCCCC"
+        android:text="CANCEL"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btApply"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_margin="8dp"
+        android:id="@+id/btApply"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:background="@drawable/bg_button"
+        android:text="APPLY"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btCancel" />
+
+    <ProgressBar
+        android:id="@+id/pbAddEmpl"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintHorizontal_bias="0.7"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="79dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

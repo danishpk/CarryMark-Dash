@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.DistributerListResponse
 import tech.stacka.carrymarkdashboard.models.EmployeeListResponse
 import tech.stacka.carrymarkdashboard.models.RetailerListResponse
@@ -120,6 +121,54 @@ class RetailerListPresenter(retailreListView: RetailerListView, context: Context
             override fun onFailure(call: Call<DistributerListResponse>, t: Throwable) {
                 Toast.makeText(context, "error", Toast.LENGTH_LONG).show()
                 retailerListView.onDistributerListFailedServerError(context.getString(R.string.server_error))
+            }
+        })
+    }
+
+    fun updateRetailer( strToken: String,
+                        strExecutiveId: String,
+                       strExecutiveName: String,
+                       strDistributorId: String,
+                       strDistributorName: String,
+                       strActive: String,
+                       strRetailerId:String) {
+
+
+        val objUpdateRetailer = JsonObject()
+        objUpdateRetailer.addProperty("strDistributerId", strDistributorId)
+        objUpdateRetailer.addProperty("strDistributerName",strDistributorName)
+        objUpdateRetailer.addProperty("strActiveStatus",strActive)
+        objUpdateRetailer.addProperty("strExecutiveId",strExecutiveId)
+        objUpdateRetailer.addProperty("strExecutiveName",strExecutiveName)
+        objUpdateRetailer.addProperty("strUserDocId",strRetailerId)
+        val retrofitClient = RetrofitClient(EndPoint.baseUrl2)
+        val apiResponseCall: Call<DefaultResponse> =
+            //  RetrofitClient.instance.productList()
+            retrofitClient.instance.updateRetailer(strToken, objUpdateRetailer)
+        apiResponseCall.enqueue(object : Callback<DefaultResponse> {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if (response.isSuccessful()) {
+                    val apiResponse: DefaultResponse? = response.body()
+                    if (apiResponse != null) {
+                        retailerListView.onRetailerUpdateSuccess(apiResponse)
+                    } else {
+                        val apiResponse: DefaultResponse = response.body()!!
+                        retailerListView.onRetailerUpdateNull(apiResponse)
+                    }
+                } else {
+                    val apiResponse: ResponseBody = response.errorBody()!!
+                    if (apiResponse != null) {
+                        retailerListView.onRetailerUpdateFailed(apiResponse)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(context, "error", Toast.LENGTH_LONG).show()
+                retailerListView.onRetailerUpdateFailedServerError(context.getString(R.string.server_error))
             }
         })
     }

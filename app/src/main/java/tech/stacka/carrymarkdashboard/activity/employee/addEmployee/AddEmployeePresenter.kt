@@ -1,14 +1,14 @@
 package tech.stacka.carrymarkdashboard.activity.employee.addEmployee
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.network.EndPoint
 import tech.stacka.carrymarkdashboard.network.RetrofitClient
@@ -16,9 +16,12 @@ import tech.stacka.carrymarkdashboard.network.RetrofitClient
 class AddEmployeePresenter(private val addEmployeeView: AddEmployeeView,
                            private val context: Context) {
 
-    fun addEmployee(strToken:String,strName:String,strMobile:String,strEmail:String,strPassword:String) {
+    fun addEmployee(strToken:String,strName:String,strMobile:String,strEmail:String,strPassword:String,strAddress:String) {
         val objAddEmployee= JsonObject()
         val arrAddress=JsonArray()
+        val objAddress=JsonObject()
+        objAddress.addProperty("strAddress",strAddress)
+        arrAddress.add(objAddress)
         objAddEmployee.addProperty("strName",strName)
         objAddEmployee.addProperty("strMobileNo",strMobile)
         objAddEmployee.addProperty("strEmail",strEmail)
@@ -38,10 +41,16 @@ class AddEmployeePresenter(private val addEmployeeView: AddEmployeeView,
                         addEmployeeView.onaddEmployeeNull(apiResponse)
                     }
                 } else {
-                    val apiResponse: ResponseBody = response.errorBody()!!
-                    if(apiResponse!=null) {
-                        addEmployeeView.onaddEmployeeFailed(apiResponse)
-                    }
+//                    val apiResponse: ResponseBody = response.errorBody()!!
+//                    if(apiResponse!=null) {
+//                        addEmployeeView.onaddEmployeeFailed(apiResponse)
+//                    }
+
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+                    addEmployeeView.onaddEmployeeFailed(arrErrorCommon)
                 }
             }
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {

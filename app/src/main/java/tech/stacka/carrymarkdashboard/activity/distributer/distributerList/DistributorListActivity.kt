@@ -14,6 +14,8 @@ import tech.stacka.carrymarkdashboard.adapter.DistributorListAdapter
 import tech.stacka.carrymarkdashboard.models.DistributerListResponse
 import tech.stacka.carrymarkdashboard.models.data.ArrDistributerList
 import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
+import tech.stacka.carrymarkdashboard.utils.AlertHelper
+import tech.stacka.carrymarkdashboard.utils.Utilities
 
 class DistributorListActivity : AppCompatActivity(), DistributorListView {
 
@@ -34,7 +36,19 @@ class DistributorListActivity : AppCompatActivity(), DistributorListView {
         }
         val strToken:String= SharedPrefManager.getInstance(applicationContext).user.strToken!!
         val presenter = DistributorListPresenter(this, this)
-        presenter.distributerList(strToken)
+
+        if(Utilities.checkInternetConnection(this)) {
+            presenter.distributerList(strToken)
+
+        }else{
+            AlertHelper.showNoInternetSnackBar(this@DistributorListActivity, object :
+                AlertHelper.SnackBarListener {
+                override fun onOkClick() {
+                    presenter.distributerList(strToken)
+                }
+            })
+        }
+
     }
 
     override fun onDistributerListSuccess(apiResponse: DistributerListResponse) {
@@ -53,14 +67,24 @@ class DistributorListActivity : AppCompatActivity(), DistributorListView {
     }
 
     override fun onDistributerListFailed(apiResponse: ResponseBody) {
-        TODO("Not yet implemented")
+        AlertHelper.showOKSnackBarAlert(this@DistributorListActivity,"Distributor List Failed")
+        pbLoadMore.visibility = View.GONE
+        pbLoading.visibility = View.GONE
     }
 
     override fun onDistributerListFailedServerError(string: String) {
-        TODO("Not yet implemented")
+        AlertHelper.showOKSnackBarAlert(this@DistributorListActivity,"Check internet connection")
+        pbLoadMore.visibility = View.GONE
+        pbLoading.visibility = View.GONE
     }
 
     override fun onDistributerListNull(apiResponse: DistributerListResponse) {
-        TODO("Not yet implemented")
+        pbLoadMore.visibility = View.GONE
+        pbLoading.visibility = View.GONE
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

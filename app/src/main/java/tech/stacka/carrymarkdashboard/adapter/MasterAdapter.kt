@@ -1,9 +1,7 @@
 package tech.stacka.carrymarkdashboard.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.master_list_item.view.*
-import kotlinx.android.synthetic.main.product_list_item.view.*
 import tech.stacka.carrymarkdashboard.R
-import tech.stacka.carrymarkdashboard.activity.product.productDetails.ProductDetailActivity
-import tech.stacka.carrymarkdashboard.models.data.ArrProductList
-import tech.stacka.carrymarkdashboard.models.data.ClnBrand
 import tech.stacka.carrymarkdashboard.models.data.ClnCategories
 import java.util.*
 

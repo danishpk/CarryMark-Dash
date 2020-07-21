@@ -2,7 +2,6 @@ package tech.stacka.carrymarkdashboard.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,12 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.product_list_item.view.*
 import tech.stacka.carrymarkdashboard.R
-import tech.stacka.carrymarkdashboard.activity.product.productDetails.ProductDetailActivity
+import tech.stacka.carrymarkdashboard.activity.product.productDetail.ProductDetailActivity
+import tech.stacka.carrymarkdashboard.activity.product.productUpdate.ProductUpdateActivity
 import tech.stacka.carrymarkdashboard.models.data.ArrProductList
 import java.util.*
 
-class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProductList>, val lastItemCount:String,
+class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProductList>, val lastItemCount:Int,
                          var dataInterface:DataTransferInterfacePr) : RecyclerView.Adapter<ProductListAdapter.ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder
@@ -33,13 +33,14 @@ class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProduct
         Glide.with(ctx).load(product.strImageUrl).centerCrop().placeholder(R.drawable.ic_placeholder)
             .into(holder.image)
         holder.productName.text = product.strName.toUpperCase(Locale.ENGLISH)
-        holder.cat.text = product.strGenderCategory
+        holder.cat.text = "${product.dblTotalSales} sales"
         holder.pId.text = product.strProductId
         holder.price.text = "₹ ${product.dblSellingPrice}"
         holder.btEdit.setOnClickListener {
-//            val i = Intent(ctx, EditProductActivity::class.java)
-//            i.putExtra("skuId", product.skuId)
-//            ctx.startActivity(i)
+            val intent = Intent(ctx, ProductUpdateActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("productId",product._id)
+            ctx.startActivity(intent)
         }
         holder.btDelete.setOnClickListener { view ->
             Snackbar.make(view, "Are You Sure Want To Delete", Snackbar.LENGTH_LONG)
@@ -50,21 +51,26 @@ class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProduct
         }
         holder.itemView.setOnClickListener {
             val intent = Intent(ctx, ProductDetailActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
             intent.putExtra("productId",product._id)
             ctx.startActivity(intent)
         }
     }
 
-    fun getLastItemId(): String {
+    fun getLastItemId(): Int {
         return lastItemCount
     }
 
-//    fun addAll(newOrders: ArrayList<ProductListData>) {
-//        val initialSize = productList.size
-//        productList.addAll(newOrders)
-//        notifyItemRangeInserted(initialSize, newOrders.size)
-//    }
+    fun add(r: ArrProductList) {
+        productList.add(r)
+        notifyItemInserted(productList.size - 1)
+    }
+
+    fun addAll(data: ArrayList<ArrProductList>) {
+        for (result in data) {
+            add(result)
+        }
+    }
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image = view.ivProduct
@@ -79,5 +85,6 @@ class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProduct
     interface DataTransferInterfacePr {
         fun setValues(strProductId:String)
     }
+
 
 }

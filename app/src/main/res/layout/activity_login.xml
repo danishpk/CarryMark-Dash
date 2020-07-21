@@ -14,7 +14,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        android:text="CARRY MARK"
+        android:text="ELIATE"
         android:textColor="@color/colorBlack"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -59,12 +59,12 @@
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"
             android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@+id/etUserName"
             android:hint="PASSWORD"/>
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:text="LOGIN"
             android:layout_width="0dp"
             android:layout_height="55dp"
             android:textSize="20sp"
-            style="@style/ButtonStyle"
+           style="@style/ButtonStyle"
             android:id="@+id/btLogin"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="24dp"
@@ -73,13 +73,16 @@
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/etPassword"/>
         <ProgressBar
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/pbLogin"
-            app:layout_constraintTop_toTopOf="@+id/btLogin" app:layout_constraintStart_toStartOf="@+id/btLogin"
-            app:layout_constraintEnd_toEndOf="@+id/btLogin"
-            app:layout_constraintBottom_toBottomOf="@+id/btLogin"/>
+            app:layout_constraintTop_toBottomOf="@+id/etPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

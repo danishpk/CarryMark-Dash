@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">CarryMark-Dash</string>
+    <string name="app_name">Eliate Dashboard</string>
     <string name="server_error">Check your network connection</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="retry">Retry</string>
+    <string name="no_internet_connection">Check your network connection</string>
+    <string name="ok">Ok</string>
+    <string name="access_token">sk.eyJ1IjoiY2FycnltYXJrIiwiYSI6ImNrY20zb2ZrazFtNWwyeHM1anU4cnh5amoifQ.YF3hJllRiq5WP3J5ob2QsQ</string>
 </resources>

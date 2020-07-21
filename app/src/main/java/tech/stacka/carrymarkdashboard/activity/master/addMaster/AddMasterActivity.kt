@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -18,7 +19,10 @@ import com.google.gson.JsonArray
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_master.*
+import kotlinx.android.synthetic.main.activity_add_product.*
+import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.models.AddProductCategoryResponse
 import tech.stacka.carrymarkdashboard.models.DefaultResponse
@@ -44,7 +48,9 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_master)
-
+        nav_back.setOnClickListener {
+            finish()
+        }
 
         sp_master_categorry.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long){
@@ -268,6 +274,7 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
     }
 
     override fun addMasterSuccess(apiResponse: DefaultResponse) {
+
         Toast.makeText(applicationContext,apiResponse.strMessage,Toast.LENGTH_SHORT).show()
         finish()
     }
@@ -276,8 +283,19 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
 
     }
 
-    override fun addMasterFailed(apiResponse: ResponseBody) {
-        Toast.makeText(applicationContext,apiResponse.toString(),Toast.LENGTH_SHORT).show()
+    override fun addMasterFailed(apiResponse: JSONArray) {
+        val listData = ArrayList<String>()
+        for (i in 0 until apiResponse.length()) {
+            listData += apiResponse.getString(i)
+            Log.e("ListData",listData.toString())
+            for(i in listData){
+                if(i=="ITEM NAME ALREADY EXIST"){
+                    etAddMaster.error = "ITEM NAME ALREADY EXIST *"
+                    etAddMaster.requestFocus()
+                }
+            }
+        }
+        //Toast.makeText(applicationContext,apiResponse.toString(),Toast.LENGTH_SHORT).show()
     }
 
     override fun addMasterFailedServerError(toString: String) {
@@ -328,5 +346,10 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
     fun displayColor() {
         btColorPick.setBackgroundColor(color)
         btColorPick.setText(String.format(" %08x", color))
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

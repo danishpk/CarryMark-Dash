@@ -35,7 +35,7 @@
 
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_margin="8dp"
         android:id="@+id/btCancel"
         android:layout_width="0dp"
@@ -49,7 +49,7 @@
         app:layout_constraintEnd_toStartOf="@id/btApply"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_margin="8dp"
         android:id="@+id/btApply"
         android:layout_width="0dp"

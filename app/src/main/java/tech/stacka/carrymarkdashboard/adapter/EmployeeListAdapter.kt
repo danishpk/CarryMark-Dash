@@ -37,27 +37,28 @@ class EmployeeListAdapter(
     }
     override fun onBindViewHolder(holder: EmployeeViewHolder, position: Int) {
        // val employee = employeeList[position]
-        if (employeeList.get(position).chrStatus.equals("N")) {
-            Glide.with(ctx).load(R.drawable.ic_grey_round)
-                .into(holder.absent)
-        } else {
+        if (employeeList.get(position).chrCheckInStatus.equals("O")) {
             Glide.with(ctx).load(R.drawable.ic_grey_round)
                 .into(holder.present)
+        } else {
+
+            Glide.with(ctx).load(R.drawable.ic_grey_round)
+                .into(holder.absent)
+
         }
-       // val percentage = (employee.completedTarget*100)/employee.target
-      //  holder.target.text = "$percentage %"
         holder.name.text = employeeList.get(position).strName
         holder.itemView.setOnClickListener {
             if (!selectUser) {
                 val i = Intent(ctx, EmployeeDetailActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
                 i.putExtra("employeeId", employeeList.get(position)._id)
                 ctx.startActivity(i)
             } else {
-                val intent = Intent()
-                intent.putExtra("uId", employeeList.get(position)._id)
-                intent.putExtra("token", employeeList.get(position).strCreatedUser)
-                activity.setResult(2, intent)
-                activity.finish()
+//                val intent = Intent()
+//                intent.putExtra("uId", employeeList.get(position)._id)
+//                intent.putExtra("token", employeeList.get(position).strCreatedUser)
+//                activity.setResult(2, intent)
+//                activity.finish()
             }
         }
     }

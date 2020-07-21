@@ -23,6 +23,13 @@
         <item>Material</item>
     </array>
 
+    <array name="filterOrderCategory">
+        <item>Status Wise </item>
+        <item>Date wise</item>
+        <item>Distributor </item>
+        <item>Executive </item>
+    </array>
+
     <array name="masterCategory">
         <item>Select Category * </item>
         <item>Brand </item>
@@ -63,9 +70,12 @@
     <array name="orderStatus">
         <item>Set Status*</item>
         <item>PENDING</item>
-        <item>CONFIRMED</item>
-        <item>REJECTED</item>
+        <item>CONFIRM</item>
+        <item>SHIPPED</item>
         <item>DELIVERED</item>
+        <item>CANCEL</item>
+        <item>RETURNED</item>
+        <item>REFUNDED</item>
 
     </array>
     <array name="search_suggestions" />

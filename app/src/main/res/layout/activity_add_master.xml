@@ -44,10 +44,10 @@
                 android:id="@+id/ivAddMaster"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="40dp"
-                android:background="@drawable/ic_gal"
+                android:layout_marginEnd="24dp"
+                android:src="@drawable/ic_gal"
                 android:onClick="setCategoryImage"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
                 app:layout_constraintTop_toTopOf="@id/ivAddMaster"
                 android:visibility="visible" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btUploadImageCategory"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
@@ -146,9 +146,11 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_marginLeft="24dp"
         style="@style/ButtonStyle"
-        android:layout_margin="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
         android:id="@+id/btCancelCategory"
         android:layout_width="0dp"
         android:layout_height="55dp"
@@ -161,9 +163,11 @@
         app:layout_constraintEnd_toStartOf="@id/btAddCategory"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         style="@style/ButtonStyle"
-        android:layout_margin="8dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
         android:id="@+id/btAddCategory"
         android:layout_width="0dp"
         android:layout_height="55dp"

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="6dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Are you sure "
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat"
+            android:textSize="16sp"
+            android:textColor="#292828"
+            android:id="@+id/popupTextHead"/>
+
+
+        <TextView
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat"
+            android:textSize="14sp"
+            android:textColor="#717171"
+            android:id="@+id/popupTextDetail"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            >
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:cornerRadius="8dp"
+                android:fontFamily="@font/montserrat"
+                android:shadowRadius="4"
+                android:id="@+id/btNoPopUp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="56dp"
+                android:text="NO"
+                android:textSize="16sp"
+                android:textColor="@color/colorBlack"
+                android:textAllCaps="false"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:layout_weight="1"
+                app:cornerRadius="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/montserrat"
+                app:backgroundTint="@color/colorWhite"
+                android:shadowRadius="4"
+                android:id="@+id/btYesPopup"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:text="YES"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:textAllCaps="false" />
+
+        </TableRow>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

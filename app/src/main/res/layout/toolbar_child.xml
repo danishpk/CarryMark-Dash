@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/nav_back"
                 android:layout_marginStart="16dp"
-                android:text="ELIATE"
+                android:text="@string/appIdentity"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 android:textStyle="bold"

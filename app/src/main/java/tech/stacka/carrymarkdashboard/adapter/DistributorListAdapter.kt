@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.distributor_list_item.view.*
 import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.activity.distributer.distributerDetail.DistributerDetailActivity
+import tech.stacka.carrymarkdashboard.activity.employee.employeeDetail.EmployeeDetailActivity
 import tech.stacka.carrymarkdashboard.models.data.ArrDistributerList
 import java.util.*
 
@@ -41,14 +43,12 @@ class DistributorListAdapter(
         holder.district.text=distributor.strEmail
        // holder.district.text = distributor.district
         holder.mobile.text = distributor.strMobileNo
-        if (selectUser) {
             holder.itemView.setOnClickListener {
-                val intent = Intent()
-                intent.putExtra("uId", distributor._id)
-                intent.putExtra("token", distributor.strCreatedUser)
-                activity.setResult(2, intent)
-                activity.finish()
-            }
+                val i = Intent(ctx, DistributerDetailActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
+                i.putExtra("distributorId", distributorList[position]._id)
+                ctx.startActivity(i)
+
         }
     }
 

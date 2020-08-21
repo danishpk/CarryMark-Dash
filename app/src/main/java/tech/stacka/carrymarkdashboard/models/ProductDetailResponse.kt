@@ -2,12 +2,13 @@ package tech.stacka.carrymarkdashboard.models
 
 import tech.stacka.carrymarkdashboard.models.data.ArrColorStock
 import tech.stacka.carrymarkdashboard.models.data.ArrSizeStock
+import tech.stacka.carrymarkdashboard.models.data.ArrScheme
 
 data class ProductDetailResponse(
     val _id: String="",
     val arrColorStock: List<ArrColorStock>,
     val arrImageUrl: List<String>,
-    val arrScheme: List<Any>,
+    val arrScheme: List<ArrScheme>,
     val arrSizeStock: List<ArrSizeStock>,
     val blnAPIStatus: Boolean,
     val chrStatus: String="",
@@ -29,5 +30,9 @@ data class ProductDetailResponse(
     val strProductId: String,
     val strSubCategory: String,
     val strTargetType: String,
-    val strUnit: String
+    val strUnit: String,
+    val strKeyWords: String,
+    val dblSGST:Double,
+    val dblCGST:Double,
+    val dblTotalDiscounts:Double
 )

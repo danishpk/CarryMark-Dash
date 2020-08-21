@@ -40,9 +40,12 @@ class OrderDetailList (
         Glide.with(context).load(orderProduct.strImageUrl).centerCrop().placeholder(R.drawable.ic_placeholder)
            .into(holder.image)
         holder.productName.text = orderProduct.strName
-        holder.cat.text = orderProduct.dblQty.toString()
-        holder.pId.text = orderProduct.strProductId
-        holder.price.text = orderProduct.dblAmount.toString()
+        holder.productId.visibility=View.VISIBLE
+        holder.productId.text="ID : ${orderProduct.strOGProductId}"
+        holder.cat.text = " Quantity  : ${orderProduct.dblQty}"
+        holder.pId.text = "Total Amount   : ${orderProduct.dblAmount*orderProduct.dblQty}₹"
+        holder.price.text = "${orderProduct.dblAmount}₹"
+        holder.offrQty.text="Offer Quantity : ${orderProduct.dblOfferQty}"
         //  val category = ColorList[position]
 //        holder.colorView.setBackgroundColor(Color.parseColor("#"+colorCode[position]))
 //        holder.colorName.text = colorName[position]
@@ -59,6 +62,8 @@ class OrderDetailList (
         val price = view.tvProductPrice
         val btdelete=view.btDelete;
         val btedit=view.btEdit
+        val offrQty=view.tvProductOffrQty
+        val productId=view.tvProductOgId
         //val btCart = view.btCart
 
     }

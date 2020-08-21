@@ -1,30 +1,18 @@
 package tech.stacka.carrymarkdashboard.activity.home
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Typeface
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.widget.Toast
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_home.*
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.models.ReportResponse
-import tech.stacka.carrymarkdashboard.models.UploadProductImageResponse
 import tech.stacka.carrymarkdashboard.network.EndPoint
 import tech.stacka.carrymarkdashboard.network.RetrofitClient
-import java.io.File
 
 class HomePresenter(private val homeView: HomeView, private val mContext: Context) {
 
@@ -57,9 +45,12 @@ class HomePresenter(private val homeView: HomeView, private val mContext: Contex
                         homeView.onReportNull(apiResponse)
                     }
                 } else {
-                    val apiResponse: ResponseBody = response.errorBody()!!
-                    if (apiResponse != null) {
-                        homeView.onReportFailed(apiResponse)
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+                    if (arrErrorCommon != null) {
+                        homeView.onReportFailed(arrErrorCommon)
                     }
                 }
             }

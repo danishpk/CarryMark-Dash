@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
@@ -23,9 +24,11 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar.*
-import okhttp3.ResponseBody
+import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.activity.addAdmin.AddAdminActivity
 import tech.stacka.carrymarkdashboard.activity.distributer.addDistributer.AddDistributerActivity
 import tech.stacka.carrymarkdashboard.activity.distributer.distributerList.DistributorListActivity
 import tech.stacka.carrymarkdashboard.activity.employee.addEmployee.AddEmployeeActivity
@@ -33,6 +36,8 @@ import tech.stacka.carrymarkdashboard.activity.employee.employeeList.EmployeeLis
 import tech.stacka.carrymarkdashboard.activity.login.LoginActivity
 import tech.stacka.carrymarkdashboard.activity.master.addMaster.AddMasterActivity
 import tech.stacka.carrymarkdashboard.activity.master.masterList.MasterListActivity
+import tech.stacka.carrymarkdashboard.activity.notification.addNotification.AddNotificationActivity
+import tech.stacka.carrymarkdashboard.activity.notification.listNotification.NotificationListActivity
 import tech.stacka.carrymarkdashboard.activity.order.orderList.OrderListActivity
 import tech.stacka.carrymarkdashboard.activity.product.addProduct.AddProductActivity
 import tech.stacka.carrymarkdashboard.activity.product.productList.ProductListActivity
@@ -61,6 +66,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             showDialog()
         }
         nav_view.setNavigationItemSelectedListener(this)
+
+        notifButton.setOnClickListener {
+            startActivity(Intent(this@HomeActivity,NotificationListActivity::class.java))
+        }
 
 
 
@@ -107,6 +116,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_orderList -> {
                 startActivity(Intent(this@HomeActivity, OrderListActivity::class.java))
             }
+            R.id.nav_notific -> {
+                startActivity(Intent(this@HomeActivity, NotificationListActivity::class.java))
+            }
+            R.id.nav_send_notific -> {
+                startActivity(Intent(this@HomeActivity, AddNotificationActivity::class.java))
+            }
+            R.id.nav_addAdmin -> {
+                startActivity(Intent(this@HomeActivity, AddAdminActivity::class.java))
+            }
+
         }
         drawer_layout.closeDrawer(Gravity.LEFT)
         return false
@@ -174,7 +193,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         entries.add(PieEntry((prg), "Rest"))
         val dataSet = PieDataSet(entries, "Emp")
         val COLORFUL_COLORS = listOf(
-            Color.rgb(224, 85, 23),
+            Color.rgb(23, 150, 254),
             Color.rgb(242, 242, 242)
         )
         dataSet.colors = COLORFUL_COLORS
@@ -220,6 +239,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val i = Intent(this@HomeActivity, LoginActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(i)
+            dialog.dismiss()
         }
         btNo.setOnClickListener { dialog.dismiss() }
         dialog.show()
@@ -241,6 +261,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             dialog.findViewById<View>(R.id.btNoPopUp) as Button
         btYes.setOnClickListener {
             ActivityCompat.finishAffinity(this@HomeActivity)
+            dialog.dismiss()
         }
         btNo.setOnClickListener { dialog.dismiss() }
         dialog.show()
@@ -276,8 +297,32 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Toast.makeText(this@HomeActivity,apiResponse.toString(),Toast.LENGTH_SHORT).show()
     }
 
-    override fun onReportFailed(apiResponse: ResponseBody) {
-        Toast.makeText(this@HomeActivity,apiResponse.toString(),Toast.LENGTH_SHORT).show()
+    override fun onReportFailed(apiResponse: JSONArray) {
+        val listData = ArrayList<String>()
+        for (i in 0 until apiResponse.length()) {
+            listData += apiResponse.getString(i)
+            Log.e("ListData",listData.toString())
+            for(i in listData){
+                when (i) {
+                    "AUTHORIZATION_TOKEN_HEADER_IS_MISSING" -> {
+                        val intent = Intent(applicationContext, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+                    "INVALID_TOKEN_PROVIDED" -> {
+                        val intent = Intent(applicationContext, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+                    else -> {
+
+                        Toast.makeText(this@HomeActivity,i.toString(),Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     override fun onReportServerError(string: String) {

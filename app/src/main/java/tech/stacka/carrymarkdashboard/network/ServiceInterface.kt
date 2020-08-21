@@ -10,11 +10,11 @@ import tech.stacka.carrymarkdashboard.models.*
 interface ServiceInterface {
 
     @POST(EndPoint.userLogin)
-    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
+    @Headers("Content-Type: application/json",EndPoint.strAppInfo)
     fun authUserLogin(@Body userlogin: JsonObject): Call<LoginResponse>
 
     @POST(EndPoint.productList)
-    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
+    @Headers("Content-Type: application/json",EndPoint.strAppInfo)
     fun productList(@Body productList: JsonObject): Call<ProductListResponse>
 
     @POST(EndPoint.addProduct)
@@ -32,7 +32,7 @@ interface ServiceInterface {
                            @Part images:List<MultipartBody.Part>):Call<UploadProductImageResponse>
 
     @POST(EndPoint.getMaster)
-    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
+    @Headers("Content-Type: application/json",EndPoint.strAppInfo)
     fun filterCategoryList(@Body filterCategoryList: JsonObject): Call<FilterCategoryResponse>
 
     @POST(EndPoint.userList)
@@ -50,6 +50,11 @@ interface ServiceInterface {
     fun retailerList(@Header("Authorization")strToken:String,
                      @Body userList: JsonObject): Call<RetailerListResponse>
 
+    @POST(EndPoint.userList)
+    @Headers("Content-Type: application/json")
+    fun adminList(@Header("Authorization")strToken:String,
+                        @Body userList: JsonObject): Call<AdminResponse>
+
     @POST(EndPoint.createUser)
     @Headers("Content-Type: application/json")
     fun createUser(@Header("Authorization")strToken:String,
@@ -63,11 +68,11 @@ interface ServiceInterface {
                    @Body createUser: JsonObject): Call<DefaultResponse>
 
     @POST(EndPoint.getMaster)
-    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
+    @Headers("Content-Type: application/json",EndPoint.strAppInfo)
     fun addSizeColor(@Body addSizeColor: JsonObject): Call<AddSizeColorResponse>
 
     @POST(EndPoint.getMaster)
-    @Headers("Content-Type: application/json","strAppInfo: ELIATE")
+    @Headers("Content-Type: application/json",EndPoint.strAppInfo)
     fun getMaster(@Body getMaster: JsonObject): Call<GetMasterResponse>
 
     @POST(EndPoint.createMaster)
@@ -126,6 +131,39 @@ interface ServiceInterface {
     @Headers("Content-Type: application/json")
     fun createTarget(@Header("Authorization")strToken:String,
                     @Body createTarget: JsonObject): Call<DefaultResponse>
+
+    @POST(EndPoint.notificationList)
+    @Headers("Content-Type: application/json")
+    fun notificationList(@Header("Authorization")strToken:String): Call<NotificationListResponse>
+
+    @POST(EndPoint.createNotification)
+    @Headers("Content-Type: application/json")
+    fun createNotification(@Header("Authorization")strToken:String,
+                     @Body createNotification: JsonObject): Call<DefaultResponse>
+
+    @POST(EndPoint.deleteUser)
+    @Headers("Content-Type: application/json")
+    fun deleteUser(@Header("Authorization")strToken:String,
+                      @Body deleteUser: JsonObject): Call<DefaultResponse>
+
+    @POST(EndPoint.userList)
+    @Headers("Content-Type: application/json")
+    fun distributorDetail(@Header("Authorization")strToken:String,
+                       @Body distributorDetail: JsonObject): Call<DistributorDetailResponse>
+
+    @POST(EndPoint.getMaster)
+    @Headers("Content-Type: application/json",EndPoint.strAppInfo)
+    fun pincodeList(@Body filterCategoryList: JsonObject): Call<PincodeResponse>
+
+    @POST(EndPoint.getReports)
+    @Headers("Content-Type: application/json")
+    fun getTargetHistory(@Header("Authorization")strToken:String,
+                  @Body getReport: JsonObject): Call<TargetHistoryResponse>
+
+    @POST(EndPoint.userList)
+    @Headers("Content-Type: application/json")
+    fun retailerDetail(@Header("Authorization")strToken:String,
+                       @Body userDetail: JsonObject): Call<RetailerDetailResponse>
 
 
 }

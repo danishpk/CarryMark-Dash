@@ -25,11 +25,11 @@
 
     <array name="filterOrderCategory">
         <item>Status Wise </item>
-        <item>Date wise</item>
         <item>Distributor </item>
         <item>Executive </item>
+         <item>Date wise</item>
     </array>
-
+    <!--        <item>Location</item>-->
     <array name="masterCategory">
         <item>Select Category * </item>
         <item>Brand </item>
@@ -37,7 +37,6 @@
         <item>Material</item>
         <item>Size</item>
         <item>Color</item>
-        <item>Location</item>
         <item>Sub Category</item>
     </array>
 
@@ -48,8 +47,10 @@
         <item>Material</item>
         <item>Size</item>
         <item>Color</item>
-        <item>Location</item>
+<!--        <item>Location</item>-->
         <item>Sub Category</item>
+
+
     </array>
     <array name="subcategory">
         <item>SubCategory *</item>
@@ -92,6 +93,14 @@
         <item>Executive</item>
         <item>Retailer</item>
         <item>Distributor</item>
+    </array>
+
+    <array name="users_type_notify">
+        <item>Select User Type*</item>
+        <item>ADMIN</item>
+        <item>EXECUTIVE</item>
+        <item>RETAILER</item>
+        <item>DISTRIBUTOR</item>
     </array>
     <array name="categories">
         <item>All Products</item>

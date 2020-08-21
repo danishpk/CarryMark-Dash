@@ -36,6 +36,7 @@
             android:layout_height="wrap_content">
 
             <RadioButton
+                android:buttonTint="@color/colorLightBlue"
                 android:id="@+id/radioSortAscending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,6 +49,7 @@
                 android:textStyle="bold" />
 
             <RadioButton
+                android:buttonTint="@color/colorLightBlue"
                 android:id="@+id/radioSortDescending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +62,7 @@
                 android:textStyle="bold" />
 
             <RadioButton
-
+                android:buttonTint="@color/colorLightBlue"
                 android:id="@+id/radioSortPriceAscending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,6 +75,7 @@
                 android:textStyle="bold" />
 
             <RadioButton
+                android:buttonTint="@color/colorLightBlue"
                 android:id="@+id/radioSortPriceDescending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

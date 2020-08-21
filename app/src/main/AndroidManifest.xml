@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
     package="tech.stacka.carrymarkdashboard">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,8 +10,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <dist:module dist:instant="true" />
 
@@ -19,11 +18,22 @@
         android:icon="@mipmap/ic_launcher1"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher1_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".activity.product.productDetail.ProductDetailActivity"></activity>
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+        <activity android:name=".activity.employee.targetHistory.TargetHistoryActivity" />
+        <activity android:name=".activity.retailer.retailerDetail.RetailerDetailActivity" />
+        <activity android:name=".activity.distributer.updateDistributer.UpdateDistributerActivity" />
+        <activity android:name=".activity.employee.updateEmployee.UpdateEmployeeActivity" />
+        <activity android:name=".activity.notification.addNotification.AddNotificationActivity" />
+        <activity android:name=".activity.notification.listNotification.NotificationListActivity" />
+        <activity
+            android:name=".activity.addAdmin.AddAdminActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.product.productDetail.ProductDetailActivity" />
         <activity android:name=".activity.map.MapActivity" />
         <activity android:name=".activity.order.orderFilter.OrderFilterActivity" />
         <activity android:name=".activity.order.orderDetail.OrderDetailActivity" />
@@ -31,8 +41,12 @@
         <activity android:name=".activity.master.addMaster.AddMasterActivity" />
         <activity android:name=".activity.master.masterList.MasterListActivity" />
         <activity android:name=".activity.distributer.distributerDetail.DistributerDetailActivity" />
-        <activity android:name=".activity.employee.addEmployee.AddEmployeeActivity" />
-        <activity android:name=".activity.distributer.addDistributer.AddDistributerActivity" />
+        <activity
+            android:name=".activity.employee.addEmployee.AddEmployeeActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.distributer.addDistributer.AddDistributerActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.retailer.retailerList.RetailerListActivity" />
         <activity android:name=".activity.distributer.distributerList.DistributorListActivity" />
         <activity android:name=".activity.employee.employeeDetail.EmployeeDetailActivity" />
@@ -74,7 +88,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
     </application>
 

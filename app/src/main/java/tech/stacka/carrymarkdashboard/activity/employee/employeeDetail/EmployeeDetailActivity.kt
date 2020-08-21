@@ -1,5 +1,6 @@
 package tech.stacka.carrymarkdashboard.activity.employee.employeeDetail
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -7,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
-import android.util.Log
 import android.view.View
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
@@ -19,32 +22,71 @@ import kotlinx.android.synthetic.main.activity_employee_detail.*
 
 import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.activity.employee.employeeList.EmployeeListActivity
+import tech.stacka.carrymarkdashboard.activity.employee.targetHistory.TargetHistoryActivity
+import tech.stacka.carrymarkdashboard.activity.employee.updateEmployee.UpdateEmployeeActivity
 import tech.stacka.carrymarkdashboard.activity.map.MapActivity
 import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.EmployeeDetailResponse
 import tech.stacka.carrymarkdashboard.models.ReportResponse
 import tech.stacka.carrymarkdashboard.models.data.ArrEmployeeList
 import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
-import java.text.SimpleDateFormat
-import java.util.*
+import tech.stacka.carrymarkdashboard.utils.AlertHelper
+import tech.stacka.carrymarkdashboard.utils.Utilities
 import kotlin.collections.ArrayList
 
 class EmployeeDetailActivity : AppCompatActivity(), EmployeeDetailView {
+
+    var strEmployeeId:String=""
+    var strToken:String=""
     private var employeeDetail = ArrayList<ArrEmployeeList>()
     val presenter = EmployeeDetailPresenter(this, this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_employee_detail)
-       val strEmployeeId = intent.getStringExtra("employeeId")!!
-        val strToken:String= SharedPrefManager.getInstance(applicationContext).user.strToken!!
 
-        presenter.employeeDetails(strToken,strEmployeeId)
-        presenter.getReport(strToken,strEmployeeId)
+       strEmployeeId = intent.getStringExtra("employeeId")!!
+        strToken= SharedPrefManager.getInstance(applicationContext).user.strToken!!
+
+        if(Utilities.checkInternetConnection(this)) {
+            presenter.employeeDetails(strToken,strEmployeeId)
+            presenter.getReport(strToken,strEmployeeId)
+
+        }else{
+            AlertHelper.showNoInternetSnackBar(this@EmployeeDetailActivity, object :
+                AlertHelper.SnackBarListener {
+                override fun onOkClick() {
+                    presenter.employeeDetails(strToken,strEmployeeId)
+                    presenter.getReport(strToken,strEmployeeId)
+                }
+            })
+        }
+
+        btDeleteUser.setOnClickListener {
+            showDeleteDialog()
+        }
+
+        btUpdateUser.setOnClickListener {
+            val intent = Intent(this, UpdateEmployeeActivity::class.java)
+            intent.putExtra("employeeId",strEmployeeId)
+            startActivity(intent)
+        }
+
+
 
 
         nav_back.setOnClickListener {
+            startActivity(Intent(this@EmployeeDetailActivity,EmployeeListActivity::class.java))
             finish()
+        }
+
+        btTargetHistory.setOnClickListener {
+            val intent = Intent(this, TargetHistoryActivity::class.java)
+            intent.putExtra("employeeId",strEmployeeId)
+            startActivity(intent)
+
         }
 
         btLocationHistory.setOnClickListener {
@@ -63,13 +105,6 @@ class EmployeeDetailActivity : AppCompatActivity(), EmployeeDetailView {
             presenter.createTarget(strToken,strEmployeeId,strTarget.toInt())
         }
 
-//        var target: Long = 15
-//        var completedTarget: Long = 6
-//
-//        if (target != 0L) {
-//            val targetPercentage = (completedTarget * 100) / target
-//            createTargetChart(targetPercentage.toFloat())
-//        }
     }
 
     private fun createTargetChart(progress: Float) {
@@ -111,20 +146,23 @@ class EmployeeDetailActivity : AppCompatActivity(), EmployeeDetailView {
     }
 
     override fun onEmployeeDetailSuccess(apiResponse: EmployeeDetailResponse) {
-        tvName.text = apiResponse.arrList[0].strName
-        tvMobile.text = apiResponse.arrList[0].strMobileNo
-        tvMailId.text = apiResponse.arrList[0].strEmail
-        tvUid.text=apiResponse.arrList[0]._id
+        if(apiResponse!=null) {
+            tvName.text = apiResponse.arrList[0].strName
+            tvMobile.text = apiResponse.arrList[0].strMobileNo
+            tvMailId.text = apiResponse.arrList[0].strEmail
+            tvUid.text = apiResponse.arrList[0].strUserId
 
-
-        if (apiResponse.arrList[0].chrCheckInStatus.equals("I")) {
-            Glide.with(this@EmployeeDetailActivity).load(R.drawable.ic_green_round)
-                .into(ivAttend)
-            tvAttend.text = "Present"
-        } else {
-            Glide.with(this@EmployeeDetailActivity).load(R.drawable.ic_red_round)
-                .into(ivAttend)
-            tvAttend.text = "Absent"
+            if(apiResponse.arrList[0].chrCheckInStatus!=null) {
+                if (apiResponse.arrList[0].chrCheckInStatus.equals("I")) {
+                    Glide.with(this@EmployeeDetailActivity).load(R.drawable.ic_green_round)
+                        .into(ivAttend)
+                    tvAttend.text = "Present"
+                } else {
+                    Glide.with(this@EmployeeDetailActivity).load(R.drawable.ic_red_round)
+                        .into(ivAttend)
+                    tvAttend.text = "Absent"
+                }
+            }
         }
     }
 
@@ -160,6 +198,7 @@ class EmployeeDetailActivity : AppCompatActivity(), EmployeeDetailView {
 
     override fun onReportSuccess(apiResponse: ReportResponse) {
         btTarget.text=apiResponse.SALE.dblSaleTarget.toString()
+        btTarget.text="${apiResponse.SALE.dblTotalOrderAmount}/${apiResponse.SALE.dblSaleTarget}"
 
         val target: Long = apiResponse.SALE.dblSaleTarget.toLong()
         val completedTarget: Long = apiResponse.SALE.dblTotalOrderAmount.toLong()
@@ -171,16 +210,70 @@ class EmployeeDetailActivity : AppCompatActivity(), EmployeeDetailView {
     }
 
     override fun onReportNull(apiResponse: ReportResponse) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onReportFailed(apiResponse: ResponseBody) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onReportServerError(string: String) {
-        TODO("Not yet implemented")
+
     }
 
+    override fun onDeleteUserSuccess(apiResponse: DefaultResponse) {
+        Toast.makeText(this,apiResponse.strMessage,Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this@EmployeeDetailActivity,EmployeeListActivity::class.java))
+        finish()
+    }
 
+    override fun onDeleteUserNull(apiResponse: DefaultResponse) {
+        Toast.makeText(this,apiResponse.strMessage,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDeleteUserFailed(apiResponse: JSONArray) {
+        AlertHelper.showOKSnackBarAlert(this@EmployeeDetailActivity,apiResponse[0].toString())
+        //Toast.makeText(this,apiResponse[0].toString(),Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDeleteUserServerError(string: String) {
+        Toast.makeText(this,string,Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showDeleteDialog() {
+        val dialog = Dialog(this, R.style.Theme_Dialog)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.normal_pop_up_custom)
+        val heading = dialog.findViewById<View>(R.id.tvCustomPopupHeading) as TextView
+        heading.text = "Are you sure you want to delete"
+        val details = dialog.findViewById<View>(R.id.tvCustomPopupDetail) as TextView
+        details.text=details.toString()
+        details.visibility=View.GONE
+        val btYes = dialog.findViewById<View>(R.id.btCustomPopupOk) as Button
+        val btNo = dialog.findViewById<View>(R.id.btCustomPopupCancel) as Button
+        btYes.setOnClickListener {
+            if(Utilities.checkInternetConnection(this)) {
+                presenter.deleteUser(strToken,strEmployeeId)
+
+            }else{
+                AlertHelper.showNoInternetSnackBar(this@EmployeeDetailActivity, object :
+                    AlertHelper.SnackBarListener {
+                    override fun onOkClick() {
+                        presenter.deleteUser(strToken,strEmployeeId)
+                    }
+                })
+            }
+            dialog.dismiss()
+        }
+        btNo.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this@EmployeeDetailActivity,EmployeeListActivity::class.java))
+        finish()
+
+    }
 }

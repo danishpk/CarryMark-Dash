@@ -5,6 +5,7 @@ object EndPoint {
     const val baseUrl1 = "http://15.206.134.157:3000/"
     const val baseUrl2 = "http://15.206.134.157:3001/"
     const val baseUrl3 = "http://15.206.134.157:3002/"
+    const val strAppInfo = "strAppInfo: CAPTIONTOT"
     const val userLogin = "user/login_user"
     const val productList = "product/get_product"
     const val addProduct = "product/create_product"
@@ -24,6 +25,10 @@ object EndPoint {
     const val getReports="report/get_report"
     const val getEmpLocations="employee/get_geo_location"
     const val createTarget="employee/create_target"
+    const val notificationList="firebase/get_notifications"
+    const val createNotification="firebase/create_notifications"
+    const val deleteUser="user/delete_user"
+
 
 
 }

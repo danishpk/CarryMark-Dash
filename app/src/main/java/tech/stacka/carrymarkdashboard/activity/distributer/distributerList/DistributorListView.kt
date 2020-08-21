@@ -1,6 +1,7 @@
 package tech.stacka.carrymarkdashboard.activity.distributer.distributerList
 
 import okhttp3.ResponseBody
+import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.DistributerListResponse
 
 interface DistributorListView {

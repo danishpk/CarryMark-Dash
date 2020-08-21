@@ -125,6 +125,7 @@
                 app:layout_constraintTop_toBottomOf="@id/autotvListMainCategory"/>
 
             <TextView
+                android:textColor="@color/colorBlack"
                 style="@style/InputStyle"
                 android:id="@+id/btColorPick"
                 android:layout_width="match_parent"

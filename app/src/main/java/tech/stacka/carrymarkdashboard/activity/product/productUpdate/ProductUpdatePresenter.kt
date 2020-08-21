@@ -1,6 +1,7 @@
 package tech.stacka.carrymarkdashboard.activity.product.productUpdate
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -8,6 +9,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +32,7 @@ class ProductUpdatePresenter(val productUpdateView: ProductUpdateView, val conte
                 call: Call<ProductDetailResponse>,
                 response: Response<ProductDetailResponse>
             ) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful) {
                     val apiResponse: ProductDetailResponse? = response.body()
                     if (apiResponse != null) {
                         productUpdateView.onProductDetailSuccess(apiResponse)
@@ -64,7 +66,7 @@ class ProductUpdatePresenter(val productUpdateView: ProductUpdateView, val conte
         dblRetailerPrice: String,
         strTargetType: String,
         dblTotalStock: String,
-        intTotalSales: String,
+        intTotalSales: Int,
         intEstiDeliveryDays: String,
         strUnit: String,
         arrImageUrl: JsonArray,
@@ -74,7 +76,12 @@ class ProductUpdatePresenter(val productUpdateView: ProductUpdateView, val conte
         arrColorSelected: JsonArray,
         strSubCategory: String,
         arrSelectedColorCode: MutableList<String>,
-        strDocId:String
+        strDocId:String,
+        strKeyword:String,
+        arrScheme:JsonArray,
+        dblCgst:String,
+        dblSgst:String,
+        dblTotalDiscounts:Double
     ) {
         val arrSchemeJson = JsonArray()
         val arrSizeStockJson = JsonArray()
@@ -94,10 +101,13 @@ class ProductUpdatePresenter(val productUpdateView: ProductUpdateView, val conte
         addProductJson.addProperty("dblMRP", dblMRP)
         addProductJson.addProperty("dblSellingPrice", dblSellingPrice)
         addProductJson.addProperty("dblRetailerPrice", dblRetailerPrice)
-        addProductJson.add("arrScheme", arrSchemeJson)
+        addProductJson.add("arrScheme", arrScheme)
         addProductJson.addProperty("strTargetType", strTargetType)
         addProductJson.addProperty("dblTotalStock", dblTotalStock)
-        addProductJson.addProperty("intTotalSales", intTotalSales)
+        addProductJson.addProperty("dblTotalSales", intTotalSales)
+        addProductJson.addProperty("dblTotalDiscounts", dblTotalDiscounts)
+        addProductJson.addProperty("dblSGST", dblSgst)
+        addProductJson.addProperty("dblCGST", dblCgst)
         addProductJson.addProperty("intEstiDeliveryDays", intEstiDeliveryDays)
         addProductJson.addProperty("strUnit", strUnit)
         addProductJson.addProperty("strMaterial", strMaterial)
@@ -107,6 +117,7 @@ class ProductUpdatePresenter(val productUpdateView: ProductUpdateView, val conte
         addProductJson.addProperty("strSubCategory", strSubCategory)
         addProductJson.addProperty("strDocId", strDocId)
         addProductJson.addProperty("strOperationType", "UPDATE")
+        addProductJson.addProperty("strKeyWords", strKeyword)
         val retrofitClient = RetrofitClient(EndPoint.baseUrl2)
         val apiResponseCall: Call<AddProductResponse> =
             retrofitClient.instance.addProduct(strToken, addProductJson)
@@ -125,9 +136,14 @@ class ProductUpdatePresenter(val productUpdateView: ProductUpdateView, val conte
                         productUpdateView.updateProductNull(apiResponse)
                     }
                 } else {
-                    val apiResponse: ResponseBody = response.errorBody()!!
-                    if (apiResponse != null) {
-                        productUpdateView.updateProductFailed(apiResponse)
+                    //val apiResponse: ResponseBody = response.errorBody()!!
+
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+                    if (arrErrorCommon != null) {
+                        productUpdateView.updateProductFailed(arrErrorCommon)
                     }
                 }
             }

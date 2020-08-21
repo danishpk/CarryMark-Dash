@@ -16,5 +16,10 @@ data class ArrEmployeeDetail(
     val strTenantId: String,
     val strType: String,
     val strWhatsAppNumber: Any,
-    val chrCheckInStatus:String
+    val chrCheckInStatus:String,
+    val strUserId:String,
+    val strAddress1:String,
+    val strPinCode:String,
+    val strDistrict:String,
+    val strState:String
 )

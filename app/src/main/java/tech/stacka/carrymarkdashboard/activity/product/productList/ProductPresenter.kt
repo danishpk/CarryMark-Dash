@@ -1,6 +1,7 @@
 package tech.stacka.carrymarkdashboard.activity.product.productList
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -41,9 +42,10 @@ class ProductPresenter(productView: ProductView, mContext: Context) {
         objProject.addProperty("strSortActive",strSortActive)
         objProject.add("arrBrands",arrFilteredBrand)
         objProject.add("arrCategory",arrFilteredCategory)
-        objProject.add("arrMaterial",arrFilteredCategory)
+        objProject.add("arrMaterial",arrFilteredMaterial)
 
 
+        Log.i("objProductListData",objProject.toString())
         val apiResponseCall: Call<ProductListResponse> =
           //  RetrofitClient.instance.productList()
             retrofitClient.instance.productList(objProject)
@@ -65,6 +67,58 @@ class ProductPresenter(productView: ProductView, mContext: Context) {
             override fun onFailure(call: Call<ProductListResponse>, t: Throwable) {
                 Toast.makeText(mContext,"error",Toast.LENGTH_LONG).show()
                 productView.onProductListFailedServerError(mContext.getString(R.string.server_error))
+            }
+        })
+    }
+
+    fun searchList(strSort:String,strSortActive:String,arrFilterBrand:ArrayList<String>,
+                    arrFilterCategory:ArrayList<String>,arrFilterMaterial:ArrayList<String>,offset:Int,limit:Int,strSearchValue:String) {
+        val retrofitClient=RetrofitClient(EndPoint.baseUrl1)
+        val objProject=JsonObject()
+        val arrFilteredBrand=JsonArray()
+        val arrFilteredCategory=JsonArray()
+        val arrFilteredMaterial=JsonArray()
+        for(i in arrFilterBrand){
+            arrFilteredBrand.add(i)
+        }
+        for (k in arrFilterCategory){
+            arrFilteredCategory.add(k)
+        }
+
+        for (j in arrFilterMaterial){
+            arrFilteredMaterial.add(j)
+        }
+        objProject.addProperty("intPageNo",offset)
+        objProject.addProperty("intLimit",limit)
+        objProject.addProperty("strSort",strSort)
+
+        objProject.addProperty("strSortActive",strSortActive)
+        objProject.add("arrBrands",arrFilteredBrand)
+        objProject.add("arrCategory",arrFilteredCategory)
+        objProject.add("arrMaterial",arrFilteredMaterial)
+        objProject.addProperty("strSearch",strSearchValue)
+
+        val apiResponseCall: Call<ProductListResponse> =
+            //  RetrofitClient.instance.productList()
+            retrofitClient.instance.productList(objProject)
+        apiResponseCall.enqueue(object : Callback<ProductListResponse> {
+            override fun onResponse(call: Call<ProductListResponse>, response: Response<ProductListResponse>) {
+                if (response.isSuccessful()) {
+                    val apiResponse: ProductListResponse? = response.body()
+                    if (apiResponse != null) {
+                        productView.onProductSearchListSuccess(apiResponse)
+                    }else{
+                        val apiResponse: ProductListResponse = response.body()!!
+                        productView.onProductSearchListNull(apiResponse)
+                    }
+                } else {
+                    val apiResponse: ResponseBody = response.errorBody()!!
+                    productView.onProductSearchListFailed(apiResponse)
+                }
+            }
+            override fun onFailure(call: Call<ProductListResponse>, t: Throwable) {
+                Toast.makeText(mContext,"error",Toast.LENGTH_LONG).show()
+                productView.onProductListSearchFailedServerError(mContext.getString(R.string.server_error))
             }
         })
     }
@@ -92,7 +146,7 @@ class ProductPresenter(productView: ProductView, mContext: Context) {
         objProject.addProperty("intLimit",limit)
         objProject.add("arrBrands",arrFilteredBrand)
         objProject.add("arrCategory",arrFilteredCategory)
-        objProject.add("arrMaterial",arrFilteredCategory)
+        objProject.add("arrMaterial",arrFilteredMaterial)
 
 
         val apiResponseCall: Call<ProductListResponse> =

@@ -50,15 +50,23 @@
             android:icon="@drawable/ic_retailer"
             android:title="Add Distributor" />
         <item
+
             android:id="@+id/nav_retailerList"
             android:icon="@drawable/ic_retailer"
             android:title="View Retailers" />
 
-
-<!--        <item-->
-<!--            android:id="@+id/nav_notific"-->
-<!--            android:icon="@drawable/ic_notification"-->
-<!--            android:title="Send Notification" />-->
+        <item
+            android:id="@+id/nav_notific"
+            android:icon="@drawable/ic_notification"
+            android:title="Notification List" />
+        <item
+            android:id="@+id/nav_send_notific"
+            android:icon="@drawable/ic_notification"
+            android:title="Send Notification" />
+        <item
+            android:id="@+id/nav_addAdmin"
+            android:icon="@drawable/ic_admin"
+            android:title="New Admin" />
 
     </group>
 </menu>

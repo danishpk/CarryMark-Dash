@@ -2,12 +2,14 @@ package tech.stacka.carrymarkdashboard.activity.distributer.distributerList
 
 import android.content.Context
 import android.widget.Toast
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.DistributerListResponse
 import tech.stacka.carrymarkdashboard.network.EndPoint
 import tech.stacka.carrymarkdashboard.network.RetrofitClient
@@ -49,4 +51,6 @@ class DistributorListPresenter(distributorListView: DistributorListView, context
             }
         })
     }
+
+
 }

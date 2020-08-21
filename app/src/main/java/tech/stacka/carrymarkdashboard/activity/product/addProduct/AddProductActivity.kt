@@ -53,8 +53,15 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
     var arrImageData=JsonArray()
     val presenter = AddProductPresenter(this,this)
     val path: ArrayList<File> = ArrayList()
-    val list: MutableList<String> = ArrayList()
+    var listBrand: MutableList<String> = ArrayList()
+    var listCategory: MutableList<String> = ArrayList()
+    var listSubCategory: MutableList<String> = ArrayList()
+    var listMaterial: MutableList<String> = ArrayList()
     var arrScheme=JsonArray()
+    var strValueBrand:String=""
+    var strValueCategory:String=""
+    var strValueMaterial:String=""
+    var strValueSubCategory:String=""
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +113,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                 pbAddProduct.visibility=View.VISIBLE
                 addProductClick(it)
             }else{
-                Snackbar.make(it!!,"Upload one image",Snackbar.LENGTH_LONG).show()
+                Snackbar.make(it!!,"Please upload image",Snackbar.LENGTH_LONG).show()
             }
 
         }
@@ -122,7 +129,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
 
-                    val strValueBrand:String=et_brandAddProduct.text.toString()
+                    strValueBrand=et_brandAddProduct.text.toString()
                     val strCollectionBrand:String="cln_brand"
                     presenter.categoryList(strCollectionBrand,strValueBrand,strToken)
                     CATEGORY_TYPE=1
@@ -138,30 +145,34 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 //            false
 //        }
 
-        et_brandAddProduct.setOnTouchListener { v, motionEvent ->
+        et_brandAddProduct.setOnTouchListener { v, motionEvent1 ->
             val strCollectionBrand:String="cln_brand"
-            presenter.categoryList(strCollectionBrand,"",strToken)
+            strValueBrand=et_brandAddProduct.text.toString()
+            presenter.categoryList(strCollectionBrand,strValueBrand,strToken)
             CATEGORY_TYPE=1
             false
         }
 
-        et_category.setOnTouchListener { v, motionEvent ->
+        et_category.setOnTouchListener { v, motionEvent2 ->
             val strCollectionCategory:String="cln_category"
-            presenter.categoryList(strCollectionCategory,"",strToken)
+            strValueCategory=et_category.text.toString()
+            presenter.categoryList(strCollectionCategory,strValueCategory,strToken)
             CATEGORY_TYPE=2
             false
         }
 
-        et_subcategory.setOnTouchListener { v, motionEvent ->
+        et_subcategory.setOnTouchListener { v, motionEvent3 ->
             val strCollectionSubCategory:String="cln_sub_category"
-            presenter.subCategoryList(strCollectionSubCategory,"",strToken,strMaincategory)
+            strValueSubCategory=et_subcategory.text.toString()
+            presenter.subCategoryList(strCollectionSubCategory,strValueSubCategory,strToken,strMaincategory)
             CATEGORY_TYPE=4
             false
         }
 
         etProductMaterial.setOnTouchListener { v, motionEvent ->
             val strCollectionMaterial:String="cln_material"
-            presenter.categoryList(strCollectionMaterial,"",strToken)
+            strValueMaterial=etProductMaterial.text.toString()
+            presenter.categoryList(strCollectionMaterial,strValueMaterial,strToken)
             CATEGORY_TYPE=3
             false
         }
@@ -178,10 +189,17 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                    val strValueCategory:String=et_category.text.toString()
+                    strValueCategory=et_category.text.toString()
                     val strCollectionCategory:String="cln_category"
                     presenter.categoryList(strCollectionCategory,strValueCategory,strToken)
                     CATEGORY_TYPE=2
+                if(strValueCategory == ""){
+                    et_subcategory.visibility=View.GONE
+                }
+                else{
+                    et_subcategory.visibility=View.VISIBLE
+
+                }
 
 
             }
@@ -190,7 +208,13 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         et_category.onItemClickListener = AdapterView.OnItemClickListener{
                 parent,view,position,id->
             strMaincategory = parent.getItemAtPosition(position).toString()
-            et_subcategory.visibility=View.VISIBLE
+
+            if(strMaincategory.isNotEmpty()){
+                et_subcategory.visibility=View.VISIBLE
+            }else{
+                et_subcategory.visibility=View.GONE
+            }
+
         }
 
 
@@ -204,7 +228,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                    val strValueSubCategory:String=et_subcategory.text.toString()
+                    strValueSubCategory=et_subcategory.text.toString()
                     val strCollectionSubCategory:String="cln_sub_category"
                     presenter.subCategoryList(strCollectionSubCategory,strValueSubCategory,strToken,strMaincategory)
                     CATEGORY_TYPE=4
@@ -223,7 +247,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                    val strValueMaterial:String=etProductMaterial.text.toString()
+                    strValueMaterial=etProductMaterial.text.toString()
                     val strCollectionMaterial:String="cln_material"
                     presenter.categoryList(strCollectionMaterial,strValueMaterial,strToken)
                     CATEGORY_TYPE=3
@@ -247,12 +271,16 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         val mrp = etMrp.text.toString().trim()
         val retailerPrice=etRetailerPrice.text.toString().trim()
         val stock = sp_stock.text.toString().trim()
+        val strKeyword=etKeyword.text.toString().trim()
         val strSchemeOne=etSchemeOne.text.toString().trim()
         val strScheme1Offer=etOfferOne.text.toString().trim()
         val strSchemeTwo=etSchemeTw.text.toString().trim()
         val strScheme2Offer=etOfferTw.text.toString().trim()
         val strSchemeThree=etSchemeTr.text.toString().trim()
         val strScheme3Offer=etOfferTr.text.toString().trim()
+        var dblSgst=etSGST.text.toString().trim()
+        var dblCgst=etCGST.text.toString().trim()
+
 //        val strSchemeFour=etSchemeOne.text.toString().trim()
 //        val strScheme4Offer=etOfferOne.text.toString().trim()
 
@@ -312,9 +340,15 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
             btAddProduct.visibility=View.VISIBLE
             return
         }
+        if(etSGST.text.isEmpty()){
+            dblSgst= "9.0"
+        }
+        if(etCGST.text.isEmpty()){
+            dblCgst= "9.0"
+        }
 
         if (stock.isEmpty()) {
-            sp_stock.error = "Retail price required*"
+            sp_stock.error = "Stock required*"
             sp_stock.requestFocus()
             pbAddProduct.visibility=View.GONE
             btAddProduct.visibility=View.VISIBLE
@@ -334,6 +368,115 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
             btAddProduct.visibility=View.VISIBLE
             return
         }
+
+        if (strKeyword.isEmpty()) {
+            etKeyword.error = "Keyword required*"
+            etKeyword.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
+            return
+        }
+        if(listBrand.size!=0){
+            var BRAND_ERROR_FLAG=true
+            for(i in listBrand){
+                if(i==strValueBrand){
+                   BRAND_ERROR_FLAG=false
+                }
+            }
+            if(BRAND_ERROR_FLAG){
+                et_brandAddProduct.error = "BRAND NOT EXIST IN MASTER*"
+                et_brandAddProduct.requestFocus()
+                pbAddProduct.visibility=View.GONE
+                btAddProduct.visibility=View.VISIBLE
+                return
+            }
+
+        }else{
+            et_brandAddProduct.error = "BRAND NOT EXIST IN MASTER*"
+            et_brandAddProduct.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
+            return
+        }
+
+        if(listCategory.size!=0){
+            var CATEGORY_ERROR_FLAG=true
+            for(i in listCategory){
+                if(i==strValueCategory){
+                    CATEGORY_ERROR_FLAG=false
+                }
+
+                if(CATEGORY_ERROR_FLAG){
+                    et_category.error = "CATEGORY NOT EXIST IN MASTER*"
+                    et_category.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                    return
+                }
+            }
+
+        }else{
+            et_category.error = "CATEGORY NOT EXIST IN MASTER*"
+            et_category.requestFocus()
+            pbAddProduct.visibility=View.GONE
+            btAddProduct.visibility=View.VISIBLE
+            return
+        }
+
+        if(listSubCategory.size!=0){
+            if(et_subcategory.text.isNotEmpty()) {
+                var SUBCATEGORY_ERROR_FLAG = true
+                for (i in listSubCategory) {
+                    if (i == strValueSubCategory) {
+                        SUBCATEGORY_ERROR_FLAG = false
+                    }
+                    if (SUBCATEGORY_ERROR_FLAG) {
+                        et_subcategory.error = "SUB CATEGORY NOT EXIST IN MASTER*"
+                        et_subcategory.requestFocus()
+                        pbAddProduct.visibility = View.GONE
+                        btAddProduct.visibility = View.VISIBLE
+                        return
+                    }
+                }
+            }
+
+        }else{
+            if(et_subcategory.text.isNotEmpty()) {
+                et_subcategory.error = "SUB CATEGORY NOT EXIST IN MASTER*"
+                et_subcategory.requestFocus()
+                pbAddProduct.visibility = View.GONE
+                btAddProduct.visibility = View.VISIBLE
+                return
+            }
+        }
+
+        if(listMaterial.size!=0){
+           var MATERIAL_ERROR_FLAG=true
+            for(i in listMaterial){
+                if(i==strValueMaterial){
+                    MATERIAL_ERROR_FLAG=false
+                }
+
+                if(MATERIAL_ERROR_FLAG){
+                    etProductMaterial.error = "MATERIAL NOT EXIST IN MASTER*"
+                    etProductMaterial.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                    return
+                }
+            }
+
+        }else{
+            if(strValueMaterial!="") {
+                etProductMaterial.error = "MATERIAL NOT EXIST IN MASTER*"
+                etProductMaterial.requestFocus()
+                pbAddProduct.visibility = View.GONE
+                btAddProduct.visibility = View.VISIBLE
+                return
+            }
+        }
+
+
 //        if (productMaterial.isEmpty()) {
 //            etProductMaterial.error = "Product material required*"
 //            etProductMaterial.requestFocus()
@@ -359,9 +502,10 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
             btAddProduct.visibility = View.VISIBLE
         }
         if(Utilities.checkInternetConnection(this)) {
-            presenter.addProduct(productTitle,productId,productDescription,category,productBrand,
+            presenter.addProduct(productTitle,productId,productDescription,strValueCategory,strValueBrand,
                 targetedGender,mrp,sellingPrice,retailerPrice,targetApp,stock,"","",itemUnit,
-                arrImageData,strToken,productMaterial,arrSelectedSize,arrPassingColor,subCategory,arrSelectedColorCode,arrScheme)
+                arrImageData,strToken,strValueMaterial,arrSelectedSize,arrPassingColor,strValueSubCategory,arrSelectedColorCode,arrScheme,strKeyword,
+            dblCgst,dblSgst)
 
         }else{
             pbAddProduct.visibility = View.GONE
@@ -439,6 +583,9 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
     }
 
     override fun addProductFailed(apiResponse: JSONArray) {
+        pbAddProduct.visibility=View.GONE
+        btAddProduct.visibility=View.VISIBLE
+       // Toast.makeText(this,apiResponse.toString(),Toast.LENGTH_SHORT).show()
         val listData = ArrayList<String>()
         for (i in 0 until apiResponse.length()) {
             listData += apiResponse.getString(i)
@@ -454,6 +601,32 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
                     etProductId.requestFocus()
                     pbAddProduct.visibility=View.GONE
                     btAddProduct.visibility=View.VISIBLE
+                }
+                else if(i=="BRAND DOES NOT EXIST"){
+                    et_brandAddProduct.error = "BRAND DOES NOT EXIST *"
+                    et_brandAddProduct.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                }
+                else if(i=="CATEGORY DOES NOT EXIST"){
+                    et_category.error = "CATEGORY DOES NOT EXIST *"
+                    et_category.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                }
+                else if(i=="SUB CATEGORY DOES NOT EXIST"){
+                    et_subcategory.error = "SUB CATEGORY DOES NOT EXIST *"
+                    et_subcategory.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                }
+                else if(i=="MATERIAL DOES NOT EXIST"){
+                    etProductMaterial.error = "MATERIAL DOES NOT EXIST *"
+                    etProductMaterial.requestFocus()
+                    pbAddProduct.visibility=View.GONE
+                    btAddProduct.visibility=View.VISIBLE
+                }else{
+                    Toast.makeText(this,apiResponse.toString(),Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -479,7 +652,7 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 //        objImageData.addProperty("strImgUrl_0",apiResponse.strImgUrl_0)
 //        objImageData.addProperty("strImgUrl_1",apiResponse.strImgUrl_1)
 //        objImageData.addProperty("strImgUrl_2",apiResponse.strImgUrl_2)
-        Toast.makeText(applicationContext,"Upload Succes",Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,"Upload Success",Toast.LENGTH_SHORT).show()
     }
 
     override fun uploadImageFailed(apiResponse: ResponseBody) {
@@ -489,30 +662,36 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
 
     override fun uploadImageFailedServerError(string: String) {
         pbUploadImage.visibility=View.GONE
-        Toast.makeText(applicationContext,string,Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,"Please choose at least one image",Toast.LENGTH_SHORT).show()
     }
 
     override fun onProductCategoryListSuccess(apiResponse: AddProductCategoryResponse) {
          //var categoryData = ArrayList<AddProductCategoryResponse>()
         var categoryData= apiResponse.arrList as ArrayList<ArrAddProductCategory>
-        val list: MutableList<String> = ArrayList()
-        for(i in categoryData){ list.add(i.strName) }
+      //  val list: MutableList<String> = ArrayList()
+
         if(CATEGORY_TYPE==1) {
+            listBrand.clear()
+            for(i in categoryData){ listBrand.add(i.strName) }
             var acTextView1 = findViewById<AutoCompleteTextView>(R.id.et_brandAddProduct)
-            var arrayAdapter1 = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+            var arrayAdapter1 = ArrayAdapter(this, android.R.layout.simple_list_item_1, listBrand)
             et_brandAddProduct.setAdapter(arrayAdapter1)
             acTextView1.showDropDown()
         }
         if(CATEGORY_TYPE==2){
+            listCategory.clear()
+            for(i in categoryData){ listCategory.add(i.strName) }
             val acTextView2 = findViewById<AutoCompleteTextView>(R.id.et_category)
-            val arrayAdapter2 = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+            val arrayAdapter2 = ArrayAdapter(this, android.R.layout.simple_list_item_1, listCategory)
             acTextView2.setAdapter(arrayAdapter2)
             acTextView2.showDropDown()
         }
 
         if(CATEGORY_TYPE==3){
+            listMaterial.clear()
+            for(i in categoryData){ listMaterial.add(i.strName) }
             val acTextView3 = findViewById<AutoCompleteTextView>(R.id.etProductMaterial)
-            val arrayAdapter3 = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+            val arrayAdapter3 = ArrayAdapter(this, android.R.layout.simple_list_item_1, listMaterial)
             acTextView3.setAdapter(arrayAdapter3)
             acTextView3.showDropDown()
 //            acTextView.onItemSelectedListener = object : OnItemSelectedListener {
@@ -530,9 +709,12 @@ class AddProductActivity : AppCompatActivity(),AddProductView{
         }
 
         if(CATEGORY_TYPE==4){
+            listSubCategory.clear()
+            for(i in categoryData){ listSubCategory.add(i.strName) }
             val acTextView = findViewById<AutoCompleteTextView>(R.id.et_subcategory)
-            val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+            val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listSubCategory)
             acTextView.setAdapter(arrayAdapter)
+            acTextView.showDropDown()
         }
     }
 

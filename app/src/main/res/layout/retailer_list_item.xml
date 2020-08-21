@@ -25,7 +25,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:visibility="gone"
+            android:textColor="@color/colorDarkGrey"
+            android:visibility="visible"
             android:id="@+id/tvRetId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,6 +41,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvDisplayName" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +51,7 @@
             app:layout_constraintTop_toTopOf="@+id/tvMobile" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvMobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,6 +62,54 @@
             app:layout_constraintTop_toBottomOf="@+id/tvRetId" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
+            android:id="@+id/tvShopNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Shop Name : "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMobile" />
+
+        <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:id="@+id/tvShopName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text=" "
+            app:layout_constraintStart_toEndOf="@+id/tvShopNameText"
+            app:layout_constraintTop_toTopOf="@+id/tvShopNameText" />
+
+
+        <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
+            android:id="@+id/tvGstText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="GST : "
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvShopName" />
+
+        <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:id="@+id/tvGST"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="GST "
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/tvGstText"
+            app:layout_constraintTop_toTopOf="@+id/tvGstText" />
+
+
+        <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,20 +117,22 @@
             android:text="Whatsapp Number : "
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvMobile" />
+            app:layout_constraintTop_toBottomOf="@+id/tvGST" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvWhatsapp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="+91 "
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toBottomOf="@+id/tvMobile" />
+            app:layout_constraintTop_toTopOf="@+id/textView6" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,18 +143,21 @@
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvOfficeNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+
             android:layout_marginEnd="8dp"
             android:text="+91 "
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/textView7"
-            app:layout_constraintTop_toBottomOf="@+id/tvWhatsapp" />
+            app:layout_constraintTop_toTopOf="@+id/textView7" />
 
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,15 +168,18 @@
             app:layout_constraintTop_toBottomOf="@+id/tvOfficeNo" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvAddress1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Address 1 :.... "
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/textView8"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toTopOf="@+id/textView8" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -131,15 +190,17 @@
             app:layout_constraintTop_toBottomOf="@+id/tvAddress1" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvAddress2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Address....."
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/textView9"
-            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+            app:layout_constraintTop_toTopOf="@+id/textView9" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -152,6 +213,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvAddress2" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvDistrict"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -164,13 +226,14 @@
             app:layout_constraintTop_toBottomOf="@+id/tvPost" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:text="Stete"
+            android:text="State"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvDistrict" />
@@ -187,6 +250,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tvExecutive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -213,6 +277,7 @@
             app:layout_constraintTop_toTopOf="@+id/tvExecutive" />
 
         <TextView
+            android:textColor="@color/colorDarkGrey"
             android:id="@+id/tv_distributer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -225,6 +290,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sp_executives" />
 
         <Spinner
+
             android:id="@+id/sp_distributers"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -237,6 +303,46 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_distributer" />
 
+        <TextView
+            android:textColor="@color/colorDarkGrey"
+            android:id="@+id/tvRtDiscount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Retailer Discount(%) :"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sp_distributers" />
+
+        <ImageButton
+            android:id="@+id/ibDiscount"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRtDiscount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvRtDiscount"
+            android:src="@drawable/ic_edit"
+            android:background="@android:color/transparent"/>
+
+        <EditText
+            android:inputType="numberDecimal"
+            android:maxLength="4"
+            android:visibility="gone"
+            style="@style/InputStyle"
+            android:id="@+id/etRtDiscount"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ibDiscount"/>
+
+
 
         <CheckBox
             android:buttonTint="@color/colorLightBlue"
@@ -248,7 +354,7 @@
             android:textOff="Off"
             android:textOn="On"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sp_distributers" />
+            app:layout_constraintTop_toBottomOf="@+id/etRtDiscount" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btUpdate"

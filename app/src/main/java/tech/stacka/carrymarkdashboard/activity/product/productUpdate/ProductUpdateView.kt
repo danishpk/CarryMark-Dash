@@ -1,6 +1,7 @@
 package tech.stacka.carrymarkdashboard.activity.product.productUpdate
 
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.models.*
 
 interface ProductUpdateView {
@@ -10,7 +11,7 @@ interface ProductUpdateView {
     abstract fun onProductDetailServerFailed(toString: String)
     abstract fun updateProductSuccess(apiResponse: AddProductResponse)
     abstract fun updateProductNull(apiResponse: AddProductResponse)
-    abstract fun updateProductFailed(apiResponse: ResponseBody)
+    abstract fun updateProductFailed(apiResponse: JSONArray)
     abstract fun updateProductFailedServerError(toString: String)
     abstract fun uploadImageSuccess(apiResponse: UploadProductImageResponse)
     abstract fun uploadImageNull(apiResponse: UploadProductImageResponse)

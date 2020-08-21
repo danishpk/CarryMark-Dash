@@ -17,16 +17,16 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import tech.stacka.carrymarkdashboard.activity.home.HomeActivity
+import tech.stacka.carrymarkdashboard.activity.notification.listNotification.NotificationListActivity
 import tech.stacka.carrymarkdashboard.models.Config
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     var push_title: String? = null
     var push_message: String? = null
     var intent: Intent? = null
-    private lateinit var sharedPreference: SharedPreferences
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // ...
-        val intent = Intent(applicationContext, HomeActivity::class.java)
+        val intent = Intent(applicationContext, NotificationListActivity::class.java)
         intent.putExtra("from", "notification")
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
@@ -47,7 +47,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val data: Map<String, String> = remoteMessage.data
             Config.title = data["title"].toString()
             Config.content = data["message"].toString()
-            sharedPreference=PreferenceManager.getDefaultSharedPreferences(this@MyFirebaseMessagingService)
+           val sharedPreference=PreferenceManager.getDefaultSharedPreferences(this@MyFirebaseMessagingService)
             val editor = sharedPreference.edit()
             editor.putString("pushTitle", Config.title)
             editor.putString("pushBody", Config.content)
@@ -67,6 +67,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
+        val sharedPreference=PreferenceManager.getDefaultSharedPreferences(this@MyFirebaseMessagingService)
         Log.d(TAG, "Refreshed token: $token")
         val editor = sharedPreference.edit()
         editor.putString("fireBaseToken", token)

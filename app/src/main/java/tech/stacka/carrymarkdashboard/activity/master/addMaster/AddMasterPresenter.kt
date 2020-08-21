@@ -66,7 +66,7 @@ class AddMasterPresenter(val addMasterView: AddMasterView,val context: Context) 
             addMasterJson.addProperty("strName", strMaster)
             addMasterJson.addProperty("strCollection", strMainCategory)
             addMasterJson.addProperty("strImgUrl_0", strImageData)
-            if(!strColorCode.equals("")){
+            if(strColorCode != ""){
                 objColorCode.addProperty("strColorCode", strColorCode.toUpperCase())
                 addMasterJson.add("objExtras",objColorCode)
             }
@@ -78,7 +78,7 @@ class AddMasterPresenter(val addMasterView: AddMasterView,val context: Context) 
             addMasterJson.addProperty("strCollection", strMainCategory)
             addMasterJson.addProperty("strImgUrl_0", strImageData)
             objSubCategoryParent.addProperty("strParentCategory", strSubCategory)
-            addMasterJson.add("",objSubCategoryParent)
+            addMasterJson.add("objExtras",objSubCategoryParent)
         }
         val apiResponseCall: Call<DefaultResponse> = retrofitClient.instance.createMaster(strToken,addMasterJson)
         apiResponseCall.enqueue(object : Callback<DefaultResponse> {

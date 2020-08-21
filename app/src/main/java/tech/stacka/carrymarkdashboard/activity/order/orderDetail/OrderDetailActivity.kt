@@ -25,9 +25,10 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_order_detail.*
 import kotlinx.android.synthetic.main.toolbar_child.*
-import okhttp3.ResponseBody
+import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.activity.order.orderList.OrderListActivity
 import tech.stacka.carrymarkdashboard.adapter.OrderDetailList
@@ -49,7 +50,7 @@ import kotlin.collections.ArrayList
 
 class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
     var strToken:String=""
-    private var productValue: Double = 0.0
+
     private lateinit var orderDetailListAdapter: OrderDetailList
     var strOrderId:String=""
     var strOrderStatus:String=""
@@ -60,11 +61,18 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
     val TABLE_TOP_PADDING = 10f
     val TEXT_TOP_PADDING_EXTRA = 30f
     val BILL_DETAILS_TOP_PADDING = 80f
+    var status=""
+    private var dblDiscount:Double=0.0
+    private var strShopName:String=""
+    private var strGSTNo:String=""
+    private var strPaymentMethod:String=""
+    private var strDistributorName:String=""
+    private var dblTotalPrice: Double = 0.0
+    private var productValue: Double = 0.0
     val presenter= OrderDetailPresenter(this,this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order_detail)
-
         val orderId = intent.getStringExtra("orderID")
         tvOrderId.text = orderId
 
@@ -99,7 +107,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         }
 
         btUpdateStatus.setOnClickListener {
-            val status = sp_editStatus.selectedItem.toString().trim()
+             status = sp_editStatus.selectedItem.toString().trim()
             if(Utilities.checkInternetConnection(this)) {
                 presenter.updateOrder(strToken,strOrderId,status)
             }else{
@@ -125,9 +133,8 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
                 id: Long
             ) {
                 if (position != 0) {
-                    val status = sp_editStatus.selectedItem.toString().trim()
+                    status = sp_editStatus.selectedItem.toString().trim()
                     tvOrderStatus.text=status
-
 
                 }
             }
@@ -143,7 +150,6 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport) {
 
                         if (report.areAllPermissionsGranted()) {
-
 
                             val doc = Document(A4, 0f, 0f, 0f, 0f)
                             val outPath =
@@ -161,7 +167,6 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
                             initPriceDetails(doc)
                             initFooter(doc)
                             doc.close()
-
 
                             val file = File(outPath)
                             val path: Uri = FileProvider.getUriForFile(
@@ -218,13 +223,13 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         priceDetailsTable.isLockedWidth = true
 
 
-        val txtSubTotalCell = PdfPCell(Phrase(""))
+        val txtSubTotalCell = PdfPCell(Phrase("Total Price"))
         txtSubTotalCell.border = Rectangle.NO_BORDER
         txtSubTotalCell.horizontalAlignment = Rectangle.ALIGN_RIGHT
         txtSubTotalCell.paddingTop = TEXT_TOP_PADDING_EXTRA
         priceDetailsTable.addCell(txtSubTotalCell)
 
-        val totalPriceCell = PdfPCell(Phrase(""))
+        val totalPriceCell = PdfPCell(Phrase("Rs $dblTotalPrice"))
         totalPriceCell.border = Rectangle.NO_BORDER
         totalPriceCell.horizontalAlignment = Rectangle.ALIGN_RIGHT
         totalPriceCell.paddingTop = TEXT_TOP_PADDING_EXTRA
@@ -232,20 +237,20 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         priceDetailsTable.addCell(totalPriceCell)
 
 
-        val txtTaxCell = PdfPCell(Phrase(" "))
+        val txtTaxCell = PdfPCell(Phrase("Discount "))
         txtTaxCell.border = Rectangle.NO_BORDER
         txtTaxCell.horizontalAlignment = Rectangle.ALIGN_RIGHT
         txtTaxCell.paddingTop = TEXT_TOP_PADDING
         priceDetailsTable.addCell(txtTaxCell)
 
-        val totalTaxCell = PdfPCell(Phrase(""))
+        val totalTaxCell = PdfPCell(Phrase("Rs "+dblDiscount.toString()))
         totalTaxCell.border = Rectangle.NO_BORDER
         totalTaxCell.horizontalAlignment = Rectangle.ALIGN_RIGHT
         totalTaxCell.paddingTop = TEXT_TOP_PADDING
         totalTaxCell.paddingRight = PADDING_EDGE
         priceDetailsTable.addCell(totalTaxCell)
 
-        val txtTotalCell = PdfPCell(Phrase("TOTAL : "))
+        val txtTotalCell = PdfPCell(Phrase("Payable Amount : "))
         txtTotalCell.border = Rectangle.NO_BORDER
         txtTotalCell.horizontalAlignment = Rectangle.ALIGN_RIGHT
         txtTotalCell.paddingTop = TEXT_TOP_PADDING
@@ -268,7 +273,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         val itemsTable = PdfPTable(5)
         itemsTable.isLockedWidth = true
         itemsTable.totalWidth = A4.width
-        itemsTable.setWidths(floatArrayOf(1.5f, 1f, 1f, .6f, 1.1f))
+        itemsTable.setWidths(floatArrayOf(1.5f, .5f, .6f, 1f, 1.1f))
 
 
         for (item in arrOrderProduct ) {
@@ -298,23 +303,31 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
             itemsTable.addCell(itemCell)
 
 
+//            val itemID = PdfPCell(Phrase(item.strOGProductId.toString()))
+//            itemID.border = Rectangle.NO_BORDER
+//            itemID.paddingTop = TABLE_TOP_PADDING
+//            itemID.paddingLeft = PADDING_EDGE
+//            itemsTable.addCell(itemID)
+
+
             val quantityCell = PdfPCell(Phrase(item.dblQty.toString()))
             quantityCell.border = Rectangle.NO_BORDER
             quantityCell.horizontalAlignment = Rectangle.ALIGN_RIGHT
             quantityCell.paddingTop = TABLE_TOP_PADDING
             itemsTable.addCell(quantityCell)
 
-            val disAmount = PdfPCell(Phrase(""))
-            disAmount.border = Rectangle.NO_BORDER
-            disAmount.horizontalAlignment = Rectangle.ALIGN_RIGHT
-            disAmount.paddingTop = TABLE_TOP_PADDING
-            itemsTable.addCell(disAmount)
-
-            val vat = PdfPCell(Phrase(item.strProductId.toString()))
+            val vat = PdfPCell(Phrase(item.dblOfferQty.toString()))
             vat.border = Rectangle.NO_BORDER
             vat.horizontalAlignment = Rectangle.ALIGN_RIGHT
             vat.paddingTop = TABLE_TOP_PADDING
             itemsTable.addCell(vat)
+
+            val unitPrice = PdfPCell(Phrase("Rs ${item.dblAmount}"))
+            unitPrice.border = Rectangle.NO_BORDER
+            unitPrice.horizontalAlignment = Rectangle.ALIGN_RIGHT
+            unitPrice.paddingTop = TABLE_TOP_PADDING
+            itemsTable.addCell(unitPrice)
+
 
             val netAmount = PdfPCell(Phrase("Rs ${item.dblAmount.toString().toDouble()*item.dblQty.toString().toDouble()}"))
             netAmount.horizontalAlignment = Rectangle.ALIGN_RIGHT
@@ -334,15 +347,22 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         val titleTable = PdfPTable(5)
         titleTable.isLockedWidth = true
         titleTable.totalWidth = A4.width
-        titleTable.setWidths(floatArrayOf(1.5f, 1f, 1f, .6f, 1.1f))
+        titleTable.setWidths(floatArrayOf(1.5f, .5f, .6f, 1f, 1.1f))
 
 
-        val itemCell = PdfPCell(Phrase("Item"))
+        val itemCell = PdfPCell(Phrase("Product Name"))
         itemCell.border = Rectangle.NO_BORDER
         itemCell.paddingTop = TABLE_TOP_PADDING
         itemCell.paddingBottom = TABLE_TOP_PADDING
         itemCell.paddingLeft = PADDING_EDGE
         titleTable.addCell(itemCell)
+
+//        val itemIdCell = PdfPCell(Phrase("Product Id"))
+//        itemIdCell.border = Rectangle.NO_BORDER
+//        itemIdCell.paddingTop = TABLE_TOP_PADDING
+//        itemIdCell.paddingBottom = TABLE_TOP_PADDING
+//        itemIdCell.paddingLeft = PADDING_EDGE
+//        titleTable.addCell(itemIdCell)
 
 
         val quantityCell = PdfPCell(Phrase("Quantity"))
@@ -352,19 +372,21 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         quantityCell.paddingTop = TABLE_TOP_PADDING
         titleTable.addCell(quantityCell)
 
-        val disAmount = PdfPCell(Phrase(""))
-        disAmount.border = Rectangle.NO_BORDER
-        disAmount.horizontalAlignment = Rectangle.ALIGN_RIGHT
-        disAmount.paddingBottom = TABLE_TOP_PADDING
-        disAmount.paddingTop = TABLE_TOP_PADDING
-        titleTable.addCell(disAmount)
-
-        val vat = PdfPCell(Phrase("Product ID"))
+        val vat = PdfPCell(Phrase("Offer Quantity"))
         vat.border = Rectangle.NO_BORDER
         vat.horizontalAlignment = Rectangle.ALIGN_RIGHT
         vat.paddingBottom = TABLE_TOP_PADDING
         vat.paddingTop = TABLE_TOP_PADDING
         titleTable.addCell(vat)
+
+        val unitPrice = PdfPCell(Phrase("Unit Price"))
+        unitPrice.border = Rectangle.NO_BORDER
+        unitPrice.horizontalAlignment = Rectangle.ALIGN_RIGHT
+        unitPrice.paddingBottom = TABLE_TOP_PADDING
+        unitPrice.paddingTop = TABLE_TOP_PADDING
+        titleTable.addCell(unitPrice)
+
+
 
         val netAmount = PdfPCell(Phrase("Net Amount"))
         netAmount.horizontalAlignment = Rectangle.ALIGN_RIGHT
@@ -409,7 +431,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
 
         val txtBilledToCell = PdfPCell(
             Phrase(
-                "Billed From"
+                "Ordered From"
             )
         )
         txtBilledToCell.border = Rectangle.NO_BORDER
@@ -418,27 +440,26 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         )
 
         val clientAddressCell1 = PdfPCell(
-            Paragraph(
-                "Sparcot"
-
-            )
+//            Paragraph(
+//                getString(R.string.appIdentity)
+//
+//            )
+            Paragraph("Shop : $strShopName")
         )
         clientAddressCell1.border = Rectangle.NO_BORDER
         clientAddressCell1.paddingTop = TEXT_TOP_PADDING
         customerAddressTable.addCell(clientAddressCell1)
 
         val clientAddressCell2 = PdfPCell(
-            Paragraph(""))
+            Paragraph("GST No. : $strGSTNo")
+        )
         clientAddressCell2.border = Rectangle.NO_BORDER
         clientAddressCell2.paddingTop = TEXT_TOP_PADDING
         customerAddressTable.addCell(clientAddressCell2)
 
 
         val clientAddressCell3 = PdfPCell(
-            Paragraph(
-                " "
-
-            )
+            Paragraph("Payment Method : $strPaymentMethod")
         )
         clientAddressCell3.border = Rectangle.NO_BORDER
         clientAddressCell3.paddingTop = TEXT_TOP_PADDING
@@ -446,10 +467,8 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
 
 
         val clientAddressCell4 = PdfPCell(
-            Paragraph(
-                " "
-
-            )
+            Paragraph("Distributor : $strDistributorName")
+            //        Paragraph("")
         )
         clientAddressCell4.border = Rectangle.NO_BORDER
         clientAddressCell4.paddingTop = TEXT_TOP_PADDING
@@ -464,37 +483,6 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
 
         billDetailsTable.addCell(billDetailsCell1)
 
-
-        val invoiceNumAndData = PdfPTable(1)
-
-        val txtInvoiceNumber = PdfPCell(Phrase("Invoice Number"))
-        txtInvoiceNumber.paddingTop = BILL_DETAILS_TOP_PADDING
-        txtInvoiceNumber.border = Rectangle.NO_BORDER
-        invoiceNumAndData.addCell(txtInvoiceNumber)
-
-        val invoiceNumber = PdfPCell(Phrase(strOrderId))
-        invoiceNumber.border = Rectangle.NO_BORDER
-        invoiceNumber.paddingTop = TEXT_TOP_PADDING
-        invoiceNumAndData.addCell(invoiceNumber)
-
-
-        val txtDate = PdfPCell(Phrase("Date Of Issue"))
-        txtDate.paddingTop = TEXT_TOP_PADDING_EXTRA
-        txtDate.border = Rectangle.NO_BORDER
-        invoiceNumAndData.addCell(txtDate)
-
-        var date = Date()
-        val formatter = SimpleDateFormat("MMM dd yyyy HH:mma")
-        val answer: String = formatter.format(date)
-
-
-        val dateCell = PdfPCell(Phrase(answer))
-        dateCell.border = Rectangle.NO_BORDER
-        invoiceNumAndData.addCell(dateCell)
-
-        val dataInvoiceNumAndData = PdfPCell(invoiceNumAndData)
-        dataInvoiceNumAndData.border = Rectangle.NO_BORDER
-        billDetailsTable.addCell(dataInvoiceNumAndData)
 
         val totalPriceTable = PdfPTable(1)
         val txtInvoiceTotal = PdfPCell(Phrase(""))
@@ -512,8 +500,41 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         dataTotalAmount.border = Rectangle.NO_BORDER
         dataTotalAmount.paddingRight = PADDING_EDGE
         dataTotalAmount.verticalAlignment = Rectangle.ALIGN_BOTTOM
-
         billDetailsTable.addCell(dataTotalAmount)
+
+
+        val invoiceNumAndData = PdfPTable(1)
+        val txtInvoiceNumber = PdfPCell(Phrase("P.O Number"))
+        //txtInvoiceNumber.horizontalAlignment = Rectangle.ALIGN_RIGHT
+        txtInvoiceNumber.paddingTop = BILL_DETAILS_TOP_PADDING
+        txtInvoiceNumber.border = Rectangle.NO_BORDER
+        invoiceNumAndData.addCell(txtInvoiceNumber)
+
+        val invoiceNumber = PdfPCell(Phrase(strOrderId))
+        //invoiceNumber.horizontalAlignment = Rectangle.ALIGN_RIGHT
+        invoiceNumber.border = Rectangle.NO_BORDER
+        invoiceNumber.paddingTop = TEXT_TOP_PADDING
+        invoiceNumAndData.addCell(invoiceNumber)
+
+
+        val txtDate = PdfPCell(Phrase("Date Of Issue"))
+        // txtDate.horizontalAlignment = Rectangle.ALIGN_RIGHT
+        txtDate.paddingTop = TEXT_TOP_PADDING_EXTRA
+        txtDate.border = Rectangle.NO_BORDER
+        invoiceNumAndData.addCell(txtDate)
+
+        var date = Date()
+        val formatter = SimpleDateFormat("MMM dd yyyy HH:mma")
+        val answer: String = formatter.format(date)
+
+        val dateCell = PdfPCell(Phrase(answer))
+        // dateCell.horizontalAlignment = Rectangle.ALIGN_RIGHT
+        dateCell.border = Rectangle.NO_BORDER
+        invoiceNumAndData.addCell(dateCell)
+
+        val dataInvoiceNumAndData = PdfPCell(invoiceNumAndData)
+        dataInvoiceNumAndData.border = Rectangle.NO_BORDER
+        billDetailsTable.addCell(dataInvoiceNumAndData)
         doc.add(billDetailsTable)
     }
 
@@ -551,8 +572,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
         val phoneCell =
             PdfPCell(
                 Paragraph(
-                    "+91 8547984369"
-
+                    SharedPrefManager.getInstance(this).user.strMobileNo
                 )
             )
         phoneCell.border = Rectangle.NO_BORDER
@@ -561,14 +581,14 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
 
         contactTable.addCell(phoneCell)
 
-        val emailCellCell = PdfPCell(Phrase("sreeharikariot@gmail.com"))
+        val emailCellCell = PdfPCell(Phrase(""))
         emailCellCell.border = Rectangle.NO_BORDER
         emailCellCell.horizontalAlignment = Element.ALIGN_RIGHT
         emailCellCell.paddingTop = TEXT_TOP_PADDING
 
         contactTable.addCell(emailCellCell)
 
-        val webCell = PdfPCell(Phrase("www.kariot.me"))
+        val webCell = PdfPCell(Phrase(getString(R.string.appIdentity)))
         webCell.border = Rectangle.NO_BORDER
         webCell.paddingTop = TEXT_TOP_PADDING
         webCell.horizontalAlignment = Element.ALIGN_RIGHT
@@ -624,28 +644,44 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
 
 
     override fun onOrderDetailSuccess(apiResponse: OrderDetailResponse) {
-        strOrderId=apiResponse.strOrderId
-        tvOrderId.text=apiResponse.strOrderId
-        tvRetailerId.text = apiResponse.strOrderedUserId
-        tvShopName.text = apiResponse.objAddress.strName
-        tvShopArea.text = apiResponse.objAddress.strCity
-        tvPhoneNumber.text = apiResponse.objAddress.strMobileNo
-        tvTime.text=apiResponse.strCreatedTime
-        tvAmount.text = apiResponse.dblTotalOrderAmount.toString()
-        tvPaymentMethod.text = apiResponse.strModePayment
-        tvDistributor.text=apiResponse.strOrderedUserId
-        tvOrderStatus.text=apiResponse.strOrderStatus
-        arrOrderProduct= apiResponse.arrProducts as ArrayList<ArrOrderProduct>
-        productValue=apiResponse.dblTotalOrderAmount.toDouble()
-        val orderLayoutManager = LinearLayoutManager(this)
-        rvOrderDetails.layoutManager = orderLayoutManager
-        orderDetailListAdapter = OrderDetailList(
-            this,arrOrderProduct)
-        rvOrderDetails.adapter = orderDetailListAdapter
+        if(apiResponse!= null) {
+            strOrderId = apiResponse.strOrderId
+            productValue = apiResponse.dblTotalOrderAmount.toDouble()
+            dblTotalPrice=apiResponse.dblTotalPrice.toDouble()
+            dblDiscount=apiResponse.dblDiscountPrice.toDouble()
+            strShopName=apiResponse.strShopName
+            strDistributorName=apiResponse.strDistributerName
+            strGSTNo=apiResponse.strGSTNo
+            strPaymentMethod=apiResponse.strModePayment
+            tvOrderId.text=apiResponse.strOrderId
+            tvRetailerId.text = apiResponse.strUserId
+            tvShopName.text = apiResponse.strShopName
+            //tvShopArea.text = apiResponse.objAddress.strCity
+            if(apiResponse.strGSTNo!=null) {
+                tvGST.text = apiResponse.strGSTNo
+            }
+            tvPhoneNumber.text = apiResponse.strMobileNo
+            if(apiResponse.strNote!=null) {
+                tvNotes.text = apiResponse.strNote
+            }
+            tvTime.text=apiResponse.strCreatedTime
+            tvAmount.text = "${apiResponse.dblTotalOrderAmount}₹"
+            tvPaymentMethod.text = apiResponse.strModePayment
+            tvDistributor.text=apiResponse.strDistributerName
+            tvOrderStatus.text=apiResponse.strOrderStatus
+            if(apiResponse.strExecutiveName!=null) {
+                tvExecutive.text = apiResponse.strExecutiveName
+            }
+            arrOrderProduct = apiResponse.arrProducts as ArrayList<ArrOrderProduct>
+            val orderLayoutManager = LinearLayoutManager(this)
+            rvOrderDetails.layoutManager = orderLayoutManager
+            orderDetailListAdapter = OrderDetailList(
+                this, arrOrderProduct
+            )
+            rvOrderDetails.adapter = orderDetailListAdapter
 
 
-
-
+        }
 
     }
 
@@ -666,6 +702,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
     }
 
     override fun onOrderUpdateSuccess(apiResponse: DefaultResponse) {
+        tvOrderStatus.text=status
         AlertHelper.showOKSnackBarAlert(this@OrderDetailActivity,"Order updated successfully")
         finish();
         overridePendingTransition(0, 0);
@@ -677,8 +714,25 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailView {
 
     }
 
-    override fun onOrderUpdateFailed(apiResponse: ResponseBody) {
-        AlertHelper.showOKSnackBarAlert(this@OrderDetailActivity,"No updation required")
+    override fun onOrderUpdateFailed(apiResponse: JSONArray) {
+        val listData = ArrayList<String>()
+        for (i in 0 until apiResponse.length()) {
+            listData += apiResponse.getString(i)
+            Log.e("ListData",listData.toString())
+            for(i in listData){
+                when (i) {
+                    "CANT_UPDATE" -> {
+                        AlertHelper.showOKSnackBarAlert(this@OrderDetailActivity, "Can't be $status")
+                    }
+                    "INVALID_STATUS" -> {
+                        AlertHelper.showOKSnackBarAlert(this@OrderDetailActivity, "Can't be marked as $status")
+                    }
+                    else -> {
+                        AlertHelper.showOKSnackBarAlert(this@OrderDetailActivity, "Can't be $status")
+                    }
+                }
+            }
+        }
     }
 
     override fun onOrderUpdateFailedServerError(toString: String) {

@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Eliate Dashboard</string>
+    <string name="app_name">Captaintot Dashboard</string>
+    <string name="appIdentity">CAPTAINTOT</string>
+    <string name="website">www.captaintot.com</string>
     <string name="server_error">Check your network connection</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="retry">Retry</string>
     <string name="no_internet_connection">Check your network connection</string>
     <string name="ok">Ok</string>

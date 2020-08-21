@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimary">#0537C8</color>
+    <color name="colorPrimaryDark">#00134A</color>
     <color name="colorAccent">#0384DA</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGrey">#999999</color>
-    <color name="colorOrange">#F27136</color>
+    <color name="colorDarkGrey">#6C6C6C</color>
     <color name="cardColor">#F9F9F9</color>
     <color name="colorLightBlack">#3C3C3C</color>
     <color name="colorCardText">#4D4D4D</color>
+    <color name="colorOrange">#F27136</color>
     <color name="colorLightOrange">#E05517</color>
-    <color name="colorBlue">#00134A</color>
-    <color name="colorLightBlue">#0537C8</color>
+    <color name="colorBlue">#E05517</color>
+    <color name="colorLightBlue">#F27136</color>
+    <color name="colorBlueSparcot">#00134A</color>
+    <color name="colorLightBlueSparcot">#0537C8</color>
 </resources>

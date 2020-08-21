@@ -23,4 +23,12 @@ interface RetailerListView {
     abstract fun onRetailerUpdateNull(apiResponse: DefaultResponse)
     abstract fun onRetailerUpdateFailed(apiResponse: ResponseBody)
     abstract fun onRetailerUpdateFailedServerError(string: String)
+    abstract fun onRetailerSearchListSuccess(apiResponse: RetailerListResponse)
+    abstract fun onRetailerSearchListNull(apiResponse: RetailerListResponse)
+    abstract fun onRetailerSearchListFailed(apiResponse: ResponseBody)
+    abstract fun onRetailerListSearchFailedServerError(string: String)
+    abstract fun onRetailerListMoreSuccess(apiResponse: RetailerListResponse)
+    abstract fun onRetailerListMOreNull(apiResponse: RetailerListResponse)
+    abstract fun onRetailerListMoreFailed(apiResponse: ResponseBody)
+    abstract fun onRetailerListFailedMoreServerError(string: String)
 }

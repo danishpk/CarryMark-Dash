@@ -28,24 +28,29 @@ class MasterAdapter(val ctx: Context, val categoryList: ArrayList<ClnCategories>
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = categoryList[position]
         if(product.strImgUrl_0!=null ) {
-            if (!product.strImgUrl_0.equals("")) {
+            if (product.strImgUrl_0 != "") {
                 Glide.with(ctx).load(product.strImgUrl_0).centerCrop()
                     .placeholder(R.drawable.ic_placeholder)
                     .into(holder.image)
 
             }
         }
-        if(!product.strColorCode.equals("")){
+        if(product.strColorCode != ""){
             holder.image.setBackgroundColor(Color.parseColor("#"+product.strColorCode));
+            holder.parentName.visibility=View.VISIBLE
+            holder.parentName.text="#${product.strColorCode}"
         }
+//        else{
+//            holder.parentName.visibility=View.GONE
+//        }
         if(!product.strParentCategory.equals("")){
             holder.parentName.visibility=View.VISIBLE
             holder.parentName.text=product.strParentCategory
 
-        }else{
-            holder.parentName.visibility=View.GONE
         }
-
+//        else{
+//            holder.parentName.visibility=View.GONE
+//        }
         holder.productName.text = product.strName.toUpperCase(Locale.ENGLISH)
 
     holder.delMaster.setOnClickListener {

@@ -17,4 +17,8 @@ interface ProductView {
     abstract fun onProductListMoreNull(apiResponse: ProductListResponse)
     abstract fun onProductListMoreFailed(apiResponse: ResponseBody)
     abstract fun onProductListFailedMoreServerError(string: String)
+    abstract fun onProductSearchListSuccess(apiResponse: ProductListResponse)
+    abstract fun onProductSearchListNull(apiResponse: ProductListResponse)
+    abstract fun onProductSearchListFailed(apiResponse: ResponseBody)
+    abstract fun onProductListSearchFailedServerError(string: String)
 }

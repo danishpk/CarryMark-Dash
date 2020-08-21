@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.order_list_item.view.*
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.activity.order.orderDetail.OrderDetailActivity
 import tech.stacka.carrymarkdashboard.models.data.ArrOrderList
+import tech.stacka.carrymarkdashboard.models.data.ArrProductList
 
 class OrderListAdapter(val ctx: Context, val orderList: ArrayList<ArrOrderList>) :
     RecyclerView.Adapter<OrderListAdapter.OrderViewHolder>() {
@@ -33,9 +34,16 @@ class OrderListAdapter(val ctx: Context, val orderList: ArrayList<ArrOrderList>)
         holder.orderItems.text = "${order.arrProducts.size} Products"
         holder.orderTime.text =order.strCreatedTime
           //  SimpleDateFormat("dd/MM/yyyy \nHH:mm a").format(order.!!.toDate())
-        holder.retailerId.text = order.strOrderedUserId
+        holder.retailerId.text = order.dblTotalOrderAmount.toString()
         holder.orderStatus.text = order.strOrderStatus
-        holder.shopName.text = ""
+        if(order.strShopName!=""){
+            holder.shopName.text="SHOP NAME"
+            holder.shopName.text = order.strShopName
+        }else{
+            holder.shopNameText.text="CUSTOMER NAME"
+            holder.shopName.text=order.strName
+        }
+
         holder.itemView.setOnClickListener {
             val intent = Intent(ctx, OrderDetailActivity::class.java)
             intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK
@@ -45,15 +53,16 @@ class OrderListAdapter(val ctx: Context, val orderList: ArrayList<ArrOrderList>)
         }
     }
 
-//    fun getLastItemId(): Timestamp {
-//        return orderList[orderList.lastIndex].orderTime!!
-//    }
+    fun add(r: ArrOrderList) {
+        orderList.add(r)
+        notifyItemInserted(orderList.size - 1)
+    }
 
-//    fun addAll(newPosts: ArrayList<Orders>) {
-//        val initialSize = orderList.size
-//        orderList.addAll(newPosts)
-//        notifyItemRangeInserted(initialSize, newPosts.size)
-//    }
+    fun addAll(data: java.util.ArrayList<ArrOrderList>) {
+        for (result in data) {
+            add(result)
+        }
+    }
 
 
     class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -63,6 +72,8 @@ class OrderListAdapter(val ctx: Context, val orderList: ArrayList<ArrOrderList>)
         val retailerId = view.tv_RetailerId
         val orderStatus = view.tv_OrderStatus
         val shopName = view.tv_ShopName
+        val shopNameText=view.textView21
+
     }
 
 }

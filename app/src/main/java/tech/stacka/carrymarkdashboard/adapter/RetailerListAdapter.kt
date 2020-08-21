@@ -51,10 +51,27 @@ class RetailerListAdapter(
         val adapter2 = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, distributerList)
         val retailer = retailerList[position]
         holder.displayName.text = retailer.strName
-        holder.retId.text = retailer._id
+        holder.shopName.text=retailer.strShopName
+        holder.retId.text = retailer.strUserId
         holder.mobile.text = retailer.strMobileNo
-        holder.whatsapp.text = retailer.strWhatsAppNumber
-        holder.officeNo.text = retailer.strOfficeNumber
+        holder.address1.text = retailer.strAddress1
+        holder.district.text = "District : " + retailer.strDistrict
+        holder.state.text = "State     : " + retailer.strState
+        holder.tvRtDiscount.text="Retailer Discount : "+retailer.dblDiscount+"%"
+        holder.etRtDiscount.setText(retailer.dblDiscount.toString())
+        if(retailer.strOfficeNumber!=null){
+            holder.officeNo.text = retailer.strOfficeNumber.toString()
+        }
+        if(retailer.strWhatsAppNumber!=null){
+            holder.whatsapp.text = retailer.strWhatsAppNumber.toString()
+        }
+        if(retailer.strAddress2!=null){
+            holder.address2.text = retailer.strAddress2
+        }
+        holder.post.text = "PIN Code  : " + retailer.strPinCode
+        if(retailer.strGSTNo!=null) {
+            holder.gst.text =  retailer.strGSTNo
+        }
         holder.checkBox.isChecked = retailer.strActiveStatus == "A"
         holder.sp_executive.adapter = adapter
         holder.sp_distributer.adapter=adapter2
@@ -76,7 +93,6 @@ class RetailerListAdapter(
             }
             holder.sp_executive.setSelection(employeeIdList.indexOf(retailer.strExecutiveId))
             val exeIndex = employeeIdList.indexOf(retailer.strExecutiveId)
-
             if (exeIndex >= 0) {
                 holder.executiveName.text = "Executive : " + employeeList[exeIndex]
                 strExecutiveName = employeeList[exeIndex]
@@ -105,7 +121,7 @@ class RetailerListAdapter(
             holder.sp_distributer.setSelection(distributerIdList.indexOf(retailer.strDistributerId))
             val exeIndex = distributerIdList.indexOf(retailer.strDistributerId)
             if (exeIndex >= 0) {
-                holder.distributerName.text = "Distributer : " + distributerList[exeIndex]
+                holder.distributerName.text = "Distributor : " + distributerList[exeIndex]
                 strDistributorId = distributerIdList[exeIndex]
                 strDistributorName = distributerList[exeIndex]
             }
@@ -118,7 +134,7 @@ class RetailerListAdapter(
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
 
                     if (distributerIdList[pos] != "Distributers * *") {
-                        holder.distributerName.text = "Distributer : " + distributerList[pos]
+                        holder.distributerName.text = "Distributor : " + distributerList[pos]
                         strDistributorName = distributerList[pos]
                         strDistributorId = distributerIdList[pos]
                     }
@@ -128,23 +144,32 @@ class RetailerListAdapter(
 
 
 
-        if (selectUser) {
-            holder.itemView.setOnClickListener {
-                val intent = Intent()
-                intent.putExtra("uId", retailer._id)
-                intent.putExtra("token", retailer._id)
-                activity.setResult(2, intent)
-                activity.finish()
-            }
-        }
+//        if (selectUser) {
+//            holder.itemView.setOnClickListener {
+//                val intent = Intent()
+//                intent.putExtra("uId", retailer._id)
+//                intent.putExtra("token", retailer._id)
+//                activity.setResult(2, intent)
+//                activity.finish()
+//            }
+//        }
 
         holder.btUpdate.setOnClickListener {
+            val strDiscount=holder.etRtDiscount.text.toString().trim()
+            if(holder.checkBox.isChecked){
+                strActive="A"
+
+            }else{
+                strActive="I"
+            }
             dtInterface.setRetailerValues(strExecutiveId,strExecutiveName,strDistributorId,
-                strDistributorName,strActive,retailerList.get(position)._id)
+                strDistributorName,strActive, retailerList[position]._id,strDiscount)
+
+            holder.etRtDiscount.visibility=View.GONE
         }
 
         holder.btmMore.setOnClickListener {
-            if (holder.district.getVisibility() == View.VISIBLE) {
+            if (holder.whatsapp.getVisibility() == View.VISIBLE) {
                 holder.btmMore.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp)
                 holder.district.visibility = View.GONE
                 holder.whatsapp.visibility = View.GONE
@@ -157,6 +182,8 @@ class RetailerListAdapter(
                 holder.text7.visibility = View.GONE
                 holder.text8.visibility = View.GONE
                 holder.text9.visibility = View.GONE
+                holder.gstText.visibility = View.GONE
+                holder.gst.visibility = View.GONE
             } else {
                 holder.btmMore.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp)
                 holder.district.visibility = View.VISIBLE
@@ -170,16 +197,35 @@ class RetailerListAdapter(
                 holder.text7.visibility = View.VISIBLE
                 holder.text8.visibility = View.VISIBLE
                 holder.text9.visibility = View.VISIBLE
+                holder.gstText.visibility = View.VISIBLE
+                holder.gst.visibility = View.VISIBLE
             }
+        }
+
+
+        holder.ibRtDiscount.setOnClickListener {
+            holder.etRtDiscount.visibility=View.VISIBLE
         }
 
     }
 
 
-    fun addAll(newOrders: ArrayList<ArrRetailerList>) {
-        val initialSize = retailerList.size
-        retailerList.addAll(newOrders)
-        notifyItemRangeInserted(initialSize, newOrders.size)
+//    fun addAll(newOrders: ArrayList<ArrRetailerList>) {
+//        val initialSize = retailerList.size
+//        retailerList.addAll(newOrders)
+//        notifyItemRangeInserted(initialSize, newOrders.size)
+//    }
+
+
+    fun add(r: ArrRetailerList) {
+        retailerList.add(r)
+        notifyItemInserted(retailerList.size - 1)
+    }
+
+    fun addAll(data:ArrayList<ArrRetailerList>) {
+        for (result in data) {
+            add(result)
+        }
     }
 
     class RetailersViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -205,11 +251,17 @@ class RetailerListAdapter(
         val checkBox = view.chStatus
         val sp_executive = view.sp_executives
         val sp_distributer = view.sp_distributers
+        val gst=view.tvGST
+        val gstText=view.tvGstText
+        val shopName=view.tvShopName
+        val tvRtDiscount=view.tvRtDiscount
+        val etRtDiscount=view.etRtDiscount
+        val ibRtDiscount=view.ibDiscount
 
     }
     interface DataTransferInterfaceRetailer {
         fun setRetailerValues(strExecutiveId:String,strExecutiveName:String,strDistributorId:String,
-                              strDistributorName:String,strActive:String,strRetailerId:String)
+                              strDistributorName:String,strActive:String,strRetailerId:String,strDiscount:String)
     }
 
 }

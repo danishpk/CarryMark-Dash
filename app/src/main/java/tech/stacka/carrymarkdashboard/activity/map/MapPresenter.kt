@@ -1,14 +1,14 @@
 package tech.stacka.carrymarkdashboard.activity.map
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.JsonObject
-import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tech.stacka.carrymarkdashboard.R
-import tech.stacka.carrymarkdashboard.models.EmployeeDetailResponse
 import tech.stacka.carrymarkdashboard.models.EmployeeLocationResponse
 import tech.stacka.carrymarkdashboard.network.EndPoint
 import tech.stacka.carrymarkdashboard.network.RetrofitClient
@@ -34,9 +34,12 @@ class MapPresenter(val mapView: MapView,val context: Context) {
                         mapView.onEmployeeLocationNull(apiResponse)
                     }
                 } else {
-                    val apiResponse: ResponseBody = response.errorBody()!!
-                    if(apiResponse!=null) {
-                        mapView.onEmployeeLocationFailed(apiResponse)
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+                    if(arrErrorCommon!=null) {
+                        mapView.onEmployeeLocationFailed(arrErrorCommon)
                     }
                 }
             }

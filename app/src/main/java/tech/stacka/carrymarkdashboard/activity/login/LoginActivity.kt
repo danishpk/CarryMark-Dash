@@ -88,22 +88,28 @@ class LoginActivity : AppCompatActivity() ,LoginView{
                 listData += apiResponse.getString(i)
                 Log.e("ListData",listData.toString())
                 for(i in listData){
-                  if(i=="INVALID_USER_NAME"){
-                      etUserName.error = "Incorrect username *"
-                      etUserName.requestFocus()
-                      pbLogin.visibility=View.GONE
-                      btLogin.visibility=View.VISIBLE
-                  }else if(i=="CREDENTIAL_INVALID"){
-                      etPassword.error = "Incorrect password *"
-                      etPassword.requestFocus()
-                      pbLogin.visibility=View.GONE
-                      btLogin.visibility=View.VISIBLE
-                  }else if(i=="INVALID_USER_TYPE"){
-                      etUserName.error = "Admin username required *"
-                      etUserName.requestFocus()
-                      pbLogin.visibility=View.GONE
-                      btLogin.visibility=View.VISIBLE
-                  }
+                    when (i) {
+                        "INVALID_USER_NAME" -> {
+                            etUserName.error = "Incorrect username *"
+                            etUserName.requestFocus()
+                            pbLogin.visibility=View.GONE
+                            btLogin.visibility=View.VISIBLE
+                        }
+                        "CREDENTIAL_INVALID" -> {
+                            etPassword.error = "Incorrect password *"
+                            etPassword.requestFocus()
+                            pbLogin.visibility=View.GONE
+                            btLogin.visibility=View.VISIBLE
+                        }
+                        "INVALID_USER_TYPE" -> {
+                            etUserName.error = "Admin username required *"
+                            etUserName.requestFocus()
+                            pbLogin.visibility=View.GONE
+                            btLogin.visibility=View.VISIBLE
+                        }else->{
+                        AlertHelper.showOKSnackBarAlert(this@LoginActivity,listData[0].toString())
+                    }
+                    }
                 }
             }
 

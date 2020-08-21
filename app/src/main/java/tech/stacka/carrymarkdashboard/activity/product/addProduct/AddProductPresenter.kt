@@ -48,7 +48,10 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
         arrColorSelected: JsonArray,
         strSubCategory:String,
         arrSelectedColorCode: MutableList<String>,
-        arrScheme:JsonArray
+        arrScheme:JsonArray,
+        strKeyword:String,
+        dblCgst:String,
+        dblSgst:String
     ) {
         //val arrSchemeJson = JsonArray()
         val arrSizeStockJson=JsonArray()
@@ -71,6 +74,8 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
         addProductJson.add("arrScheme",arrScheme)
         addProductJson.addProperty("strTargetType",strTargetType)
         addProductJson.addProperty("dblTotalStock",dblTotalStock)
+        addProductJson.addProperty("dblCGST",dblCgst)
+        addProductJson.addProperty("dblSGST",dblSgst)
         addProductJson.addProperty("intTotalSales",intTotalSales)
         addProductJson.addProperty("intEstiDeliveryDays",intEstiDeliveryDays)
         addProductJson.addProperty("strUnit",strUnit)
@@ -79,6 +84,7 @@ class AddProductPresenter(addProductView: AddProductView, mContext: Context) {
         addProductJson.add("arrSizeStock",arrSizeStockJson)
         addProductJson.add("arrColorStock",arrColorSelected)
         addProductJson.addProperty("strSubCategory",strSubCategory)
+        addProductJson.addProperty("strKeyWords",strKeyword)
         val retrofitClient=RetrofitClient(EndPoint.baseUrl2)
         val apiResponseCall: Call<AddProductResponse> = retrofitClient.instance.addProduct(strToken,addProductJson)
         apiResponseCall.enqueue(object : Callback<AddProductResponse> {

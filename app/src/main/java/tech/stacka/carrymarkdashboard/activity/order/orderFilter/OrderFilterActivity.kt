@@ -1,14 +1,17 @@
 package tech.stacka.carrymarkdashboard.activity.order.orderFilter
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_order_filter.*
 import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
+import tech.stacka.carrymarkdashboard.MainActivity
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.activity.order.orderList.OrderListActivity
 import tech.stacka.carrymarkdashboard.activity.product.productList.ProductListActivity
@@ -22,6 +25,9 @@ import tech.stacka.carrymarkdashboard.models.data.ArrEmployeeList
 import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
 import tech.stacka.carrymarkdashboard.utils.AlertHelper
 import tech.stacka.carrymarkdashboard.utils.Utilities
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class OrderFilterActivity : AppCompatActivity(), OrderFilterView,
     FilterCategoryAdapter.DataTransferInterface, FilterOrderExecutiveAdapter.DataTransferInterface,
@@ -32,6 +38,8 @@ class OrderFilterActivity : AppCompatActivity(), OrderFilterView,
     var arrSelDistIds=ArrayList<String>()
     var fromDate:String=""
     var toDate:String=""
+    private lateinit var fromDatePicker: DatePickerDialog
+    private lateinit var toDatePicker: DatePickerDialog
     var arrDistributorIds=ArrayList<String>()
     var arrDistributorName=ArrayList<String>()
     var arrDistributorDetail=ArrayList<ArrDistributerList>()
@@ -43,6 +51,7 @@ class OrderFilterActivity : AppCompatActivity(), OrderFilterView,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order_filter)
+
         strToken=SharedPrefManager.getInstance(this).user.strToken!!
         if(Utilities.checkInternetConnection(this@OrderFilterActivity)){
             presenter.distributerList(strToken)
@@ -67,19 +76,27 @@ class OrderFilterActivity : AppCompatActivity(), OrderFilterView,
             arrSelectedStatusWise = intent.getStringArrayListExtra("arrFilteredStatusOrder")
             arrSelExeIds = intent.getStringArrayListExtra("arrFilteredExeOrder")
             arrSelDistIds = intent.getStringArrayListExtra("arrFilteredDistOrder")
+            fromDate=intent.getStringExtra("fromDate")
+            toDate=intent.getStringExtra("toDate")
+
         }
 
         btApply.setOnClickListener {
+            fromDate=tvOrdFromDate.text.toString().trim()
+            toDate=tvOrdToDate.text.toString().trim()
             intent= Intent(applicationContext, OrderListActivity::class.java)
             intent.putExtra("arrSelStatus",arrSelectedStatusWise as ArrayList<String>)
             intent.putExtra("arrSelExeIds",arrSelExeIds as ArrayList<String>)
             intent.putExtra("arrSelDistIds",arrSelDistIds as ArrayList<String>)
+            intent.putExtra("fromDate",fromDate)
+            intent.putExtra("toDate",toDate)
             startActivity(intent)
         }
         btCancel.setOnClickListener {
             finish()
         }
-
+        tvOrdFromDate.text=fromDate
+        tvOrdToDate.text=toDate
 
         lvFilterOrderMainCategory.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -90,11 +107,8 @@ class OrderFilterActivity : AppCompatActivity(), OrderFilterView,
                     val adapter = FilterCategoryAdapter(this,statusWiseOrder,this,arrSelectedStatusWise)
                     lvFilterOrderDetailCategory.adapter=adapter;
                 }
-                if (position == 1) {
-                    lvFilterOrderDetailCategory.visibility=View.GONE
-                    datePickerLayout.visibility=View.VISIBLE
-                }
-                if(position==2){
+
+                if(position==1){
                     lvFilterOrderDetailCategory.visibility=View.VISIBLE
                     datePickerLayout.visibility=View.GONE
                     val adapter = FilterOrderDistributerAdapter(this,arrDistributorName,arrDistributorIds,this,arrSelDistIds)
@@ -102,14 +116,89 @@ class OrderFilterActivity : AppCompatActivity(), OrderFilterView,
 
                 }
 
-                if(position==3){
+                if(position==2){
                     lvFilterOrderDetailCategory.visibility=View.VISIBLE
                     datePickerLayout.visibility=View.GONE
                     val adapter = FilterOrderExecutiveAdapter(this,arrExecutiveName,arrExecutiveIds,this,arrSelExeIds)
                     lvFilterOrderDetailCategory.adapter=adapter;
 
                 }
+                if (position == 3) {
+                    lvFilterOrderDetailCategory.visibility=View.GONE
+                    datePickerLayout.visibility=View.VISIBLE
+                }
             }
+
+
+
+
+        val fromDateCalendar = Calendar.getInstance()
+        val fromDatePickerListener =
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                fromDateCalendar.set(Calendar.YEAR, year)
+                fromDateCalendar.set(Calendar.MONTH, monthOfYear)
+                fromDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                fromDate =
+                    fromDateCalendar.get(Calendar.YEAR).toString() + "-" + (fromDateCalendar.get(
+                        Calendar.MONTH
+                    ) + 1) + "-" + fromDateCalendar.get(Calendar.DAY_OF_MONTH)
+                //etFromDate.setText(fromDate);
+                toDatePicker.datePicker.minDate = fromDateCalendar.timeInMillis
+                tvOrdFromDate.text = fromDate
+            }
+
+        val toDateCalendar = Calendar.getInstance()
+        val toDatePickerListener =
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                toDateCalendar.set(Calendar.YEAR, year)
+                toDateCalendar.set(Calendar.MONTH, monthOfYear)
+                toDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                toDate = toDateCalendar.get(Calendar.YEAR).toString() + "-" + (toDateCalendar.get(
+                    Calendar.MONTH
+                ) + 1) + "-" + toDateCalendar.get(Calendar.DAY_OF_MONTH)
+                //etToDate.setText(toDate);
+
+                tvOrdToDate.text = toDate
+            }
+
+        toDatePicker = DatePickerDialog(
+            this,
+            toDatePickerListener,
+            toDateCalendar.get(Calendar.YEAR),
+            toDateCalendar.get(Calendar.MONTH),
+            toDateCalendar.get(Calendar.DAY_OF_MONTH)
+        )
+        toDatePicker.datePicker.maxDate = Calendar.getInstance().timeInMillis
+
+        fromDatePicker = DatePickerDialog(
+            this,
+            fromDatePickerListener,
+            fromDateCalendar.get(Calendar.YEAR),
+            fromDateCalendar.get(Calendar.MONTH),
+            fromDateCalendar.get(Calendar.DAY_OF_MONTH)
+        )
+        fromDatePicker.datePicker.maxDate = Calendar.getInstance().timeInMillis
+
+
+        tvOrdFromDate.setOnClickListener {
+
+            fromDatePicker.show()
+
+        }
+
+
+
+        tvOrdToDate.setOnClickListener {
+
+            toDatePicker.show()
+        }
+
+        tvClearDate.setOnClickListener {
+           tvOrdToDate.text=""
+            tvOrdFromDate.text=""
+
+        }
+
 
     }
 

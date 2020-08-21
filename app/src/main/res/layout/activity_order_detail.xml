@@ -206,6 +206,7 @@
                             app:layout_constraintTop_toTopOf="@+id/tv7" />
 
                         <TextView
+                            android:visibility="visible"
                             android:id="@+id/tv12"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -216,6 +217,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/tv7" />
 
                         <TextView
+                            android:visibility="visible"
                             android:id="@+id/tvDistributor"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -230,6 +232,32 @@
                             app:layout_constraintTop_toTopOf="@+id/tv12" />
 
                         <TextView
+                            android:visibility="visible"
+                            android:id="@+id/tv15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="EXECUTIVE"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv12" />
+
+                        <TextView
+                            android:visibility="visible"
+                            android:id="@+id/tvExecutive"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv15"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@+id/tv15"
+                            app:layout_constraintTop_toTopOf="@+id/tv15" />
+
+                        <TextView
                             android:id="@+id/tv6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -237,7 +265,7 @@
                             android:layout_marginTop="8dp"
                             android:text="NOTES"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv12" />
+                            app:layout_constraintTop_toBottomOf="@+id/tv15" />
 
                         <TextView
                             android:id="@+id/tvNotes"
@@ -310,6 +338,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
                         <TextView
+                            android:visibility="gone"
                             android:id="@+id/textView14"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -333,6 +362,7 @@
                             app:layout_constraintTop_toTopOf="@+id/textView12" />
 
                         <TextView
+                            android:visibility="gone"
                             android:id="@+id/tvShopArea"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

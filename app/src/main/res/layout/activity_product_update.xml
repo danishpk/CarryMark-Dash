@@ -207,18 +207,50 @@
                     app:layout_constraintTop_toBottomOf="@+id/etSellingPrice" />
 
                 <EditText
+                    android:id="@+id/etSGST"
+                    style="@style/InputStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:ems="10"
+                    android:hint="SGST(%)"
+                    android:inputType="numberDecimal"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etRetailerPriceDetail" />
+
+                <EditText
+                    android:id="@+id/etCGST"
+                    style="@style/InputStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:ems="10"
+                    android:hint="CGST(%)"
+                    android:inputType="numberDecimal"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etSGST" />
+
+                <EditText
                     android:id="@+id/et_stockDetail"
                     style="@style/InputStyle"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="24dp"
                     android:hint="Stock *"
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etRetailerPrice" />
+                    app:layout_constraintTop_toBottomOf="@+id/etCGST" />
 
                 <LinearLayout
                     android:id="@+id/rdAppDetail"
@@ -332,7 +364,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="24dp"
-                    android:hint="Sub Category *"
+                    android:hint="Sub Category "
                     android:inputType="text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -425,6 +457,23 @@
                     tools:layout_editor_absoluteY="608dp" />
 
                 <EditText
+                    android:id="@+id/etKeyword"
+                    style="@style/InputStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:ems="10"
+                    android:hint="Keyword *"
+                    android:inputType="text"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:layout_editor_absoluteY="608dp"
+                    app:layout_constraintTop_toBottomOf="@+id/etProductMaterial"/>
+
+                <EditText
                     android:id="@+id/etProductDescriptionDetail"
                     style="@style/InputStyle"
                     android:layout_width="match_parent"
@@ -439,7 +488,7 @@
                     android:maxLines="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etProductMaterial" />
+                    app:layout_constraintTop_toBottomOf="@+id/etKeyword" />
 
                 <!--            <TextView-->
                 <!--                android:id="@+id/textView18"-->
@@ -521,7 +570,7 @@
                     android:textSize="24sp" />
 
                 <LinearLayout
-                    android:id="@+id/Allshceme"
+                    android:id="@+id/AllshcemeUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -532,21 +581,21 @@
                     android:visibility="visible">
 
                     <TableRow
-                        android:id="@+id/trSchemeRow"
+                        android:id="@+id/trSchemeRowUpdate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <LinearLayout
                             android:layout_marginLeft="32dp"
                             android:gravity="center_vertical"
-                            android:id="@+id/schemeLayout"
+                            android:id="@+id/schemeLayoutUpdate"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/etSchemeOne"
+                                android:id="@+id/etSchemeOneUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:layout_height="55dp"
@@ -555,7 +604,7 @@
                                 android:layout_marginRight="5dp" />
 
                             <EditText
-                                android:id="@+id/etOfferOne"
+                                android:id="@+id/etOfferOneUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:inputType="number"
@@ -566,7 +615,7 @@
                             <ImageButton
                                 android:background="@android:color/transparent"
                                 android:layout_marginLeft="16dp"
-                                android:id="@+id/ibAddNewScheme1"
+                                android:id="@+id/ibAddNewScheme1Update"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_outline_add_circle_outline_24"
@@ -576,7 +625,7 @@
                     </TableRow>
 
                     <TableRow
-                        android:id="@+id/trSchemeTwo"
+                        android:id="@+id/trSchemeTwoUpdate"
                         android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -591,7 +640,7 @@
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/etSchemeTw"
+                                android:id="@+id/etSchemeTwUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:layout_height="55dp"
@@ -600,7 +649,7 @@
                                 android:layout_marginRight="5dp" />
 
                             <EditText
-                                android:id="@+id/etOfferTw"
+                                android:id="@+id/etOfferTwUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:inputType="number"
@@ -611,7 +660,7 @@
                             <ImageButton
                                 android:background="@android:color/transparent"
                                 android:layout_marginLeft="16dp"
-                                android:id="@+id/ibAddNewScheme2"
+                                android:id="@+id/ibAddNewScheme2Update"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_outline_add_circle_outline_24"
@@ -624,7 +673,7 @@
 
                     <TableRow
                         android:visibility="gone"
-                        android:id="@+id/trSchemeThree"
+                        android:id="@+id/trSchemeThreeUpdate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -637,7 +686,7 @@
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/etSchemeTr"
+                                android:id="@+id/etSchemeTrUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:hint="Buy Qty"
@@ -646,7 +695,7 @@
                                 android:layout_marginRight="5dp" />
 
                             <EditText
-                                android:id="@+id/etOfferTr"
+                                android:id="@+id/etOfferTrUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:layout_height="55dp"
@@ -656,7 +705,7 @@
                             <ImageButton
                                 android:background="@android:color/transparent"
                                 android:layout_marginLeft="16dp"
-                                android:id="@+id/ibAddNewScheme3"
+                                android:id="@+id/ibAddNewScheme3Update"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_outline_add_circle_outline_24"
@@ -668,7 +717,7 @@
 
                     <TableRow
                         android:visibility="gone"
-                        android:id="@+id/trScheme4"
+                        android:id="@+id/trScheme4Update"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -680,7 +729,7 @@
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/etSchemeFr"
+                                android:id="@+id/etSchemeFrUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:inputType="number"
@@ -689,7 +738,7 @@
                                 android:layout_marginRight="5dp" />
 
                             <EditText
-                                android:id="@+id/etOfferFr"
+                                android:id="@+id/etOfferFrUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:layout_height="55dp"
@@ -699,7 +748,7 @@
                             <ImageButton
                                 android:background="@android:color/transparent"
                                 android:layout_marginLeft="16dp"
-                                android:id="@+id/ibAddNewScheme4"
+                                android:id="@+id/ibAddNewScheme4Update"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_outline_add_circle_outline_24"
@@ -710,7 +759,7 @@
 
                     <TableRow
                         android:visibility="gone"
-                        android:id="@+id/trScheme5"
+                        android:id="@+id/trScheme5Update"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -722,7 +771,7 @@
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/etSchemeFv"
+                                android:id="@+id/etSchemeFvUpdate"
                                 style="@style/InputStyle"
                                 android:hint="Buy Qty"
                                 android:layout_width="100dp"
@@ -731,7 +780,7 @@
                                 android:layout_marginRight="5dp" />
 
                             <EditText
-                                android:id="@+id/etOfferFv"
+                                android:id="@+id/etOfferFvUpdate"
                                 style="@style/InputStyle"
                                 android:layout_width="100dp"
                                 android:layout_height="55dp"

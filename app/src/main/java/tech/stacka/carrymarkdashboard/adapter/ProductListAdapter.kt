@@ -33,9 +33,10 @@ class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProduct
         Glide.with(ctx).load(product.strImageUrl).centerCrop().placeholder(R.drawable.ic_placeholder)
             .into(holder.image)
         holder.productName.text = product.strName.toUpperCase(Locale.ENGLISH)
-        holder.cat.text = "${product.dblTotalSales} sales"
+        holder.cat.text = "Total Sales :${product.dblTotalSales}"
         holder.pId.text = product.strProductId
-        holder.price.text = "₹ ${product.dblSellingPrice}"
+        holder.price.text = "₹ ${product.dblMRP}"
+        holder.offQty.text="Total Stock :${product.dblTotalStock}"
         holder.btEdit.setOnClickListener {
             val intent = Intent(ctx, ProductUpdateActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -80,6 +81,7 @@ class ProductListAdapter(val ctx: Context, val productList: ArrayList<ArrProduct
         val price = view.tvProductPrice
         val btEdit = view.btEdit
         val btDelete = view.btDelete
+        val offQty=view.tvProductOffrQty
     }
 
     interface DataTransferInterfacePr {

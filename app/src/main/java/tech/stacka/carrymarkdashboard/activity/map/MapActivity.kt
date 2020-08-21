@@ -1,38 +1,43 @@
 package tech.stacka.carrymarkdashboard.activity.map
 
-import android.graphics.BitmapFactory
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.DatePicker
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import kotlinx.android.synthetic.main.activity_map.*
-import okhttp3.ResponseBody
+import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.R
 import tech.stacka.carrymarkdashboard.models.EmployeeLocationResponse
 import tech.stacka.carrymarkdashboard.models.data.ArrLocationDetail
 import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
+import tech.stacka.carrymarkdashboard.utils.AlertHelper
+import tech.stacka.carrymarkdashboard.utils.Utilities
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MapActivity : AppCompatActivity(), MapView {
+@Suppress("DEPRECATION")
+class MapActivity : AppCompatActivity(), MapView, DatePickerDialog.OnDateSetListener {
     private var map: MapboxMap? = null
     private val presenter=MapPresenter(this,this);
     private var cordinates=ArrayList<String>()
     private var locationDetail=ArrayList<ArrLocationDetail>()
     private var currentDate=""
+    private var selectDate=""
     private var strToken=""
     private var timeShown=""
+    var strEmployeeId=""
     private val MARKER_IMAGE_ID = "MARKER_IMAGE_ID"
+  //  private lateinit var datePicker: DatePickerDialog
   //  private lateinit var  mapView: MapView
     private var mapboxMap: MapboxMap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +46,60 @@ class MapActivity : AppCompatActivity(), MapView {
         setContentView(R.layout.activity_map)
         mapbox.onCreate(savedInstanceState)
         strToken=SharedPrefManager.getInstance(this).user.strToken!!
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val sdf = SimpleDateFormat("dd-MM-yyyy")
         currentDate = sdf.format(Date())
+        tv_date_show.text=currentDate
         println(" C DATE is  $currentDate")
         Log.e("current Date",currentDate)
-        val strEmployeeId = intent.getStringExtra("employeeId")!!
+         strEmployeeId = intent.getStringExtra("employeeId")!!
 
-        presenter.employeeLocations(strToken,strEmployeeId,currentDate)
+        if(Utilities.checkInternetConnection(this)) {
+            presenter.employeeLocations(strToken,strEmployeeId,currentDate)
 
+        }else{
+            AlertHelper.showNoInternetSnackBar(this@MapActivity, object :
+                AlertHelper.SnackBarListener {
+                override fun onOkClick() {
+                    presenter.employeeLocations(strToken,strEmployeeId,currentDate)
+                }
+            })
+        }
+
+//        val calendar = Calendar.getInstance()
+//        val datePickerListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+//            calendar.set(Calendar.YEAR, year)
+//            calendar.set(Calendar.MONTH, monthOfYear)
+//            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+////                selectDate = calendar.get(Calendar.YEAR).toString() + "/" + (calendar.get(
+////                    Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.DAY_OF_MONTH)
+//
+//            selectDate = calendar.get(Calendar.DAY_OF_MONTH).toString() + "/" + (calendar.get(
+//                Calendar.MONTH) + 1) + "/" +  calendar.get(Calendar.YEAR)
+//            tv_date_show.text = selectDate
+//        }
+//            datePicker = DatePickerDialog(
+//                this,
+//                datePickerListener,
+//                calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DAY_OF_MONTH)
+//            )
+//            datePicker.datePicker.maxDate = Calendar.getInstance().timeInMillis
+
+        btDateSelection.setOnClickListener {
+         //   datePicker.show()
+
+            val dd = SimpleDateFormat("dd")
+            val mm = SimpleDateFormat("MM")
+            val yy = SimpleDateFormat("yyyy")
+            val day = dd.format(Date()).toInt()
+            val month = mm.format(Date()).toInt() - 1
+            val year = yy.format(Date()).toInt()
+//                println(" " + year + " " + month + " " + day)
+            val datePickerDialog = DatePickerDialog(this, this, year, month, day)
+            datePickerDialog.datePicker.maxDate = System.currentTimeMillis() - 1000
+            datePickerDialog.show()
+        }
 
 
     }
@@ -96,43 +147,68 @@ class MapActivity : AppCompatActivity(), MapView {
     override fun onEmployeeLocationSuccess(apiResponse: EmployeeLocationResponse) {
         locationDetail=apiResponse.arrList as ArrayList<ArrLocationDetail>
 
-        if(locationDetail.size!=0){
+        if(locationDetail!=null) {
+            map?.clear()
+            if (locationDetail.isNotEmpty()) {
 
-            mapbox.getMapAsync { mapBoxMap ->
-                mapBoxMap.clear()
-                mapBoxMap.setStyle(Style.LIGHT)
+                mapbox.getMapAsync { mapBoxMap ->
+                    mapBoxMap.clear()
+                    mapBoxMap.setStyle(Style.LIGHT)
 
-                for (i in locationDetail){
-                    var lati=i.coordinates[0]
-                    var longi=i.coordinates[1]
+                    for (i in locationDetail) {
+                        val lati = i.coordinates[0]
+                        val longi = i.coordinates[1]
 
-                    mapBoxMap.addMarker(
-                        MarkerOptions()
-                            .position(LatLng(lati, longi))
-                            .title(i.strCreatedTime)
-                    )
+                        mapBoxMap.addMarker(
+                            MarkerOptions()
+                                .position(LatLng(lati, longi))
+                                .title(i.strTime)
+                        )
+                    }
+                    map = mapBoxMap
+
                 }
-                map = mapBoxMap
-
+                tv_notFound.visibility = View.GONE
+            } else {
+                tv_notFound.visibility = View.VISIBLE
             }
-
-        }else {
-            tv_notFound.visibility = View.VISIBLE
         }
 
 
     }
 
     override fun onEmployeeLocationNull(apiResponse: EmployeeLocationResponse) {
-        TODO("Not yet implemented")
+
     }
 
-    override fun onEmployeeLocationFailed(apiResponse: ResponseBody) {
-        TODO("Not yet implemented")
+    override fun onEmployeeLocationFailed(apiResponse: JSONArray) {
+        Toast.makeText(this@MapActivity,apiResponse.get(0).toString(),Toast.LENGTH_SHORT).show()
     }
 
     override fun onEmployeeLocationFailedServerError(string: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(this@MapActivity,string,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val sdt = SimpleDateFormat("hh:mm a")
+        val sdf = SimpleDateFormat("dd-MM-yyyy")
+        val year = year - 1900
+        val date = sdf.format(Date(year, month, dayOfMonth))
+        currentDate=date.toString()
+        map?.clear()
+        tv_date_show.text=currentDate
+        if(Utilities.checkInternetConnection(this)) {
+            presenter.employeeLocations(strToken,strEmployeeId,currentDate)
+
+        }else{
+            AlertHelper.showNoInternetSnackBar(this@MapActivity, object :
+                AlertHelper.SnackBarListener {
+                override fun onOkClick() {
+                    presenter.employeeLocations(strToken,strEmployeeId,currentDate)
+                }
+            })
+        }
+
     }
 
 //    override fun onMapReady(mapboxMap: MapboxMap) {

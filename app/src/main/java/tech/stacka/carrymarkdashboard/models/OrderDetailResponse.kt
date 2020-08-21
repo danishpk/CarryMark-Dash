@@ -1,5 +1,5 @@
 package tech.stacka.carrymarkdashboard.models
-
+import tech.stacka.carrymarkdashboard.models.data.ObjAddress
 data class OrderDetailResponse(
     val _id: String,
     val arrDiscount: List<Any>,
@@ -7,24 +7,41 @@ data class OrderDetailResponse(
     val arrTracks: List<ArrOrderTrack>,
     val blnAPIStatus: Boolean,
     val chrStatus: String,
-    val dblTotalOrderAmount: Int,
-    val objAddress: ObjOrderAddress,
+    val dblOfferAmount: Double,
+    val dblTotalAmount: Double,
+    val dblTotalOrderAmount: Double,
+    val dblTotalPrice:Double,
+    val dblDiscountPrice:Double,
+    val objAddress: ObjAddress,
     val strCreatedTime: String,
     val strCreatedUser: String,
+    val strDistributerId: Any,
+    val strExecutiveId: Any,
     val strModePayment: String,
     val strOrderId: String,
     val strOrderStatus: String,
-    val strOrderedUserId: String
+    val strOrderedUserId: String,
+    val strUserType: String,
+    val strDistributerName: String,
+    val strGSTNo: String,
+    val strPinCode: String,
+    val strShopName: String,
+    val strUserId: String,
+    val strNote: String,
+    val strMobileNo:String,
+    val strExecutiveName:String
 )
 
 data class ArrOrderProduct(
     val dblAmount: Int,
     val dblQty: Int,
-    val strColor: String,
+    val dblSellingPrice: Int,
+    val strCreatedTime: String,
     val strImageUrl: String,
     val strName: String,
     val strProductId: String,
-    val strSize: String
+    val strOGProductId: String,
+    val dblOfferQty :Int
 )
 
 data class ArrOrderTrack(

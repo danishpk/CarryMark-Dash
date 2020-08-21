@@ -13,5 +13,6 @@ data class ArrProductList(
     val strImageUrl: String,
     val strName: String,
     val strProductId: String,
-    val dblTotalSales: Int=0
+    val dblTotalSales: Int=0,
+    val dblTotalStock:Int
 )

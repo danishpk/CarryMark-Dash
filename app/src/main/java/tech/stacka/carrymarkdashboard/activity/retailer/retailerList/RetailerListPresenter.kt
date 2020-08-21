@@ -21,9 +21,11 @@ class RetailerListPresenter(retailreListView: RetailerListView, context: Context
     private val context: Context = context
 
 
-    fun retailerList(strToken: String) {
+    fun retailerList(strToken: String,offset:Int,limit:Int) {
         val objRetailerList = JsonObject()
         objRetailerList.addProperty("strType", "RETAILER")
+        objRetailerList.addProperty("intPageNo",offset)
+        objRetailerList.addProperty("intLimit",limit)
         val retrofitClient = RetrofitClient(EndPoint.baseUrl2)
         val apiResponseCall: Call<RetailerListResponse> =
             //  RetrofitClient.instance.productList()
@@ -50,6 +52,41 @@ class RetailerListPresenter(retailreListView: RetailerListView, context: Context
             override fun onFailure(call: Call<RetailerListResponse>, t: Throwable) {
                 Toast.makeText(context, "error", Toast.LENGTH_LONG).show()
                 retailerListView.onRetailerListFailedServerError(context.getString(R.string.server_error))
+            }
+        })
+    }
+
+    fun retailerPagination(strToken: String,offset:Int,limit:Int) {
+        val objRetailerList = JsonObject()
+        objRetailerList.addProperty("strType", "RETAILER")
+        objRetailerList.addProperty("intPageNo",offset)
+        objRetailerList.addProperty("intLimit",limit)
+        val retrofitClient = RetrofitClient(EndPoint.baseUrl2)
+        val apiResponseCall: Call<RetailerListResponse> =
+            //  RetrofitClient.instance.productList()
+            retrofitClient.instance.retailerList(strToken, objRetailerList)
+        apiResponseCall.enqueue(object : Callback<RetailerListResponse> {
+            override fun onResponse(
+                call: Call<RetailerListResponse>,
+                response: Response<RetailerListResponse>
+            ) {
+                if (response.isSuccessful()) {
+                    val apiResponse: RetailerListResponse? = response.body()
+                    if (apiResponse != null) {
+                        retailerListView.onRetailerListMoreSuccess(apiResponse)
+                    } else {
+                        val apiResponse: RetailerListResponse = response.body()!!
+                        retailerListView.onRetailerListMOreNull(apiResponse)
+                    }
+                } else {
+                    val apiResponse: ResponseBody = response.errorBody()!!
+                    retailerListView.onRetailerListMoreFailed(apiResponse)
+                }
+            }
+
+            override fun onFailure(call: Call<RetailerListResponse>, t: Throwable) {
+                Toast.makeText(context, "error", Toast.LENGTH_LONG).show()
+                retailerListView.onRetailerListFailedMoreServerError(context.getString(R.string.server_error))
             }
         })
     }
@@ -125,13 +162,43 @@ class RetailerListPresenter(retailreListView: RetailerListView, context: Context
         })
     }
 
+    fun searchList(strToken:String,strSearchKey:String,offset:Int,limit:Int) {
+        val objRetailerList= JsonObject()
+        objRetailerList.addProperty("strType","RETAILER")
+        objRetailerList.addProperty("strSearch",strSearchKey)
+        val retrofitClient= RetrofitClient(EndPoint.baseUrl2)
+        val apiResponseCall: Call<RetailerListResponse> =
+            //  RetrofitClient.instance.productList()
+            retrofitClient.instance.retailerList(strToken,objRetailerList)
+        apiResponseCall.enqueue(object : Callback<RetailerListResponse> {
+            override fun onResponse(call: Call<RetailerListResponse>, response: Response<RetailerListResponse>) {
+                if (response.isSuccessful()) {
+                    val apiResponse: RetailerListResponse? = response.body()
+                    if (apiResponse != null) {
+                        retailerListView.onRetailerSearchListSuccess(apiResponse)
+                    }else{
+                        val apiResponse: RetailerListResponse = response.body()!!
+                        retailerListView.onRetailerSearchListNull(apiResponse)
+                    }
+                } else {
+                    val apiResponse: ResponseBody = response.errorBody()!!
+                    retailerListView.onRetailerSearchListFailed(apiResponse)
+                }
+            }
+            override fun onFailure(call: Call<RetailerListResponse>, t: Throwable) {
+                Toast.makeText(context,"error", Toast.LENGTH_LONG).show()
+                retailerListView.onRetailerListSearchFailedServerError(context.getString(R.string.server_error))
+            }
+        })
+    }
+
     fun updateRetailer( strToken: String,
                         strExecutiveId: String,
                        strExecutiveName: String,
                        strDistributorId: String,
                        strDistributorName: String,
                        strActive: String,
-                       strRetailerId:String) {
+                       strRetailerId:String,strDiscount:String) {
 
 
         val objUpdateRetailer = JsonObject()
@@ -141,6 +208,7 @@ class RetailerListPresenter(retailreListView: RetailerListView, context: Context
         objUpdateRetailer.addProperty("strExecutiveId",strExecutiveId)
         objUpdateRetailer.addProperty("strExecutiveName",strExecutiveName)
         objUpdateRetailer.addProperty("strUserDocId",strRetailerId)
+        objUpdateRetailer.addProperty("dblDiscount",strDiscount)
         val retrofitClient = RetrofitClient(EndPoint.baseUrl2)
         val apiResponseCall: Call<DefaultResponse> =
             //  RetrofitClient.instance.productList()

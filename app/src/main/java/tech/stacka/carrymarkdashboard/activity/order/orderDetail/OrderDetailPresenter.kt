@@ -1,12 +1,12 @@
 package tech.stacka.carrymarkexecutive.activity.order.orderDetail
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,7 +60,7 @@ class OrderDetailPresenter(val orderDetailView: OrderDetailView,val context: Con
         val apiResponseCall: Call<DefaultResponse> = retrofitClient.instance.orderUpdate(strToken,objUpdateOrder)
         apiResponseCall.enqueue(object : Callback<DefaultResponse> {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful) {
                     val apiResponse: DefaultResponse? = response.body()
                     if (apiResponse != null) {
                         orderDetailView.onOrderUpdateSuccess(apiResponse)
@@ -69,8 +69,13 @@ class OrderDetailPresenter(val orderDetailView: OrderDetailView,val context: Con
                         orderDetailView.onOrderUpdateNull(apiResponse)
                     }
                 } else {
-                    val apiResponse: ResponseBody = response.errorBody()!!
-                    orderDetailView.onOrderUpdateFailed(apiResponse)
+
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+                    //val apiResponse: ResponseBody = response.errorBody()!!
+                    orderDetailView.onOrderUpdateFailed(arrErrorCommon)
                 }
             }
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {

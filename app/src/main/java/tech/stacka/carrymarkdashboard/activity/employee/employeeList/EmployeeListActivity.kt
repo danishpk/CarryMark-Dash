@@ -1,16 +1,16 @@
 package tech.stacka.carrymarkdashboard.activity.employee.employeeList
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_employee_list.*
-import kotlinx.android.synthetic.main.activity_product_list.pbLoadMore
-import kotlinx.android.synthetic.main.activity_product_list.pbLoading
 import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
 import tech.stacka.carrymarkdashboard.R
-import tech.stacka.carrymarkdashboard.adapter.EmployeeListAdapter
+import tech.stacka.carrymarkdashboard.activity.home.HomeActivity
+import tech.stacka.carrymarkdashboard.adapter.ExecutiveListAdapter
 import tech.stacka.carrymarkdashboard.models.EmployeeListResponse
 import tech.stacka.carrymarkdashboard.models.data.ArrEmployeeList
 import tech.stacka.carrymarkdashboard.storage.SharedPrefManager
@@ -18,19 +18,13 @@ import tech.stacka.carrymarkdashboard.utils.AlertHelper
 import tech.stacka.carrymarkdashboard.utils.Utilities
 
 class EmployeeListActivity : AppCompatActivity(), EmployeeListView {
-    private var mTotalItemCount = 0
-    private var mLastVisibleItemPosition: Int = 0
-    private val mPostsPerPage = 10L
-    private var isAvailable = true
-    private var isLoading = false
-    private var selectUser = false
-    private lateinit var mAdapter: EmployeeListAdapter
-    private var employeeList = ArrayList<ArrEmployeeList>()
+    var employeeList = ArrayList<ArrEmployeeList>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_employee_list)
 
         nav_back.setOnClickListener {
+            startActivity(Intent(this@EmployeeListActivity,HomeActivity::class.java))
             finish()
         }
         val strToken:String= SharedPrefManager.getInstance(applicationContext).user.strToken!!
@@ -55,18 +49,16 @@ class EmployeeListActivity : AppCompatActivity(), EmployeeListView {
     }
 
     override fun onEmployeeListSuccess(apiResponse: EmployeeListResponse) {
-        val strLastItemCount:String=apiResponse.intTotalCount.toString();
         employeeList= apiResponse.arrList as ArrayList<ArrEmployeeList>
-        selectUser = intent.getBooleanExtra("selectUser", false)
         val mLayoutManager = LinearLayoutManager(this)
         rvEmpList.layoutManager = mLayoutManager
         rvEmpList.setHasFixedSize(true)
-        mAdapter = EmployeeListAdapter(applicationContext,employeeList,this,selectUser)
-         //   mAdapter.addAll(employeeList)
-        rvEmpList.adapter = mAdapter
-        pbLoadMore.visibility = View.GONE
+        val mAdapterData = ExecutiveListAdapter(this@EmployeeListActivity,employeeList)
+        rvEmpList.adapter = mAdapterData
         pbLoading.visibility = View.GONE
-        isLoading = false
+        if(apiResponse.arrList.isEmpty()){
+            noDataLayoutSubject.visibility=View.VISIBLE
+        }
     }
 
     override fun onEmployeeListFailed(apiResponse: ResponseBody) {
@@ -92,6 +84,7 @@ class EmployeeListActivity : AppCompatActivity(), EmployeeListView {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        startActivity(Intent(this@EmployeeListActivity,HomeActivity::class.java))
         finish()
     }
 }

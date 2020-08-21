@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="NAME *"
@@ -63,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="MOBILE *"
@@ -72,21 +72,37 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etName" />
 
+
+            <EditText
+                android:id="@+id/etDtWhatsapp"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:ems="10"
+                android:hint="WHATSAPP NUMBER"
+                android:inputType="phone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etMobile" />
+
             <EditText
                 android:id="@+id/etEmail"
                 style="@style/InputStyle"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
-                android:hint="EMAIL *"
+                android:hint="EMAIL "
                 android:inputType="textEmailAddress"
                 android:textColor="@color/colorGrey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etMobile"
+                app:layout_constraintTop_toBottomOf="@+id/etDtWhatsapp"
 
                 />
 
@@ -96,7 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="PASSWORD *"
@@ -127,7 +143,7 @@
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:hint="ADDRESS *"
                 android:inputType="text"
@@ -135,6 +151,80 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
+            <EditText
+                android:id="@+id/etDtPost"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:maxLength="6"
+                android:hint="POSTAL CODE *"
+                android:inputType="phone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etAddressDistr" />
+
+            <TextView
+                android:id="@+id/tvDtState"
+                style="@style/InputStyle"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etDtPost" />
+
+            <TextView
+                android:id="@+id/tvDtDist"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:visibility="gone"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDtState" />
+
+
+            <EditText
+                android:id="@+id/etDtGst"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:maxLength="15"
+                android:hint="GST "
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDtDist" />
+
+            <EditText
+                android:id="@+id/etDtDiscount"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:maxLength="4"
+                android:hint="DISCOUNT(%)"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etDtGst" />
+
+
 
             <TextView
                 android:id="@+id/tvExecutive"
@@ -149,7 +239,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etAddressDistr" />
+                app:layout_constraintTop_toBottomOf="@+id/etDtDiscount" />
 
 
 
@@ -196,8 +286,7 @@
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sp_district" />
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.toolbar_child.*
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import tech.stacka.carrymarkdashboard.R
+import tech.stacka.carrymarkdashboard.activity.home.HomeActivity
 import tech.stacka.carrymarkdashboard.models.AddProductCategoryResponse
 import tech.stacka.carrymarkdashboard.models.DefaultResponse
 import tech.stacka.carrymarkdashboard.models.UploadProductImageResponse
@@ -43,12 +44,15 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
     var strCategoryParent:String = ""
     var strImageData:String = ""
     var SUBCATEGORY_SELECTTED:Int=0
+    private var strCategory:String=""
     var color: Int = -0x100
+    val listCategory: MutableList<String> = ArrayList()
     val presenter=AddMasterPresenter(this,this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_master)
         nav_back.setOnClickListener {
+            startActivity(Intent(this@AddMasterActivity,HomeActivity::class.java))
             finish()
         }
 
@@ -84,9 +88,9 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
                 }
                 if(position==4){
                     btColorPick.visibility=View.GONE
-                    btUploadImageCategory.visibility=View.VISIBLE
-                    ivSuccess.visibility=View.VISIBLE
-                    ivAddMaster.visibility=View.VISIBLE
+                    btUploadImageCategory.visibility=View.GONE
+                    ivSuccess.visibility=View.GONE
+                    ivAddMaster.visibility=View.GONE
                     autotvListMainCategory.visibility=View.GONE
                     SUBCATEGORY_SELECTTED=0
                     strCategoryParent="cln_size"
@@ -101,15 +105,14 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
                     strCategoryParent="cln_color"
                 }
                 if(position==6){
-                    btColorPick.visibility=View.GONE
-                    btUploadImageCategory.visibility=View.VISIBLE
-                    ivSuccess.visibility=View.VISIBLE
-                    ivAddMaster.visibility=View.VISIBLE
-                    autotvListMainCategory.visibility=View.GONE
-                    SUBCATEGORY_SELECTTED=0
-                    strCategoryParent="cln_location"
-                }
-                if(position==7){
+//                    btColorPick.visibility=View.GONE
+//                    btUploadImageCategory.visibility=View.VISIBLE
+//                    ivSuccess.visibility=View.VISIBLE
+//                    ivAddMaster.visibility=View.VISIBLE
+//                    autotvListMainCategory.visibility=View.GONE
+//                    SUBCATEGORY_SELECTTED=0
+//                    strCategoryParent="cln_location"
+
                     btColorPick.visibility=View.GONE
                     btUploadImageCategory.visibility=View.VISIBLE
                     ivSuccess.visibility=View.VISIBLE
@@ -118,6 +121,9 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
                     autotvListMainCategory.visibility=View.VISIBLE
                     SUBCATEGORY_SELECTTED=1
                 }
+//                if(position==7){
+//
+//                }
 
             }
             override fun onNothingSelected(parent: AdapterView<*>){
@@ -147,6 +153,13 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
                 }
             }
         })
+
+        autotvListMainCategory.setOnTouchListener { v, event ->
+            val strValue:String=autotvListMainCategory.text.toString()
+            val strCollection:String="cln_category"
+            presenter.categoryList(strCollection,strValue,strToken)
+            false
+        }
         strToken= SharedPrefManager.getInstance(applicationContext).user.strToken!!
 
         btUploadImageCategory.setOnClickListener {
@@ -187,12 +200,53 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
                     }
                 }else{
 
+                    if(strMainCategory.equals("Size")){
+                        if (Utilities.checkInternetConnection(this)) {
+                            presenter.createMaster(
+                                strToken,
+                                strCategoryParent,
+                                strMasterName,
+                                "","",
+                                ""
+                            )
+                        } else {
+                            Snackbar.make(it!!, "check your internet connection", Snackbar.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+
                     if(UPLOAD_IMAGE_VALUE!=1){
                         Toast.makeText(applicationContext,"please upload an Image",Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
                     }
                     if(SUBCATEGORY_SELECTTED==1){
-                        var strCategory=autotvListMainCategory.text.toString().trim()
+                        strCategory=autotvListMainCategory.text.toString().trim()
+                        if(strCategory.isEmpty()){
+
+                            autotvListMainCategory.error = "Category required*"
+                            autotvListMainCategory.requestFocus()
+                            return@setOnClickListener
+                        }
+
+                        if(listCategory.size!=0){
+                            var CATEGORY_ERROR_FLAG=true
+                            for(i in listCategory){
+                                if(i == strCategory){
+                                    CATEGORY_ERROR_FLAG=false
+                                }
+
+                                if(CATEGORY_ERROR_FLAG){
+                                    autotvListMainCategory.error = "CATEGORY NOT EXIST *"
+                                    autotvListMainCategory.requestFocus()
+                                    return@setOnClickListener
+                                }
+                            }
+
+                        }else{
+                            autotvListMainCategory.error = "CATEGORY NOT EXIST *"
+                            autotvListMainCategory.requestFocus()
+                            return@setOnClickListener
+                        }
                         if(Utilities.checkInternetConnection(this)) {
                             presenter.createMaster(strToken,strCategoryParent,strMasterName,strImageData,strCategory,"")
                         }else{
@@ -268,15 +322,18 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
     }
 
     override fun uploadImageFailedServerError(toString: String) {
-        Toast.makeText(applicationContext,toString.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,"Please choose an image",Toast.LENGTH_SHORT).show()
         pbUploadImageCategory.visibility=View.GONE
 
     }
 
     override fun addMasterSuccess(apiResponse: DefaultResponse) {
-
         Toast.makeText(applicationContext,apiResponse.strMessage,Toast.LENGTH_SHORT).show()
-        finish()
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+
     }
 
     override fun addMasterNull(apiResponse: DefaultResponse) {
@@ -305,13 +362,12 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
     override fun onMasterCategoryListSuccess(apiResponse: AddProductCategoryResponse) {
 
         var categoryData= apiResponse.arrList as ArrayList<ArrAddProductCategory>
-        val list: MutableList<String> = ArrayList()
-        for(i in categoryData){ list.add(i.strName) }
-
-        val acTextView = findViewById(R.id.autotvListMainCategory) as AutoCompleteTextView
-        acTextView.threshold = 1
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1,list)
+        listCategory.clear()
+        for(i in categoryData){ listCategory.add(i.strName) }
+        val acTextView = findViewById<AutoCompleteTextView>(R.id.autotvListMainCategory)
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1,listCategory)
         acTextView.setAdapter(arrayAdapter)
+        acTextView.showDropDown()
     }
 
     override fun onMasterCategoryListNull(apiResponse: AddProductCategoryResponse) {
@@ -325,6 +381,7 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
     override fun onMasterCategoryListFailedServerError(string: String) {
 
     }
+
     fun openDialog(supportsAlpha: Boolean) {
         val dialog = AmbilWarnaDialog(this@AddMasterActivity, color, supportsAlpha,
             object : OnAmbilWarnaListener {
@@ -350,6 +407,7 @@ class AddMasterActivity : AppCompatActivity(), AddMasterView {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        startActivity(Intent(this@AddMasterActivity,HomeActivity::class.java))
         finish()
     }
 }

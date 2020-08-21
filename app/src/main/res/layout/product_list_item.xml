@@ -33,7 +33,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="4dp"
-                android:text="BABY DIAPERS"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textView17"
@@ -42,14 +41,29 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tvProductOgId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:text=""
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tvProductPrice"
+            app:layout_constraintStart_toEndOf="@+id/ivProduct"
+            app:layout_constraintTop_toBottomOf="@id/tvProductName" />
+
+        <TextView
                 android:id="@+id/tvProductCat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="Category"
                 app:layout_constraintStart_toEndOf="@+id/ivProduct"
-                app:layout_constraintTop_toBottomOf="@+id/tvProductName" />
+                app:layout_constraintTop_toBottomOf="@+id/tvProductOgId" />
 
         <TextView
                 android:id="@+id/tvProductId"
@@ -58,11 +72,20 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="MODEL"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivProduct"
-                app:layout_constraintTop_toBottomOf="@+id/tvProductCat" />
+                app:layout_constraintTop_toBottomOf="@+id/tvProductOffrQty" />
+
+        <TextView
+            android:id="@+id/tvProductOffrQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text=""
+            app:layout_constraintStart_toEndOf="@+id/ivProduct"
+            app:layout_constraintTop_toBottomOf="@+id/tvProductCat" />
 
         <TextView
                 android:id="@+id/tvProductPrice"
@@ -70,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="₹ 400"
+                android:text="₹ "
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textView17"

@@ -1,10 +1,12 @@
 package tech.stacka.carrymarkdashboard.activity.employee.employeeDetail
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,6 +59,7 @@ class EmployeeDetailPresenter(val employeeDetailView: EmployeeDetailView,val con
         objEmployeeTarget.addProperty("strTargetType","SALE")
         objEmployeeTarget.addProperty("strExecutiveId",strExecutiveId)
         objEmployeeTarget.addProperty("dblSaleTarget",dblSaleTarget)
+        Log.i("CreateTarget",objEmployeeTarget.toString())
         val retrofitClient= RetrofitClient(EndPoint.baseUrl3)
         val apiResponseCall: Call<DefaultResponse> =
             //  RetrofitClient.instance.productList()
@@ -93,7 +96,7 @@ class EmployeeDetailPresenter(val employeeDetailView: EmployeeDetailView,val con
         arrReport.add(objReportData1)
         objReport.add("arrReport",arrReport)
         objReport.addProperty("strExecutiveId",strEmployeeId)
-
+        Log.i("EmployeeReport",objReport.toString())
         val retrofitClient = RetrofitClient(EndPoint.baseUrl3)
         val apiResponseCall: Call<ReportResponse> =
             //  RetrofitClient.instance.productList()
@@ -125,4 +128,49 @@ class EmployeeDetailPresenter(val employeeDetailView: EmployeeDetailView,val con
             }
         })
     }
+
+
+    fun deleteUser(strToken: String,strUserId:String) {
+        val objUserId = JsonObject()
+        var arrUserIds= JsonArray()
+        arrUserIds.add(strUserId)
+        objUserId.add("arrDeleteId",arrUserIds)
+
+        val retrofitClient = RetrofitClient(EndPoint.baseUrl2)
+        val apiResponseCall: Call<DefaultResponse> =
+            //  RetrofitClient.instance.productList()
+            retrofitClient.instance.deleteUser(strToken, objUserId)
+        apiResponseCall.enqueue(object : Callback<DefaultResponse> {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val apiResponse: DefaultResponse? = response.body()
+                    if (apiResponse != null) {
+                        employeeDetailView.onDeleteUserSuccess(apiResponse)
+                    } else {
+                        val apiResponse: DefaultResponse = response.body()!!
+                        employeeDetailView.onDeleteUserNull(apiResponse)
+                    }
+                } else {
+                   // val apiResponse: ResponseBody = response.errorBody()!!
+
+                    var jsonObject: JSONObject? = null
+                    jsonObject = JSONObject(response.errorBody()!!.string())
+                    Log.e("ErrorBody",jsonObject.toString())
+                    val arrErrorCommon = jsonObject.getJSONArray("arrErrors")
+                    if (arrErrorCommon != null) {
+                        employeeDetailView.onDeleteUserFailed(arrErrorCommon)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                //  Toast.makeText(mContext, "error", Toast.LENGTH_LONG).show()
+                employeeDetailView.onDeleteUserServerError(context.getString(R.string.server_error))
+            }
+        })
+    }
+
 }

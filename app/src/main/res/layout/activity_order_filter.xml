@@ -80,7 +80,6 @@
             </LinearLayout>
 
             <LinearLayout
-
                 android:id="@+id/LToDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -107,6 +106,21 @@
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_dateblue" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvClearDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CLEAR"
+                android:background="@drawable/bg_input"
+                android:textSize="12sp"
+                android:gravity="end"
+                android:layout_gravity="end"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"/>
+
         </LinearLayout>
 
 

@@ -83,7 +83,6 @@ class ProductFilterActivity : AppCompatActivity(), ProductFilterView,
         lvFilterMainCategory.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
                     if (position == 0) {
-                        view.setBackgroundColor(Color.LTGRAY)
 //                        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, categorybrandList)
 //                        lvFilterDetails.adapter=arrayAdapter
                         val adapter =FilterCategoryBrandAdapter(this,categorybrandList,this,filterCategoryBrand)

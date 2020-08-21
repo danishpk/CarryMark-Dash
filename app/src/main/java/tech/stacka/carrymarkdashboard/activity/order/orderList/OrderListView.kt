@@ -8,6 +8,10 @@ interface OrderListView {
     abstract fun onOrderListNull(apiResponse: OrderListResponse)
     abstract fun onOrderListFailed(apiResponse: ResponseBody)
     abstract fun onOrderServerFailed(toString: String)
+    abstract fun onOrderListMoreSuccess(apiResponse: OrderListResponse)
+    abstract fun onOrderListMoreNull(apiResponse: OrderListResponse)
+    abstract fun onOrderListMoreFailed(apiResponse: ResponseBody)
+    abstract fun onOrderListMoreServerFailed(toString: String)
 
 
 }
